@@ -14,3 +14,4 @@ var Maze, MazeGame;
       
         makeMaze("maze_container", 12, 12);
 
+      /*TODO: Separate the 'Hero Class' from the rest of the code */
