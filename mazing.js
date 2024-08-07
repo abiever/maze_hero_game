@@ -1,11 +1,13 @@
-var Position = function(x, y) {
-  this.x = x;
-  this.y = y;
+class Position {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+    }
+    toString() {
+        return this.x + ":" + this.y;
+    }
 }
 
-Position.prototype.toString = function() {
-  return this.x + ":" + this.y;
-};
 
 //TODO: I made need to bundle everything with node/npm to get rid of the "Unexpected token 'export'" error in browser
 
@@ -30,7 +32,7 @@ export default class Mazing {
         this.heroHasKey = false;
         this.childMode = false;
 
-        this.utter = null;
+        this.heroValue = 5;
 
         for (let i = 0; i < this.mazeContainer.children.length; i++) {
             for (let j = 0; j < this.mazeContainer.children[i].children.length; j++) {
@@ -59,29 +61,19 @@ export default class Mazing {
         this.keyPressHandler = this.mazeKeyPressHandler.bind(this);
         document.addEventListener("keydown", this.keyPressHandler, false);
     }
-    enableSpeech() {
-        this.utter = new SpeechSynthesisUtterance();
-        this.setMessage(this.mazeMessage.innerText);
-    }
+    
     setMessage(text) {
-
         /* display message on screen */
         this.mazeMessage.innerHTML = text;
         this.mazeScore.innerHTML = this.heroScore;
-
-        if (this.utter && text.match(/^\w/)) {
-            /* speak message aloud */
-            this.utter.text = text;
-            window.speechSynthesis.cancel();
-            window.speechSynthesis.speak(this.utter);
-        }
-
     }
+
     heroTakeTreasure() {
         this.maze[this.heroPos].classList.remove("nubbin");
         this.heroScore += 10;
         this.setMessage("yay, treasure!");
     }
+
     heroTakeKey() {
         this.maze[this.heroPos].classList.remove("key");
         this.heroHasKey = true;
