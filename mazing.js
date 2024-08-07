@@ -8,8 +8,7 @@ class Position {
     }
 }
 
-
-//TODO: I made need to bundle everything with node/npm to get rid of the "Unexpected token 'export'" error in browser
+//TODO: I may need to bundle everything with node/npm to get rid of the "Unexpected token 'export'" error in browser
 
 export default class Mazing {
     constructor(id) {
