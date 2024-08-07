@@ -1,5 +1,5 @@
-import MazeBuilder from "/MazeBuilder.js";
 import FancyMazeBuilder from "/FancyMazeBuilder.js";
+import Mazing from "./mazing.js";
 
 var Maze, MazeGame;
       
