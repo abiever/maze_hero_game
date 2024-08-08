@@ -1,4 +1,4 @@
-import Hero from "./Hero.js"
+import Hero from "./Hero.js";
 
 class Position {
     constructor(x, y) {
@@ -28,12 +28,9 @@ export default class Mazing {
         this.mazeMessage = document.createElement("div");
         this.mazeMessage.id = "maze_message";
 
-        this.mazeHero.setHeroScore = this.mazeContainer.getAttribute("data-steps") - 2;
+        this.mazeHero.setHeroScore(this.mazeContainer.getAttribute("data-steps") - 2);
 
         this.maze = [];
-        // this.heroPos = {};
-        // this.heroHasKey = false;
-        // this.childMode = false;
 
         var mazePosition;
         for (let i = 0; i < this.mazeContainer.children.length; i++) {
@@ -42,7 +39,6 @@ export default class Mazing {
                 this.maze[new Position(i, j)] = el;
                 if (el.classList.contains("entrance")) {
                     /* place hero on entrance square */
-                    // this.heroPos = new Position(i, j);
                     mazePosition = new Position(i, j);
                     this.mazeHero.setHeroPosition(mazePosition);
                     this.maze[this.mazeHero.getHeroPosition()].classList.add("hero");
@@ -65,40 +61,42 @@ export default class Mazing {
         this.keyPressHandler = this.mazeKeyPressHandler.bind(this);
         document.addEventListener("keydown", this.keyPressHandler, false);
     }
-    
+
     setMessage(text) {
         /* display message on screen */
         this.mazeMessage.innerHTML = text;
-        this.mazeScore.innerHTML = this.heroScore;
+        this.mazeScore.innerHTML = this.mazeHero.getHeroScore();
     }
 
     heroTakeTreasure() {
-        this.maze[this.heroPos].classList.remove("nubbin");
-        this.heroScore += 10;
+        this.maze[this.mazeHero.getHeroPosition()].classList.remove("nubbin");
+        this.mazeHero.increaseScore(10);
         this.setMessage("yay, treasure!");
     }
 
     heroTakeKey() {
-        this.maze[this.heroPos].classList.remove("key");
-        this.heroHasKey = true;
-        this.heroScore += 20;
+        this.maze[this.mazeHero.getHeroPosition()].classList.remove("key");
+        this.mazeHero.setHeroHasKey(true);
+        this.mazeHero.increaseScore(20);
         this.mazeScore.classList.add("has-key");
         this.setMessage("you now have the key!");
     }
+
     gameOver(text) {
         /* de-activate control keys */
         document.removeEventListener("keydown", this.keyPressHandler, false);
         this.setMessage(text);
         this.mazeContainer.classList.add("finished");
     }
+
     heroWins() {
         this.mazeScore.classList.remove("has-key");
-        this.maze[this.heroPos].classList.remove("door");
-        this.heroScore += 50;
+        this.maze[this.mazeHero.getHeroPosition()].classList.remove("door");
+        this.mazeHero.increaseScore(50);
         this.gameOver("you finished !!!");
     }
-    tryMoveHero(pos) {
 
+    tryMoveHero(pos) {
         if ("object" !== typeof this.maze[pos]) {
             return;
         }
@@ -108,9 +106,9 @@ export default class Mazing {
         /* before moving */
         if (nextStep.match(/sentinel/)) {
             /* ran into a monster - lose points */
-            this.heroScore = Math.max(this.heroScore - 5, 0);
+            this.mazeHero.decreaseScore(5);
 
-            if (!this.childMode && (this.heroScore <= 0)) {
+            if (!this.mazeHero.childMode && (this.mazeHero.getHeroScore() <= 0)) {
                 /* game over */
                 this.gameOver("sorry, you didn't make it.");
             } else {
@@ -125,7 +123,7 @@ export default class Mazing {
         }
 
         if (nextStep.match(/exit/)) {
-            if (this.heroHasKey) {
+            if (this.mazeHero.hasKey()) {
                 this.heroWins();
             } else {
                 this.setMessage("you need a key to unlock the door");
@@ -153,24 +151,20 @@ export default class Mazing {
             return;
         }
 
-        if ((this.heroScore >= 1) && !this.childMode) {
+        if ((this.mazeHero.getHeroScore() >= 1) && !this.mazeHero.childMode) {
+            this.mazeHero.decreaseScore(1);
 
-            this.heroScore--;
-
-            if (this.heroScore <= 0) {
+            if (this.mazeHero.getHeroScore() <= 0) {
                 /* game over */
                 this.gameOver("sorry, you didn't make it");
                 return;
             }
-
         }
 
         this.setMessage("...");
-
     }
-    mazeKeyPressHandler(e) {
 
-        // var tryPos = new Position(this.heroPos.x, this.heroPos.y);
+    mazeKeyPressHandler(e) {
         var tryPos = new Position(this.mazeHero.getHeroPosition().x, this.mazeHero.getHeroPosition().y);
 
         switch (e.key) {
@@ -194,25 +188,16 @@ export default class Mazing {
 
             default:
                 return;
-
         }
 
         this.tryMoveHero(tryPos);
 
         e.preventDefault();
     }
+
     setChildMode() {
-        this.childMode = true;
-        this.heroScore = 0;
+        this.mazeHero.childMode = true;
+        this.mazeHero.setHeroScore(0);
         this.setMessage("collect all the treasure");
     }
 }
-
-
-
-
-
-
-
-
-
