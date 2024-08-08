@@ -1,3 +1,5 @@
+import Hero from "./Hero.js"
+
 class Position {
     constructor(x, y) {
         this.x = x;
@@ -15,6 +17,8 @@ export default class Mazing {
         // Original JavaScript code by Chirp Internet: www.chirpinternet.eu
         // Please acknowledge use of this code by including this header.
 
+        this.mazeHero = new Hero(5);
+
         /* bind to HTML element */
         this.mazeContainer = document.getElementById(id);
 
@@ -24,23 +28,24 @@ export default class Mazing {
         this.mazeMessage = document.createElement("div");
         this.mazeMessage.id = "maze_message";
 
-        this.heroScore = this.mazeContainer.getAttribute("data-steps") - 2;
+        this.mazeHero.setHeroScore = this.mazeContainer.getAttribute("data-steps") - 2;
 
         this.maze = [];
-        this.heroPos = {};
-        this.heroHasKey = false;
-        this.childMode = false;
+        // this.heroPos = {};
+        // this.heroHasKey = false;
+        // this.childMode = false;
 
-        this.heroValue = 5;
-
+        var mazePosition;
         for (let i = 0; i < this.mazeContainer.children.length; i++) {
             for (let j = 0; j < this.mazeContainer.children[i].children.length; j++) {
                 var el = this.mazeContainer.children[i].children[j];
                 this.maze[new Position(i, j)] = el;
                 if (el.classList.contains("entrance")) {
                     /* place hero on entrance square */
-                    this.heroPos = new Position(i, j);
-                    this.maze[this.heroPos].classList.add("hero");
+                    // this.heroPos = new Position(i, j);
+                    mazePosition = new Position(i, j);
+                    this.mazeHero.setHeroPosition(mazePosition);
+                    this.maze[this.mazeHero.getHeroPosition()].classList.add("hero");
                 }
             }
         }
@@ -129,9 +134,9 @@ export default class Mazing {
         }
 
         /* move hero one step */
-        this.maze[this.heroPos].classList.remove("hero");
+        this.maze[this.mazeHero.getHeroPosition()].classList.remove("hero");
         this.maze[pos].classList.add("hero");
-        this.heroPos = pos;
+        this.mazeHero.setHeroPosition(pos);
 
         /* check what was stepped on */
         if (nextStep.match(/nubbin/)) {
@@ -165,7 +170,8 @@ export default class Mazing {
     }
     mazeKeyPressHandler(e) {
 
-        var tryPos = new Position(this.heroPos.x, this.heroPos.y);
+        // var tryPos = new Position(this.heroPos.x, this.heroPos.y);
+        var tryPos = new Position(this.mazeHero.getHeroPosition().x, this.mazeHero.getHeroPosition().y);
 
         switch (e.key) {
             case "ArrowLeft":
