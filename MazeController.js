@@ -12,7 +12,7 @@ class Position {
 
 //TODO: I may need to bundle everything with node/npm to get rid of the "Unexpected token 'export'" error in browser
 
-export default class Mazing {
+export default class MazeController {
     constructor(id) {
         // Original JavaScript code by Chirp Internet: www.chirpinternet.eu
         // Please acknowledge use of this code by including this header.

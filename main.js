@@ -1,12 +1,12 @@
 import FancyMazeBuilder from "/FancyMazeBuilder.js";
-import Mazing from "./mazing.js"; //Don't forget capital 'M'?
+import MazeController from "./MazeController.js"; //Don't forget capital 'M'?
 
 var Maze, MazeGame;
       
         const makeMaze = (id, width, height, speech = false) => {
           Maze = new FancyMazeBuilder(width, height);
           Maze.display(id);
-          MazeGame = new Mazing("maze");
+          MazeGame = new MazeController("maze");
           if(speech) {
             MazeGame.enableSpeech();
           }
