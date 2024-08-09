@@ -1,4 +1,4 @@
-import Monster from "./Monster.js";
+import PowerUp from "./PowerUp.js";
 
 export default class MazeBuilder {
 
@@ -271,11 +271,11 @@ export default class MazeBuilder {
             cellDiv.className = cell.filter(item => typeof item === "string").join(" ");
           }
     
-          // Check if this cell contains a Monster object
-          const monster = cell.find(item => item instanceof Monster);
-          if (monster) {
-            cellDiv.classList.add("monster"); //adds the class name of 'monster' so that the CSS knows how to display the Monster class correctly
-            cellDiv.innerHTML = `<span class="heroValue">${monster.getMonsterValue()}</span>`;
+          // Check if this cell contains a powerup object
+          const powerUpInstance = cell.find(item => item instanceof PowerUp);
+          if (powerUpInstance) {
+            cellDiv.classList.add("powerUp"); //adds the class name of 'powerup' so that the CSS knows how to display the powerup class correctly
+            cellDiv.innerHTML = `<span class="heroValue">${powerUpInstance.getPowerUpFactor()}</span>`;
           }
     
           rowDiv.appendChild(cellDiv);

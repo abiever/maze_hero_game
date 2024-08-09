@@ -24,7 +24,7 @@
   }
   #maze div div::after {
     position: absolute;
-    right: 0; /* play with 'top' and 'right' to shift position of number value of hero/monster */
+    right: 0; /* play with 'top' and 'right' to shift position of number value of hero/monster/etc */
     top: 0;
     width: 100%;
     height: 100%;
@@ -70,14 +70,14 @@
   #maze div div.nubbin.wall::after {
     content: "";
   }
-  #maze div div.monster.wall {
+  #maze div div.powerUp.wall {
     background: transparent;
   }
-  #maze div div.monster.wall::after {
+  #maze div div.powerUp.wall::after {
     content: "\1F40A"; /* Default monster emoji */
     z-index: 10;
   }
-  #maze div.monster.wall:nth-of-type(3n)::after {
+  #maze div.powerUp.wall:nth-of-type(3n)::after {
     content: "\1F40D"; /* Different monster emoji */
     z-index: 10;
   }
