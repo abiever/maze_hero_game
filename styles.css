@@ -16,15 +16,21 @@
     position: relative;
     width: 1em;
     height: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em;
+    z-index: 20; /* Ensure text is on top */
   }
   #maze div div::after {
     position: absolute;
-    left: -3px;
-    top: -4px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
     text-align: center;
-    text-shadow: 0 0 1px black;
-    font-size: 1.2em;
-    z-index: 10;
+    z-index: 5; /* Ensure background images are underneath the text */
+    content: ""; /* Reset content by default */
   }
   #maze div div.door.exit::after {
     content: "\1F6AA";
@@ -44,8 +50,9 @@
   #maze div.nubbin:nth-of-type(13n)::after {
     content: "\1F381";
   }
-  #maze div.hero::after {
-    content: "\1F6B6" !important;
+  #maze div div.hero::after {
+    content: "\1F6B6"; /* Hero emoji */
+    z-index: 10;
   }
   #maze.face-right div.hero::after {
     transform: scale(-1, 1);
@@ -62,10 +69,12 @@
     background: transparent;
   }
   #maze div div.monster.wall::after {
-    content: "\1F40A";
+    content: "\1F40A"; /* Default monster emoji */
+    z-index: 10;
   }
   #maze div.monster.wall:nth-of-type(3n)::after {
-    content: "\1F40D";
+    content: "\1F40D"; /* Different monster emoji */
+    z-index: 10;
   }
   #maze div div.key::after {
     content: "\1F511";
