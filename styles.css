@@ -36,22 +36,22 @@
     content: "\1F6AA";
   }
   #maze div div.nubbin::after {
-    content: "\1F33C";
+    content: "\1F40A"; /* Default monster emoji */
   }
   #maze div.nubbin:nth-of-type(3n)::after {
-    content: "\1F344";
+    content: "\1F40D"; /* Different monster emoji */
   }
   #maze div.nubbin:nth-of-type(5n)::after {
-    content: "\1F33B";
+    content: "\1F40C"; /* Different monster emoji */
   }
   #maze div.nubbin:nth-of-type(7n)::after {
-    content: "\1F48E";
+    content: "\1F40B"; /* Different monster emoji */
   }
   #maze div.nubbin:nth-of-type(13n)::after {
-    content: "\1F381";
+    content: "\1F40E"; /* Different monster emoji */
   }
   #maze div div.hero::after {
-    content: "\1F6B6"; /* Hero emoji */
+    content: "\1F6B6"; /*Hero emoji*/
     z-index: 10;
   }
   .heroValue {
@@ -74,11 +74,11 @@
     background: transparent;
   }
   #maze div div.powerUp.wall::after {
-    content: "\1F40A"; /* Default monster emoji */
+    content: "\1F344"; /* mushroom emoji */
     z-index: 10;
   }
   #maze div.powerUp.wall:nth-of-type(3n)::after {
-    content: "\1F40D"; /* Different monster emoji */
+    content: "\1F343"; /* what emoji is this??? */
     z-index: 10;
   }
   #maze div div.key::after {
