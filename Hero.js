@@ -1,9 +1,17 @@
 export default class Hero {
     constructor(value) {
-        this.value = value;
+        this.heroValue = value;
         this.heroScore = null;
         this.heroPosition = {};
         this.heroHasKey = false;
+    }
+
+    getHeroValue() {
+        return this.heroValue;
+    }
+
+    increaseHeroValue(valueToAdd) {
+        this.heroValue += valueToAdd;
     }
 
     setHeroScore(score) {

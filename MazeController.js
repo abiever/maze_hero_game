@@ -42,6 +42,7 @@ export default class MazeController {
                     mazePosition = new Position(i, j);
                     this.mazeHero.setHeroPosition(mazePosition);
                     this.maze[this.mazeHero.getHeroPosition()].classList.add("hero");
+                    this.maze[this.mazeHero.getHeroPosition()].innerHTML = this.mazeHero.getHeroValue();
                 }
             }
         }
@@ -74,6 +75,13 @@ export default class MazeController {
         this.setMessage("yay, treasure!");
     }
 
+    //Use this method to see if the Hero can beat the monster
+    heroFightMonster() {
+        //Have the Hero's value compared to the monster's value
+        //if it is greater, eat the monster
+        //Eventually, add a consequence??
+    }
+
     heroTakeKey() {
         this.maze[this.mazeHero.getHeroPosition()].classList.remove("key");
         this.mazeHero.setHeroHasKey(true);
@@ -96,12 +104,12 @@ export default class MazeController {
         this.gameOver("you finished !!!");
     }
 
-    tryMoveHero(pos) {
-        if ("object" !== typeof this.maze[pos]) {
+    tryMoveHero(position) {
+        if ("object" !== typeof this.maze[position]) {
             return;
         }
 
-        var nextStep = this.maze[pos].className;
+        var nextStep = this.maze[position].className;
 
         /* before moving */
         if (nextStep.match(/sentinel/)) {
@@ -131,10 +139,12 @@ export default class MazeController {
             }
         }
 
-        /* move hero one step */
+        /* move hero one step by removing him, then adding him to another position with his vurrent value */
         this.maze[this.mazeHero.getHeroPosition()].classList.remove("hero");
-        this.maze[pos].classList.add("hero");
-        this.mazeHero.setHeroPosition(pos);
+        this.maze[this.mazeHero.getHeroPosition()].innerHTML = "";
+        this.maze[position].classList.add("hero");
+        this.mazeHero.setHeroPosition(position);
+        this.maze[position].innerHTML = this.mazeHero.getHeroValue();
 
         /* check what was stepped on */
         if (nextStep.match(/nubbin/)) {
@@ -165,32 +175,32 @@ export default class MazeController {
     }
 
     mazeKeyPressHandler(e) {
-        var tryPos = new Position(this.mazeHero.getHeroPosition().x, this.mazeHero.getHeroPosition().y);
+        var tryPosition = new Position(this.mazeHero.getHeroPosition().x, this.mazeHero.getHeroPosition().y);
 
         switch (e.key) {
             case "ArrowLeft":
                 this.mazeContainer.classList.remove("face-right");
-                tryPos.y--;
+                tryPosition.y--;
                 break;
 
             case "ArrowUp":
-                tryPos.x--;
+                tryPosition.x--;
                 break;
 
             case "ArrowRight":
                 this.mazeContainer.classList.add("face-right");
-                tryPos.y++;
+                tryPosition.y++;
                 break;
 
             case "ArrowDown":
-                tryPos.x++;
+                tryPosition.x++;
                 break;
 
             default:
                 return;
         }
 
-        this.tryMoveHero(tryPos);
+        this.tryMoveHero(tryPosition);
 
         e.preventDefault();
     }
