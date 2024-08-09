@@ -42,7 +42,9 @@ export default class MazeController {
                     mazePosition = new Position(i, j);
                     this.mazeHero.setHeroPosition(mazePosition);
                     this.maze[this.mazeHero.getHeroPosition()].classList.add("hero");
-                    this.maze[this.mazeHero.getHeroPosition()].innerHTML = this.mazeHero.getHeroValue();
+                    /*trying some complicated stuff here to format the innerHTML by inserting a span inside template literals*/
+                    //https://stackoverflow.com/questions/28458208/using-a-css-stylesheet-with-javascript-innerhtml
+                    this.maze[this.mazeHero.getHeroPosition()].innerHTML = `<span class="heroValue">${this.mazeHero.getHeroValue()}</span>`;
                 }
             }
         }
@@ -112,7 +114,11 @@ export default class MazeController {
         var nextStep = this.maze[position].className;
 
         /* before moving */
-        if (nextStep.match(/sentinel/)) {
+        if (nextStep.match(/monster/)) {
+            /* defeat monster if hero's value greater */
+            // if (this.mazeHero.getHeroValue() > /* this.monster.getValue() */) {
+
+            // }
             /* ran into a monster - lose points */
             this.mazeHero.decreaseScore(5);
 
@@ -144,7 +150,7 @@ export default class MazeController {
         this.maze[this.mazeHero.getHeroPosition()].innerHTML = "";
         this.maze[position].classList.add("hero");
         this.mazeHero.setHeroPosition(position);
-        this.maze[position].innerHTML = this.mazeHero.getHeroValue();
+        this.maze[position].innerHTML = `<span class="heroValue">${this.mazeHero.getHeroValue()}</span>`;
 
         /* check what was stepped on */
         if (nextStep.match(/nubbin/)) {

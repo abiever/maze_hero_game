@@ -1,17 +1,14 @@
 import FancyMazeBuilder from "/FancyMazeBuilder.js";
-import MazeController from "./MazeController.js"; //Don't forget capital 'M'?
+import MazeController from "./MazeController.js"; 
 
 var Maze, MazeGame;
       
-        const makeMaze = (id, width, height, speech = false) => {
-          Maze = new FancyMazeBuilder(width, height);
-          Maze.display(id);
-          MazeGame = new MazeController("maze");
-          if(speech) {
-            MazeGame.enableSpeech();
-          }
-        };
+const makeMaze = (id, width, height) => {
+    Maze = new FancyMazeBuilder(width, height);
+    Maze.display(id);
+    MazeGame = new MazeController("maze");
+}        
       
-        makeMaze("maze_container", 12, 12);
+/*TODO: Use the below to create larger and larger mazes for each "level" */
+makeMaze("maze_container", 20, 12);
 
-      /*TODO: Separate the 'Hero Class' from the rest of the code */

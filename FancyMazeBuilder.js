@@ -1,4 +1,5 @@
 import MazeBuilder from "/MazeBuilder.js"
+import Monster from "./Monster.js";
 
 export default class FancyMazeBuilder extends MazeBuilder {
 
@@ -11,7 +12,7 @@ export default class FancyMazeBuilder extends MazeBuilder {
   
       this.removeNubbins();
       this.joinNubbins();
-      this.placeSentinels(100);
+      this.placeMonsters(100);
       this.placeKey();
   
     }
@@ -99,7 +100,7 @@ export default class FancyMazeBuilder extends MazeBuilder {
   
     }
   
-    placeSentinels(percent = 100) {
+    placeMonsters(percent = 100) {
   
       percent = parseInt(percent, 10);
   
@@ -123,13 +124,13 @@ export default class FancyMazeBuilder extends MazeBuilder {
             return;
           }
   
-          if(this.isA("wall", [r-1,c-1],[r-1,c],[r-1,c+1],[r+1,c-1],[r+1,c],[r+1,c+1])) {
-            this.maze[r][c].push("sentinel");
-          }
-  
-          if(this.isA("wall", [r-1,c-1],[r,c-1],[r+1,c-1],[r-1,c+1],[r,c+1],[r+1,c+1])) {
-            this.maze[r][c].push("sentinel");
-          }
+          if(this.isA("wall", [r-1,c-1],[r-1,c],[r-1,c+1],[r+1,c-1],[r+1,c],[r+1,c+1]) ||
+         this.isA("wall", [r-1,c-1],[r,c-1],[r+1,c-1],[r-1,c+1],[r,c+1],[r+1,c+1])) {
+        // Create a new Monster object a random value
+        let randomMonsterValue = Math.floor(Math.random() * 10) + 1;
+        const monster = new Monster(randomMonsterValue);
+        this.maze[r][c].push(monster);
+        }
   
         });
   

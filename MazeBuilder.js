@@ -1,3 +1,5 @@
+import Monster from "./Monster.js";
+
 export default class MazeBuilder {
 
     // Original JavaScript code by Chirp Internet: www.chirpinternet.eu
@@ -244,37 +246,48 @@ export default class MazeBuilder {
     }
   
     display(id) {
-  
       this.parentDiv = document.getElementById(id);
-  
+    
       if(!this.parentDiv) {
         alert("Cannot initialise maze - no element found with id \"" + id + "\"");
         return false;
       }
-  
+    
       while(this.parentDiv.firstChild) {
         this.parentDiv.removeChild(this.parentDiv.firstChild);
       }
-  
+    
       const container = document.createElement("div");
       container.id = "maze";
       container.dataset.steps = this.totalSteps;
-  
+    
       this.maze.forEach((row) => {
         let rowDiv = document.createElement("div");
         row.forEach((cell) => {
           let cellDiv = document.createElement("div");
-          if(cell) {
-            cellDiv.className = cell.join(" ");
+    
+          // Add all string classes to the div
+          if (cell) {
+            cellDiv.className = cell.filter(item => typeof item === "string").join(" ");
           }
+    
+          // Check if this cell contains a Monster object
+          const monster = cell.find(item => item instanceof Monster);
+          if (monster) {
+            cellDiv.classList.add("monster"); //adds the class name of 'monster' so that the CSS knows how to display the Monster class correctly
+            cellDiv.innerHTML = `<span class="heroValue">${monster.getMonsterValue()}</span>`;
+          }
+    
           rowDiv.appendChild(cellDiv);
         });
         container.appendChild(rowDiv);
       });
-  
+    
       this.parentDiv.appendChild(container);
-  
+    
       return true;
     }
+    
+    
   
   }
