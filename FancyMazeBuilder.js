@@ -1,4 +1,5 @@
 import MazeBuilder from "/MazeBuilder.js"
+import Monster from "./Monster.js";
 
 export default class FancyMazeBuilder extends MazeBuilder {
 
@@ -123,13 +124,12 @@ export default class FancyMazeBuilder extends MazeBuilder {
             return;
           }
   
-          if(this.isA("wall", [r-1,c-1],[r-1,c],[r-1,c+1],[r+1,c-1],[r+1,c],[r+1,c+1])) {
-            this.maze[r][c].push("monster");
-          }
-  
-          if(this.isA("wall", [r-1,c-1],[r,c-1],[r+1,c-1],[r-1,c+1],[r,c+1],[r+1,c+1])) {
-            this.maze[r][c].push("monster");
-          }
+          if(this.isA("wall", [r-1,c-1],[r-1,c],[r-1,c+1],[r+1,c-1],[r+1,c],[r+1,c+1]) ||
+         this.isA("wall", [r-1,c-1],[r,c-1],[r+1,c-1],[r-1,c+1],[r,c+1],[r+1,c+1])) {
+        // Create a new Monster object with the value of 5 (or any other value you want)
+        const monster = new Monster(5);
+        this.maze[r][c].push(monster);
+        }
   
         });
   
