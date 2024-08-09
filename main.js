@@ -1,5 +1,5 @@
 import FancyMazeBuilder from "/FancyMazeBuilder.js";
-import MazeController from "./MazeController.js"; //Don't forget capital 'M'?
+import MazeController from "./MazeController.js"; 
 
 var Maze, MazeGame;
       

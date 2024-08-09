@@ -58,13 +58,13 @@
   #maze div div.nubbin.wall::after {
     content: "";
   }
-  #maze div div.sentinel.wall {
+  #maze div div.monster.wall {
     background: transparent;
   }
-  #maze div div.sentinel.wall::after {
+  #maze div div.monster.wall::after {
     content: "\1F40A";
   }
-  #maze div.sentinel.wall:nth-of-type(3n)::after {
+  #maze div.monster.wall:nth-of-type(3n)::after {
     content: "\1F40D";
   }
   #maze div div.key::after {
