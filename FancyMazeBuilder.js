@@ -11,7 +11,7 @@ export default class FancyMazeBuilder extends MazeBuilder {
   
       this.removeNubbins();
       this.joinNubbins();
-      this.placeSentinels(100);
+      this.placeMonsters(100);
       this.placeKey();
   
     }
@@ -99,7 +99,7 @@ export default class FancyMazeBuilder extends MazeBuilder {
   
     }
   
-    placeSentinels(percent = 100) {
+    placeMonsters(percent = 100) {
   
       percent = parseInt(percent, 10);
   
@@ -124,11 +124,11 @@ export default class FancyMazeBuilder extends MazeBuilder {
           }
   
           if(this.isA("wall", [r-1,c-1],[r-1,c],[r-1,c+1],[r+1,c-1],[r+1,c],[r+1,c+1])) {
-            this.maze[r][c].push("sentinel");
+            this.maze[r][c].push("monster");
           }
   
           if(this.isA("wall", [r-1,c-1],[r,c-1],[r+1,c-1],[r-1,c+1],[r,c+1],[r+1,c+1])) {
-            this.maze[r][c].push("sentinel");
+            this.maze[r][c].push("monster");
           }
   
         });

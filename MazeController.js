@@ -112,7 +112,7 @@ export default class MazeController {
         var nextStep = this.maze[position].className;
 
         /* before moving */
-        if (nextStep.match(/sentinel/)) {
+        if (nextStep.match(/monster/)) {
             /* ran into a monster - lose points */
             this.mazeHero.decreaseScore(5);
 
