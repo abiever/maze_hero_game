@@ -127,7 +127,8 @@ export default class FancyMazeBuilder extends MazeBuilder {
           if(this.isA("wall", [r-1,c-1],[r-1,c],[r-1,c+1],[r+1,c-1],[r+1,c],[r+1,c+1]) ||
          this.isA("wall", [r-1,c-1],[r,c-1],[r+1,c-1],[r-1,c+1],[r,c+1],[r+1,c+1])) {
         // Create a new Monster object with the value of 5 (or any other value you want)
-        const monster = new Monster(5);
+        let randomMonsterValue = Math.floor(Math.random() * 10) + 1;
+        const monster = new Monster(randomMonsterValue);
         this.maze[r][c].push(monster);
         }
   

@@ -24,13 +24,13 @@
   }
   #maze div div::after {
     position: absolute;
-    left: 0;
+    right: 0; /* play with 'top' and 'right' to shift position of number value of hero/monster */
     top: 0;
     width: 100%;
     height: 100%;
     text-align: center;
     z-index: 5; /* Ensure background images are underneath the text */
-    content: ""; /* Reset content by default */
+    content: ""; /*Reset content by default*/
   }
   #maze div div.door.exit::after {
     content: "\1F6AA";
@@ -53,6 +53,11 @@
   #maze div div.hero::after {
     content: "\1F6B6"; /* Hero emoji */
     z-index: 10;
+  }
+  .heroValue {
+    color: black;
+    font-size: 16px;
+    z-index: 30;
   }
   #maze.face-right div.hero::after {
     transform: scale(-1, 1);
