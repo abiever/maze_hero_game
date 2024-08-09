@@ -275,7 +275,7 @@ export default class MazeBuilder {
           const monster = cell.find(item => item instanceof Monster);
           if (monster) {
             cellDiv.classList.add("monster"); //adds the class name of 'monster' so that the CSS knows how to display the Monster class correctly
-            cellDiv.innerHTML = monster.getValue();
+            cellDiv.innerHTML = `<span class="heroValue">${monster.getMonsterValue()}</span>`;
           }
     
           rowDiv.appendChild(cellDiv);

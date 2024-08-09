@@ -1,9 +1,9 @@
 export default class Monster {
-    constructor(value) {
-        this.value = value;
+    constructor(monsterValue) {
+        this.monsterValue = monsterValue;
     }
 
-    getValue() {
-        return this.value;
+    getMonsterValue() {
+        return this.monsterValue;
     }
 }

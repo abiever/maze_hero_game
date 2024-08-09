@@ -43,6 +43,7 @@ export default class MazeController {
                     this.mazeHero.setHeroPosition(mazePosition);
                     this.maze[this.mazeHero.getHeroPosition()].classList.add("hero");
                     /*trying some complicated stuff here to format the innerHTML by inserting a span inside template literals*/
+                    //https://stackoverflow.com/questions/28458208/using-a-css-stylesheet-with-javascript-innerhtml
                     this.maze[this.mazeHero.getHeroPosition()].innerHTML = `<span class="heroValue">${this.mazeHero.getHeroValue()}</span>`;
                 }
             }
