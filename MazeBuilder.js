@@ -1,4 +1,5 @@
 import PowerUp from "./PowerUp.js";
+import Monster from "./Monster.js";
 
 export default class MazeBuilder {
 
@@ -277,6 +278,12 @@ export default class MazeBuilder {
             cellDiv.classList.remove("wall"); //gets rid of the wall className for PowerUps??
             cellDiv.classList.add("powerUp"); //adds the class name of 'powerup' so that the CSS knows how to display the powerup class correctly
             cellDiv.innerHTML = `<span class="heroValue">${powerUpInstance.getPowerUpFactor()}</span>`;
+          }
+
+          // Check if this cell contains a Monster object, then display its HTML
+          const monsterInstance = cell.find(item => item instanceof Monster);
+          if (monsterInstance) {
+            cellDiv.innerHTML = `<span class="heroValue">${monsterInstance.getMonsterLevel()}</span>`;
           }
     
           rowDiv.appendChild(cellDiv);

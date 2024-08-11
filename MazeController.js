@@ -80,10 +80,8 @@ export default class MazeController {
     }
 
     //Use this method to see if the Hero can beat the monster
-    heroFightMonster() {
-        //Have the Hero's value compared to the monster's value
-        //if it is greater, eat the monster
-        //Eventually, add a consequence??
+    canHeroBeatMonster(monsterLevel) {
+        return this.mazeHero.getHeroValue() > monsterLevel;
     }
 
     heroGetPowerUp(powerUpAtPosition) {
@@ -142,6 +140,18 @@ export default class MazeController {
             this.heroGetPowerUp(this.objectsInMazeArray[position.x][position.y][1].getPowerUpFactor());
         }
 
+        if (nextStep.match(/monster/)) {
+            //don't allow movement onto monster if Hero is weaker than
+            if (!this.canHeroBeatMonster(this.objectsInMazeArray[position.x][position.y][1].getMonsterLevel())) {
+                return;
+            }
+            //allow Hero to defeat monster and take its level
+            if (this.canHeroBeatMonster(this.objectsInMazeArray[position.x][position.y][1].getMonsterLevel())) {
+                this.mazeHero.increaseHeroValue(this.objectsInMazeArray[position.x][position.y][1].getMonsterLevel())
+            }
+            // console.log(this.objectsInMazeArray[position.x][position.y][1].getMonsterLevel());
+        }
+
         /* move hero one step by removing him, then adding him to another position with his vurrent value */
         this.maze[this.mazeHero.getHeroPosition()].classList.remove("hero");
         this.maze[this.mazeHero.getHeroPosition()].innerHTML = "";
@@ -149,10 +159,10 @@ export default class MazeController {
         this.mazeHero.setHeroPosition(position);
         this.maze[position].innerHTML = `<span class="heroValue">${this.mazeHero.getHeroValue()}</span>`;
 
-        /* check what was stepped on */
-        if (nextStep.match(/nubbin/)) {
+        /* check what was stepped on || remove element from display */
+        if (nextStep.match(/monster/)) {
             // console.log(this.maze[position])
-            this.heroTakeTreasure();
+            this.maze[this.mazeHero.getHeroPosition()].classList.remove("monster");
             return;
         }
 

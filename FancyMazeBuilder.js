@@ -1,5 +1,6 @@
 import MazeBuilder from "/MazeBuilder.js"
 import PowerUp from "./PowerUp.js";
+import Monster from "./Monster.js";
 
 export default class FancyMazeBuilder extends MazeBuilder {
 
@@ -10,8 +11,7 @@ export default class FancyMazeBuilder extends MazeBuilder {
   
       super(width, height);
   
-      this.removeNubbins();
-      this.joinNubbins();
+      this.placeMonsters();
       this.placePowerUps(100);
       this.placeKey();
   
@@ -28,7 +28,7 @@ export default class FancyMazeBuilder extends MazeBuilder {
       });
     }
   
-    removeNubbins() {
+    placeMonsters() {
   
       this.maze.slice(2, -2).forEach((row, idx) => {
   
@@ -43,55 +43,31 @@ export default class FancyMazeBuilder extends MazeBuilder {
           }
   
           if(this.isA("wall", [r-1, c-1], [r-1, c], [r-1, c+1], [r+1, c]) && this.isGap([r+1, c-1], [r+1, c+1], [r+2, c])) {
+            let randomMonsterLevel = Math.floor(Math.random() * 20) + 2;
+            let monster = new Monster(randomMonsterLevel);
             this.maze[r][c] = [];
-            this.maze[r+1][c] = ["nubbin"];
+            this.maze[r+1][c] = ["monster", monster];
           }
   
           if(this.isA("wall", [r-1, c+1], [r, c-1], [r, c+1], [r+1, c+1]) && this.isGap([r-1, c-1], [r, c-2], [r+1, c-1])) {
+            let randomMonsterLevel = Math.floor(Math.random() * 20) + 2;
+            let monster = new Monster(randomMonsterLevel);
             this.maze[r][c] = [];
-            this.maze[r][c-1] = ["nubbin"];
+            this.maze[r][c-1] = ["monster", monster];
           }
   
           if(this.isA("wall", [r-1, c-1], [r, c-1], [r+1, c-1], [r, c+1]) && this.isGap([r-1, c+1], [r, c+2], [r+1, c+1])) {
+            let randomMonsterLevel = Math.floor(Math.random() * 20) + 2;
+            let monster = new Monster(randomMonsterLevel);
             this.maze[r][c] = [];
-            this.maze[r][c+1] = ["nubbin"];
+            this.maze[r][c+1] = ["monster", monster];
           }
   
           if(this.isA("wall", [r-1, c], [r+1, c-1], [r+1, c], [r+1, c+1]) && this.isGap([r-1, c-1], [r-2, c], [r-1, c+1])) {
+            let randomMonsterLevel = Math.floor(Math.random() * 20) + 2;
+            let monster = new Monster(randomMonsterLevel);
             this.maze[r][c] = [];
-            this.maze[r-1][c] = ["nubbin"];
-          }
-  
-        });
-  
-      });
-  
-    }
-  
-    joinNubbins() {
-  
-      this.maze.slice(2, -2).forEach((row, idx) => {
-  
-        let r = idx + 2;
-  
-        row.slice(2, -2).forEach((cell, idx) => {
-  
-          let c = idx + 2;
-  
-          if(!this.isA("nubbin", [r, c])) {
-            return;
-          }
-  
-          if(this.isA("nubbin", [r-2, c])) {
-            this.maze[r-2][c].push("wall");
-            this.maze[r-1][c] = ["nubbin", "wall"];
-            this.maze[r][c].push("wall");
-          }
-  
-          if(this.isA("nubbin", [r, c-2])) {
-            this.maze[r][c-2].push("wall");
-            this.maze[r][c-1] = ["nubbin", "wall"];
-            this.maze[r][c].push("wall");
+            this.maze[r-1][c] = ["monster", monster];
           }
   
         });
