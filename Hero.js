@@ -1,6 +1,7 @@
 export default class Hero {
     constructor(value) {
         this.heroValue = value;
+        this.heroStepCount = 0;
         this.heroScore = null;
         this.heroPosition = {};
         this.heroHasKey = false;
@@ -48,5 +49,13 @@ export default class Hero {
 
     increaseScore(amount) {
         this.heroScore += amount;
+    }
+
+    increaseHeroStepCount() {
+        this.heroStepCount += 1;
+    }
+
+    getHeroStepCount() {
+        return this.heroStepCount;
     }
 }

@@ -70,7 +70,8 @@ export default class MazeController {
     setMessage(text) {
         /* display message on screen */
         this.mazeMessage.innerHTML = text;
-        this.mazeScore.innerHTML = this.mazeHero.getHeroScore();
+        /* changed the below to 'step count'. Refactor names for better readability */
+        this.mazeScore.innerHTML = this.mazeHero.getHeroStepCount();
     }
 
     heroTakeTreasure() {
@@ -180,15 +181,16 @@ export default class MazeController {
             return;
         }
 
-        if ((this.mazeHero.getHeroScore() >= 1) && !this.mazeHero.childMode) {
-            this.mazeHero.decreaseScore(1);
+        // if ((this.mazeHero.getHeroScore() >= 1) && !this.mazeHero.childMode) {
+        //     this.mazeHero.decreaseScore(1);
 
-            if (this.mazeHero.getHeroScore() <= 0) {
-                /* game over */
-                this.gameOver("sorry, you didn't make it");
-                return;
-            }
-        }
+        //     if (this.mazeHero.getHeroScore() <= 0) {
+        //         /* game over */
+        //         this.gameOver("sorry, you didn't make it");
+        //         return;
+        //     }
+        // }
+        this.mazeHero.increaseHeroStepCount();
 
         this.setMessage("...");
     }
@@ -230,12 +232,9 @@ export default class MazeController {
         this.setMessage("collect all the treasure");
     }
 
-    // returnPowerUpIndex() {
-    //     return this.maze.indexOf()
+    //Use this to check the contents of the MazeControllerArray
+    // returnMazeControllerMaze() {
+    //     console.log("MazeControllerMazeArray:", this.maze);
+    //     return this.maze;
     // }
-
-    returnMazeControllerMaze() {
-        console.log("MazeControllerMazeArray:", this.maze);
-        return this.maze;
-    }
 }
