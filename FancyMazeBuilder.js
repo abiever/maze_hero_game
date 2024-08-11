@@ -11,8 +11,7 @@ export default class FancyMazeBuilder extends MazeBuilder {
   
       super(width, height);
   
-      this.removeNubbins();
-      this.joinNubbins(); //Could this method be removed and not really change anything??
+      this.placeMonsters();
       this.placePowerUps(100);
       this.placeKey();
   
@@ -29,7 +28,7 @@ export default class FancyMazeBuilder extends MazeBuilder {
       });
     }
   
-    removeNubbins() {
+    placeMonsters() {
   
       this.maze.slice(2, -2).forEach((row, idx) => {
   
@@ -69,38 +68,6 @@ export default class FancyMazeBuilder extends MazeBuilder {
             let monster = new Monster(randomMonsterLevel);
             this.maze[r][c] = [];
             this.maze[r-1][c] = ["monster", monster];
-          }
-  
-        });
-  
-      });
-  
-    }
-  
-    joinNubbins() {
-  
-      this.maze.slice(2, -2).forEach((row, idx) => {
-  
-        let r = idx + 2;
-  
-        row.slice(2, -2).forEach((cell, idx) => {
-  
-          let c = idx + 2;
-  
-          if(!this.isA("nubbin", [r, c])) {
-            return;
-          }
-  
-          if(this.isA("nubbin", [r-2, c])) {
-            this.maze[r-2][c].push("wall");
-            this.maze[r-1][c] = ["nubbin", "wall"];
-            this.maze[r][c].push("wall");
-          }
-  
-          if(this.isA("nubbin", [r, c-2])) {
-            this.maze[r][c-2].push("wall");
-            this.maze[r][c-1] = ["nubbin", "wall"];
-            this.maze[r][c].push("wall");
           }
   
         });
