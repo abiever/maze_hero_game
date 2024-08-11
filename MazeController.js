@@ -23,8 +23,8 @@ export default class MazeController {
         /* bind to HTML element */
         this.mazeContainer = document.getElementById(id);
 
-        this.mazeScore = document.createElement("div");
-        this.mazeScore.id = "maze_score";
+        this.heroStepCounter = document.createElement("div");
+        this.heroStepCounter.id = "maze_score";
 
         this.mazeMessage = document.createElement("div");
         this.mazeMessage.id = "maze_message";
@@ -54,7 +54,7 @@ export default class MazeController {
         var mazeOutputDiv = document.createElement("div");
         mazeOutputDiv.id = "maze_output";
 
-        mazeOutputDiv.appendChild(this.mazeScore);
+        mazeOutputDiv.appendChild(this.heroStepCounter);
         mazeOutputDiv.appendChild(this.mazeMessage);
 
         mazeOutputDiv.style.width = this.mazeContainer.scrollWidth + "px";
@@ -71,7 +71,7 @@ export default class MazeController {
         /* display message on screen */
         this.mazeMessage.innerHTML = text;
         /* changed the below to 'step count'. Refactor names for better readability */
-        this.mazeScore.innerHTML = this.mazeHero.getHeroStepCount();
+        this.heroStepCounter.innerHTML = this.mazeHero.getHeroStepCount();
     }
 
     heroTakeTreasure() {
@@ -93,8 +93,7 @@ export default class MazeController {
     heroTakeKey() {
         this.maze[this.mazeHero.getHeroPosition()].classList.remove("key");
         this.mazeHero.setHeroHasKey(true);
-        this.mazeHero.increaseScore(20);
-        this.mazeScore.classList.add("has-key");
+        this.heroStepCounter.classList.add("has-key");
         this.setMessage("you now have the key!");
     }
 
@@ -106,9 +105,8 @@ export default class MazeController {
     }
 
     heroWins() {
-        this.mazeScore.classList.remove("has-key");
+        this.heroStepCounter.classList.remove("has-key");
         this.maze[this.mazeHero.getHeroPosition()].classList.remove("door");
-        this.mazeHero.increaseScore(50);
         this.gameOver("you finished !!!");
     }
 
