@@ -1,5 +1,6 @@
 import MazeBuilder from "/MazeBuilder.js"
 import PowerUp from "./PowerUp.js";
+import Monster from "./Monster.js";
 
 export default class FancyMazeBuilder extends MazeBuilder {
 
@@ -43,8 +44,10 @@ export default class FancyMazeBuilder extends MazeBuilder {
           }
   
           if(this.isA("wall", [r-1, c-1], [r-1, c], [r-1, c+1], [r+1, c]) && this.isGap([r+1, c-1], [r+1, c+1], [r+2, c])) {
+            let randomMonsterLevel = Math.floor(Math.random() * 20) + 2;
+            let monster = new Monster(randomMonsterLevel);
             this.maze[r][c] = [];
-            this.maze[r+1][c] = ["nubbin"];
+            this.maze[r+1][c] = ["monster", monster];
           }
   
           if(this.isA("wall", [r-1, c+1], [r, c-1], [r, c+1], [r+1, c+1]) && this.isGap([r-1, c-1], [r, c-2], [r+1, c-1])) {

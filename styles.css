@@ -50,6 +50,12 @@
   #maze div.nubbin:nth-of-type(13n)::after {
     content: "\1F40E"; /* Different monster emoji */
   }
+
+  /*troubleshooting emoji for new Monster class display*/
+  #maze div div.monster::after {
+    content: "\1F30E" /* earth emoji lmao */
+  }
+
   #maze div div.hero::after {
     content: "\1F6B6"; /*Hero emoji*/
     z-index: 10;

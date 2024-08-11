@@ -290,7 +290,7 @@ export default class MazeBuilder {
     }
     
     returnMazeBuilderArray() {
-      console.log("MazeBuilderArray:", this.maze);
+      //console.log("MazeBuilderArray:", this.maze);
       return this.maze;
     }
   
