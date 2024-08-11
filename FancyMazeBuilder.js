@@ -127,13 +127,13 @@ export default class FancyMazeBuilder extends MazeBuilder {
           if(this.isA("wall", [r-1,c-1],[r-1,c],[r-1,c+1],[r+1,c-1],[r+1,c],[r+1,c+1]) ||
          this.isA("wall", [r-1,c-1],[r,c-1],[r+1,c-1],[r-1,c+1],[r,c+1],[r+1,c+1])) {
         // Create a new PowerUp object with a random factor value
-        let randomPowerUpFactor = Math.floor(Math.random() * 3) + 1;
+        let randomPowerUpFactor = Math.floor(Math.random() * 4) + 2;
         const powerUp = new PowerUp(randomPowerUpFactor);
         this.maze[r][c].push(powerUp);
         }
-  
+
         });
-  
+
       });
     }
   

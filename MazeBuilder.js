@@ -288,6 +288,9 @@ export default class MazeBuilder {
       return true;
     }
     
-    
+    returnMazeBuilderArray() {
+      console.log("MazeBuilderArray:", this.maze);
+      return this.maze;
+    }
   
   }

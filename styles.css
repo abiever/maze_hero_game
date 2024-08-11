@@ -78,7 +78,7 @@
     z-index: 10;
   }
   #maze div.powerUp.wall:nth-of-type(3n)::after {
-    content: "\1F343"; /* what emoji is this??? */
+    content: "\1F345"; /* tomato emoji */
     z-index: 10;
   }
   #maze div div.key::after {

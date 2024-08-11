@@ -1,4 +1,5 @@
 import Hero from "./Hero.js";
+import PowerUp from "./PowerUp.js";
 
 class Position {
     constructor(x, y) {
@@ -13,7 +14,7 @@ class Position {
 //TODO: I may need to bundle everything with node/npm to get rid of the "Unexpected token 'export'" error in browser
 
 export default class MazeController {
-    constructor(id) {
+    constructor(id, objectsInMazeArray) {
         // Original JavaScript code by Chirp Internet: www.chirpinternet.eu
         // Please acknowledge use of this code by including this header.
 
@@ -30,7 +31,8 @@ export default class MazeController {
 
         this.mazeHero.setHeroScore(this.mazeContainer.getAttribute("data-steps") - 2);
 
-        this.maze = [];
+        this.maze = []; //This array contains the HTML elements composing the maze itself?
+        this.objectsInMazeArray = objectsInMazeArray; //This array will contain the positions of where objects like PowerUps are 
 
         var mazePosition;
         for (let i = 0; i < this.mazeContainer.children.length; i++) {
@@ -84,6 +86,11 @@ export default class MazeController {
         //Eventually, add a consequence??
     }
 
+    heroGetPowerUp(powerUpAtPosition) {
+        /* Have Hero's value increase by PowerUp's factor */
+        this.mazeHero.powerUpHero(powerUpAtPosition)
+    }
+
     heroTakeKey() {
         this.maze[this.mazeHero.getHeroPosition()].classList.remove("key");
         this.mazeHero.setHeroHasKey(true);
@@ -114,22 +121,40 @@ export default class MazeController {
         var nextStep = this.maze[position].className;
 
         /* before moving */
-        if (nextStep.match(/monster/)) {
-            /* defeat monster if hero's value greater */
-            // if (this.mazeHero.getHeroValue() > /* this.monster.getValue() */) {
+        // if (nextStep.match(/powerUp/)) {
 
-            // }
-            /* ran into a monster - lose points */
-            this.mazeHero.decreaseScore(5);
+        //     // this.heroGetPowerUp(this.maze[position].getPowerUpFactor())
 
-            if (!this.mazeHero.childMode && (this.mazeHero.getHeroScore() <= 0)) {
-                /* game over */
-                this.gameOver("sorry, you didn't make it.");
-            } else {
-                this.setMessage("ow, that hurt!");
-            }
+            
+        //     return;
+        //     // /* defeat monster if hero's value greater */
+        //     // // if (this.mazeHero.getHeroValue() > /* this.monster.getValue() */) {
 
-            return;
+        //     // // }
+        //     // /* ran into a monster - lose points */
+        //     // this.mazeHero.decreaseScore(5);
+
+        //     // if (!this.mazeHero.childMode && (this.mazeHero.getHeroScore() <= 0)) {
+        //     //     /* game over */
+        //     //     this.gameOver("sorry, you didn't make it.");
+        //     // } else {
+        //     //     this.setMessage("ow, that hurt!");
+        //     // }
+
+        //     // return;
+        // }
+
+        if (nextStep.match(/powerUp/)) {
+
+            // console.log(this.maze[position] instanceof PowerUp);
+            // return;
+            console.log(true, position);
+            console.log(this.objectsInMazeArray[position.x][position.y][1].getPowerUpFactor());
+            // console.log(nextStep);
+            //NOTE FOR DEBUGGING
+            //The MazeBuilderArray and MazeControllerArray appear to be 1:1 with position for objects/classes, I just need some way to "bridge" access of methods.
+            //Perhaps "export" the MazeBuilderArray so that it's accessible where I need it?
+            return 0;
         }
 
         if (nextStep.match(/wall/)) {
@@ -154,6 +179,7 @@ export default class MazeController {
 
         /* check what was stepped on */
         if (nextStep.match(/nubbin/)) {
+            console.log(this.maze[position])
             this.heroTakeTreasure();
             return;
         }
@@ -215,5 +241,14 @@ export default class MazeController {
         this.mazeHero.childMode = true;
         this.mazeHero.setHeroScore(0);
         this.setMessage("collect all the treasure");
+    }
+
+    // returnPowerUpIndex() {
+    //     return this.maze.indexOf()
+    // }
+
+    returnMazeControllerMaze() {
+        console.log("MazeControllerMazeArray:", this.maze);
+        return this.maze;
     }
 }

@@ -4,6 +4,7 @@ export default class PowerUp {
     }
 
     getPowerUpFactor() {
+        console.log(this.powerUpFactor)
         return this.powerUpFactor;
     }
 }

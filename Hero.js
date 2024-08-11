@@ -14,6 +14,10 @@ export default class Hero {
         this.heroValue += valueToAdd;
     }
 
+    powerUpHero(factorValue) {
+        this.heroValue *= factorValue;
+    }
+
     setHeroScore(score) {
         this.heroScore = score;
     }
