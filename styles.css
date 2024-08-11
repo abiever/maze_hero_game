@@ -73,11 +73,11 @@
   #maze div div.powerUp.wall {
     background: transparent;
   }
-  #maze div div.powerUp.wall::after {
+  #maze div div.powerUp::after {
     content: "\1F344"; /* mushroom emoji */
     z-index: 10;
   }
-  #maze div.powerUp.wall:nth-of-type(3n)::after {
+  #maze div.powerUp:nth-of-type(3n)::after {
     content: "\1F345"; /* tomato emoji */
     z-index: 10;
   }

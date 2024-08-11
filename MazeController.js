@@ -120,43 +120,7 @@ export default class MazeController {
 
         var nextStep = this.maze[position].className;
 
-        /* before moving */
-        // if (nextStep.match(/powerUp/)) {
-
-        //     // this.heroGetPowerUp(this.maze[position].getPowerUpFactor())
-
-            
-        //     return;
-        //     // /* defeat monster if hero's value greater */
-        //     // // if (this.mazeHero.getHeroValue() > /* this.monster.getValue() */) {
-
-        //     // // }
-        //     // /* ran into a monster - lose points */
-        //     // this.mazeHero.decreaseScore(5);
-
-        //     // if (!this.mazeHero.childMode && (this.mazeHero.getHeroScore() <= 0)) {
-        //     //     /* game over */
-        //     //     this.gameOver("sorry, you didn't make it.");
-        //     // } else {
-        //     //     this.setMessage("ow, that hurt!");
-        //     // }
-
-        //     // return;
-        // }
-
-        if (nextStep.match(/powerUp/)) {
-
-            // console.log(this.maze[position] instanceof PowerUp);
-            // return;
-            console.log(true, position);
-            console.log(this.objectsInMazeArray[position.x][position.y][1].getPowerUpFactor());
-            // console.log(nextStep);
-            //NOTE FOR DEBUGGING
-            //The MazeBuilderArray and MazeControllerArray appear to be 1:1 with position for objects/classes, I just need some way to "bridge" access of methods.
-            //Perhaps "export" the MazeBuilderArray so that it's accessible where I need it?
-            return 0;
-        }
-
+        /* make checks before moving to inhibit illegal moves*/
         if (nextStep.match(/wall/)) {
             return;
         }
@@ -170,6 +134,14 @@ export default class MazeController {
             }
         }
 
+        /* NOTE: I had to 'separate' the 2 steps for what happens when a match with 'powerUp' is found */
+        //1) getPowerUpFactor
+        //Between) Hero moves
+        //2) remove className of 'powerUp' so that the emoji disappears right when the Hero moves onto that square
+        if (nextStep.match(/powerUp/)) {
+            this.heroGetPowerUp(this.objectsInMazeArray[position.x][position.y][1].getPowerUpFactor());
+        }
+
         /* move hero one step by removing him, then adding him to another position with his vurrent value */
         this.maze[this.mazeHero.getHeroPosition()].classList.remove("hero");
         this.maze[this.mazeHero.getHeroPosition()].innerHTML = "";
@@ -179,11 +151,16 @@ export default class MazeController {
 
         /* check what was stepped on */
         if (nextStep.match(/nubbin/)) {
-            console.log(this.maze[position])
+            // console.log(this.maze[position])
             this.heroTakeTreasure();
             return;
         }
 
+        if (nextStep.match(/powerUp/)) {
+            this.maze[this.mazeHero.getHeroPosition()].classList.remove("powerUp");
+            return;
+        }
+        
         if (nextStep.match(/key/)) {
             this.heroTakeKey();
             return;

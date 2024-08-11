@@ -274,6 +274,7 @@ export default class MazeBuilder {
           // Check if this cell contains a powerup object
           const powerUpInstance = cell.find(item => item instanceof PowerUp);
           if (powerUpInstance) {
+            cellDiv.classList.remove("wall"); //gets rid of the wall className for PowerUps??
             cellDiv.classList.add("powerUp"); //adds the class name of 'powerup' so that the CSS knows how to display the powerup class correctly
             cellDiv.innerHTML = `<span class="heroValue">${powerUpInstance.getPowerUpFactor()}</span>`;
           }
