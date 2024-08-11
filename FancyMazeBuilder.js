@@ -1,5 +1,5 @@
 import MazeBuilder from "/MazeBuilder.js"
-import Monster from "./Monster.js";
+import PowerUp from "./PowerUp.js";
 
 export default class FancyMazeBuilder extends MazeBuilder {
 
@@ -12,7 +12,7 @@ export default class FancyMazeBuilder extends MazeBuilder {
   
       this.removeNubbins();
       this.joinNubbins();
-      this.placeMonsters(100);
+      this.placePowerUps(100);
       this.placeKey();
   
     }
@@ -100,7 +100,7 @@ export default class FancyMazeBuilder extends MazeBuilder {
   
     }
   
-    placeMonsters(percent = 100) {
+    placePowerUps(percent = 100) {
   
       percent = parseInt(percent, 10);
   
@@ -126,14 +126,14 @@ export default class FancyMazeBuilder extends MazeBuilder {
   
           if(this.isA("wall", [r-1,c-1],[r-1,c],[r-1,c+1],[r+1,c-1],[r+1,c],[r+1,c+1]) ||
          this.isA("wall", [r-1,c-1],[r,c-1],[r+1,c-1],[r-1,c+1],[r,c+1],[r+1,c+1])) {
-        // Create a new Monster object a random value
-        let randomMonsterValue = Math.floor(Math.random() * 10) + 1;
-        const monster = new Monster(randomMonsterValue);
-        this.maze[r][c].push(monster);
+        // Create a new PowerUp object with a random factor value
+        let randomPowerUpFactor = Math.floor(Math.random() * 4) + 2;
+        const powerUp = new PowerUp(randomPowerUpFactor);
+        this.maze[r][c].push(powerUp);
         }
-  
+
         });
-  
+
       });
     }
   
