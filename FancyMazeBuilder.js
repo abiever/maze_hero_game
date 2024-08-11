@@ -12,7 +12,7 @@ export default class FancyMazeBuilder extends MazeBuilder {
       super(width, height);
   
       this.removeNubbins();
-      this.joinNubbins();
+      this.joinNubbins(); //Could this method be removed and not really change anything??
       this.placePowerUps(100);
       this.placeKey();
   
@@ -51,18 +51,24 @@ export default class FancyMazeBuilder extends MazeBuilder {
           }
   
           if(this.isA("wall", [r-1, c+1], [r, c-1], [r, c+1], [r+1, c+1]) && this.isGap([r-1, c-1], [r, c-2], [r+1, c-1])) {
+            let randomMonsterLevel = Math.floor(Math.random() * 20) + 2;
+            let monster = new Monster(randomMonsterLevel);
             this.maze[r][c] = [];
-            this.maze[r][c-1] = ["nubbin"];
+            this.maze[r][c-1] = ["monster", monster];
           }
   
           if(this.isA("wall", [r-1, c-1], [r, c-1], [r+1, c-1], [r, c+1]) && this.isGap([r-1, c+1], [r, c+2], [r+1, c+1])) {
+            let randomMonsterLevel = Math.floor(Math.random() * 20) + 2;
+            let monster = new Monster(randomMonsterLevel);
             this.maze[r][c] = [];
-            this.maze[r][c+1] = ["nubbin"];
+            this.maze[r][c+1] = ["monster", monster];
           }
   
           if(this.isA("wall", [r-1, c], [r+1, c-1], [r+1, c], [r+1, c+1]) && this.isGap([r-1, c-1], [r-2, c], [r-1, c+1])) {
+            let randomMonsterLevel = Math.floor(Math.random() * 20) + 2;
+            let monster = new Monster(randomMonsterLevel);
             this.maze[r][c] = [];
-            this.maze[r-1][c] = ["nubbin"];
+            this.maze[r-1][c] = ["monster", monster];
           }
   
         });
