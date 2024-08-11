@@ -12,5 +12,5 @@ const makeMaze = (id, width, height) => {
 }        
       
 /*TODO: Use the below to create larger and larger mazes for each "level" */
-makeMaze("maze_container", 8, 8);
+makeMaze("maze_container", 10, 10);
 
