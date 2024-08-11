@@ -35,25 +35,20 @@
   #maze div div.door.exit::after {
     content: "\1F6AA";
   }
-  #maze div div.nubbin::after {
+  #maze div div.monster::after {
     content: "\1F40A"; /* Default monster emoji */
   }
-  #maze div.nubbin:nth-of-type(3n)::after {
+  #maze div.monster:nth-of-type(3n)::after {
     content: "\1F40D"; /* Different monster emoji */
   }
-  #maze div.nubbin:nth-of-type(5n)::after {
+  #maze div.monster:nth-of-type(5n)::after {
     content: "\1F40C"; /* Different monster emoji */
   }
-  #maze div.nubbin:nth-of-type(7n)::after {
+  #maze div.monster:nth-of-type(7n)::after {
     content: "\1F40B"; /* Different monster emoji */
   }
-  #maze div.nubbin:nth-of-type(13n)::after {
+  #maze div.monster:nth-of-type(13n)::after {
     content: "\1F40E"; /* Different monster emoji */
-  }
-
-  /*troubleshooting emoji for new Monster class display*/
-  #maze div div.monster::after {
-    content: "\1F30E" /* earth emoji lmao */
   }
 
   #maze div div.hero::after {
