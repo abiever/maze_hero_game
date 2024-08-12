@@ -9,8 +9,9 @@ const makeMaze = (id, width, height) => {
     //Maze.returnMazeBuilderArray();
     MazeGame = new MazeController("maze", Maze.returnMazeBuilderArray());
     //MazeGame.returnMazeControllerMaze();
+    //Maze.getKeyLocation();
 }        
       
 /*TODO: Use the below to create larger and larger mazes for each "level" */
-makeMaze("maze_container", 10, 10);
+makeMaze("maze_container", 12, 10);
 

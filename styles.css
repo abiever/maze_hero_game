@@ -1,3 +1,5 @@
+/*1F409*/ /*dragon emoji*/
+
 #maze_container {
     position: relative;
     margin: 1em auto;
@@ -49,6 +51,9 @@
   }
   #maze div.monster:nth-of-type(13n)::after {
     content: "\1F40E"; /* Different monster emoji */
+  }
+  #maze div div.boss::after {
+    content: "\1F409"; /* dragon emoji */
   }
 
   #maze div div.hero::after {

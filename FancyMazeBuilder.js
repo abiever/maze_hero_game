@@ -14,6 +14,7 @@ export default class FancyMazeBuilder extends MazeBuilder {
       this.placeMonsters();
       this.placePowerUps(100);
       this.placeKey();
+      this.placeBoss();
   
     }
   
@@ -113,23 +114,45 @@ export default class FancyMazeBuilder extends MazeBuilder {
       });
     }
   
-    placeKey() {
+    // placeKey() {
   
+    //   let fr, fc;
+    //   [fr, fc] = this.getKeyLocation();
+  
+    //   if(this.isA("nubbin", [fr-1,fc-1]) && !this.isA("wall", [fr-1,fc-1])) {
+    //     this.maze[fr-1][fc-1] = ["key"];
+    //   } else if(this.isA("nubbin", [fr-1,fc+1]) && !this.isA("wall", [fr-1,fc+1])) {
+    //     this.maze[fr-1][fc+1] = ["key"];
+    //   } else if(this.isA("nubbin", [fr+1,fc-1]) && !this.isA("wall", [fr+1,fc-1])) {
+    //     this.maze[fr+1][fc-1] = ["key"];
+    //   } else if(this.isA("nubbin", [fr+1,fc+1]) && !this.isA("wall", [fr+1,fc+1])) {
+    //     this.maze[fr+1][fc+1] = ["key"];
+    //   } else {
+    //     this.maze[fr][fc] = ["key"];
+    //   }
+  
+    // }
+
+    /* this will place the Boss Monster right in front the key */
+    placeBoss() {
+
       let fr, fc;
       [fr, fc] = this.getKeyLocation();
-  
+      
+      let boss = new Monster(999); //edit this to be based on ALL monster levels
+
       if(this.isA("nubbin", [fr-1,fc-1]) && !this.isA("wall", [fr-1,fc-1])) {
-        this.maze[fr-1][fc-1] = ["key"];
+        this.maze[fr-2][fc-1] = ["boss", boss];
       } else if(this.isA("nubbin", [fr-1,fc+1]) && !this.isA("wall", [fr-1,fc+1])) {
-        this.maze[fr-1][fc+1] = ["key"];
+        this.maze[fr-2][fc+1] = ["boss", boss];
       } else if(this.isA("nubbin", [fr+1,fc-1]) && !this.isA("wall", [fr+1,fc-1])) {
-        this.maze[fr+1][fc-1] = ["key"];
+        this.maze[fr+2][fc-1] = ["boss", boss];
       } else if(this.isA("nubbin", [fr+1,fc+1]) && !this.isA("wall", [fr+1,fc+1])) {
-        this.maze[fr+1][fc+1] = ["key"];
+        this.maze[fr+2][fc+1] = ["boss", boss];
       } else {
-        this.maze[fr][fc] = ["key"];
-      }
-  
+        this.maze[fr][fc] = ["boss", boss];
+
     }
-  
+
   }
+}

@@ -29,7 +29,7 @@ export default class MazeController {
         this.mazeMessage = document.createElement("div");
         this.mazeMessage.id = "maze_message";
 
-        this.mazeHero.setHeroScore(this.mazeContainer.getAttribute("data-steps") - 2);
+        this.mazeHero.setHeroScore(this.mazeContainer.getAttribute("data-steps")); // removed "- 2" from here a few commits ago; doesn't seem necessary any more??
 
         this.maze = []; //This array contains the HTML elements composing the maze itself?
         this.objectsInMazeArray = objectsInMazeArray; //This array will contain the positions of where objects like PowerUps are 

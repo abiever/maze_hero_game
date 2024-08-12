@@ -233,7 +233,7 @@ export default class MazeBuilder {
           }
         });
       });
-  
+      console.log([fr, fc])
       return [fr, fc];
     }
   
