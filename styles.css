@@ -107,7 +107,7 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    content: "Game Over";
+    content: "You Won!";
     background: rgba(0,0,0,0.4);
     text-align: center;
     text-transform: uppercase;
@@ -115,7 +115,7 @@
     font-size: 5em;
     text-shadow: 2px 2px 2px rgba(0,0,0,0.8);
     color: #fff;
-    z-index: 10;
+    z-index: 50;
   }
   
   #maze_output {
