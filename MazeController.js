@@ -148,7 +148,18 @@ export default class MazeController {
             if (this.canHeroBeatMonster(this.objectsInMazeArray[position.x][position.y][1].getMonsterLevel())) {
                 this.mazeHero.increaseHeroValue(this.objectsInMazeArray[position.x][position.y][1].getMonsterLevel())
             }
-            // console.log(this.objectsInMazeArray[position.x][position.y][1].getMonsterLevel());
+        }
+
+        //This is a little too spaghetti code — consider consolidating!
+        if (nextStep.match(/boss/)) {
+            //don't allow movement onto boss if Hero is weaker than
+            if (!this.canHeroBeatMonster(this.objectsInMazeArray[position.x][position.y][1].getMonsterLevel())) {
+                return;
+            }
+            //allow Hero to defeat monster and take its level
+            if (this.canHeroBeatMonster(this.objectsInMazeArray[position.x][position.y][1].getMonsterLevel())) {
+                this.mazeHero.increaseHeroValue(this.objectsInMazeArray[position.x][position.y][1].getMonsterLevel())
+            }
         }
 
         /* move hero one step by removing him, then adding him to another position with his vurrent value */
@@ -160,8 +171,12 @@ export default class MazeController {
 
         /* check what was stepped on || remove element from display */
         if (nextStep.match(/monster/)) {
-            // console.log(this.maze[position])
             this.maze[this.mazeHero.getHeroPosition()].classList.remove("monster");
+            return;
+        }
+
+        if (nextStep.match(/boss/)) {
+            this.maze[this.mazeHero.getHeroPosition()].classList.remove("boss");
             return;
         }
 
@@ -179,15 +194,6 @@ export default class MazeController {
             return;
         }
 
-        // if ((this.mazeHero.getHeroScore() >= 1) && !this.mazeHero.childMode) {
-        //     this.mazeHero.decreaseScore(1);
-
-        //     if (this.mazeHero.getHeroScore() <= 0) {
-        //         /* game over */
-        //         this.gameOver("sorry, you didn't make it");
-        //         return;
-        //     }
-        // }
         this.mazeHero.increaseHeroStepCount();
 
         this.setMessage("...");
