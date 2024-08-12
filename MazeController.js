@@ -241,4 +241,8 @@ export default class MazeController {
     //     console.log("MazeControllerMazeArray:", this.maze);
     //     return this.maze;
     // }
+
+    startNewGame() {
+        //Use this method to start a new maze game but bigger and with greater functionality/difficulty??
+    }
 }
