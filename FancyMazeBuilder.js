@@ -10,11 +10,14 @@ export default class FancyMazeBuilder extends MazeBuilder {
     constructor(width, height) {
   
       super(width, height);
+
+      //This will store the sum of all monster levels
+      this.cumulativeMonsterLevels = 0;
   
       this.placeMonsters();
       this.placePowerUps(100);
       this.placeKey();
-      this.placeBoss();
+      this.placeBoss(this.cumulativeMonsterLevels);
   
     }
   
@@ -46,6 +49,7 @@ export default class FancyMazeBuilder extends MazeBuilder {
           if(this.isA("wall", [r-1, c-1], [r-1, c], [r-1, c+1], [r+1, c]) && this.isGap([r+1, c-1], [r+1, c+1], [r+2, c])) {
             let randomMonsterLevel = Math.floor(Math.random() * 20) + 2;
             let monster = new Monster(randomMonsterLevel);
+            this.cumulativeMonsterLevels += randomMonsterLevel;
             this.maze[r][c] = [];
             this.maze[r+1][c] = ["monster", monster];
           }
@@ -53,6 +57,7 @@ export default class FancyMazeBuilder extends MazeBuilder {
           if(this.isA("wall", [r-1, c+1], [r, c-1], [r, c+1], [r+1, c+1]) && this.isGap([r-1, c-1], [r, c-2], [r+1, c-1])) {
             let randomMonsterLevel = Math.floor(Math.random() * 20) + 2;
             let monster = new Monster(randomMonsterLevel);
+            this.cumulativeMonsterLevels += randomMonsterLevel;
             this.maze[r][c] = [];
             this.maze[r][c-1] = ["monster", monster];
           }
@@ -60,6 +65,7 @@ export default class FancyMazeBuilder extends MazeBuilder {
           if(this.isA("wall", [r-1, c-1], [r, c-1], [r+1, c-1], [r, c+1]) && this.isGap([r-1, c+1], [r, c+2], [r+1, c+1])) {
             let randomMonsterLevel = Math.floor(Math.random() * 20) + 2;
             let monster = new Monster(randomMonsterLevel);
+            this.cumulativeMonsterLevels += randomMonsterLevel;
             this.maze[r][c] = [];
             this.maze[r][c+1] = ["monster", monster];
           }
@@ -67,6 +73,7 @@ export default class FancyMazeBuilder extends MazeBuilder {
           if(this.isA("wall", [r-1, c], [r+1, c-1], [r+1, c], [r+1, c+1]) && this.isGap([r-1, c-1], [r-2, c], [r-1, c+1])) {
             let randomMonsterLevel = Math.floor(Math.random() * 20) + 2;
             let monster = new Monster(randomMonsterLevel);
+            this.cumulativeMonsterLevels += randomMonsterLevel;
             this.maze[r][c] = [];
             this.maze[r-1][c] = ["monster", monster];
           }
@@ -74,7 +81,7 @@ export default class FancyMazeBuilder extends MazeBuilder {
         });
   
       });
-  
+
     }
   
     placePowerUps(percent = 100) {
@@ -134,12 +141,12 @@ export default class FancyMazeBuilder extends MazeBuilder {
     // }
 
     /* this will place the Boss Monster right in front the key */
-    placeBoss() {
+    placeBoss(bossLevel) {
 
       let fr, fc;
       [fr, fc] = this.getKeyLocation();
       
-      let boss = new Monster(999); //edit this to be based on ALL monster levels
+      let boss = new Monster(bossLevel); //edit this to be based on ALL monster levels
 
       if(this.isA("nubbin", [fr-1,fc-1]) && !this.isA("wall", [fr-1,fc-1])) {
         this.maze[fr-2][fc-1] = ["boss", boss];
