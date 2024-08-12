@@ -15,9 +15,10 @@ export default class FancyMazeBuilder extends MazeBuilder {
       this.cumulativeMonsterLevels = 0;
   
       this.placeMonsters();
-      this.placePowerUps(100);
-      this.placeKey();
+      this.placePowerUps(50); //change this number to alter amount of PowerUps placed in maze?
+      this.calculateKeyLocationAndPlaceKey();
       this.placeBoss(this.cumulativeMonsterLevels);
+      this.getKeyLocation();
   
     }
   
@@ -111,7 +112,7 @@ export default class FancyMazeBuilder extends MazeBuilder {
           if(this.isA("wall", [r-1,c-1],[r-1,c],[r-1,c+1],[r+1,c-1],[r+1,c],[r+1,c+1]) ||
          this.isA("wall", [r-1,c-1],[r,c-1],[r+1,c-1],[r-1,c+1],[r,c+1],[r+1,c+1])) {
         // Create a new PowerUp object with a random factor value
-        let randomPowerUpFactor = Math.floor(Math.random() * 4) + 2;
+        let randomPowerUpFactor = Math.floor(Math.random() * 2) + 2;
         const powerUp = new PowerUp(randomPowerUpFactor);
         this.maze[r][c].push(powerUp);
         }
@@ -121,45 +122,30 @@ export default class FancyMazeBuilder extends MazeBuilder {
       });
     }
   
-    // placeKey() {
-  
-    //   let fr, fc;
-    //   [fr, fc] = this.getKeyLocation();
-  
-    //   if(this.isA("nubbin", [fr-1,fc-1]) && !this.isA("wall", [fr-1,fc-1])) {
-    //     this.maze[fr-1][fc-1] = ["key"];
-    //   } else if(this.isA("nubbin", [fr-1,fc+1]) && !this.isA("wall", [fr-1,fc+1])) {
-    //     this.maze[fr-1][fc+1] = ["key"];
-    //   } else if(this.isA("nubbin", [fr+1,fc-1]) && !this.isA("wall", [fr+1,fc-1])) {
-    //     this.maze[fr+1][fc-1] = ["key"];
-    //   } else if(this.isA("nubbin", [fr+1,fc+1]) && !this.isA("wall", [fr+1,fc+1])) {
-    //     this.maze[fr+1][fc+1] = ["key"];
-    //   } else {
-    //     this.maze[fr][fc] = ["key"];
-    //   }
-  
-    // }
+    
 
     /* this will place the Boss Monster right in front the key */
+    //ISSUE!!! Boss is currently being placed ON THE KEY
     placeBoss(bossLevel) {
 
       let fr, fc;
       [fr, fc] = this.getKeyLocation();
+      //console.log("key location in placeBoss():", [fr, fc])
       
       let boss = new Monster(bossLevel); //edit this to be based on ALL monster levels
 
-      if(this.isA("nubbin", [fr-1,fc-1]) && !this.isA("wall", [fr-1,fc-1])) {
-        this.maze[fr-2][fc-1] = ["boss", boss];
-      } else if(this.isA("nubbin", [fr-1,fc+1]) && !this.isA("wall", [fr-1,fc+1])) {
-        this.maze[fr-2][fc+1] = ["boss", boss];
-      } else if(this.isA("nubbin", [fr+1,fc-1]) && !this.isA("wall", [fr+1,fc-1])) {
-        this.maze[fr+2][fc-1] = ["boss", boss];
-      } else if(this.isA("nubbin", [fr+1,fc+1]) && !this.isA("wall", [fr+1,fc+1])) {
-        this.maze[fr+2][fc+1] = ["boss", boss];
-      } else {
-        this.maze[fr][fc] = ["boss", boss];
+      //Checks to make sure there's an empty spot next to the key to place the boss
+      //TODO: Add extra checks to make sure key is "trapped" in a corner and you must get through the boss to get it
+      if (this.maze[fr+1][fc].length === 0) {
+        this.maze[fr+1][fc] = ["boss", boss];
+      } else if (this.maze[fr-1][fc].length === 0) {
+        this.maze[fr+1][fc] = ["boss", boss];
+      } else if (this.maze[fr][fc+1].length === 0)  {
+        this.maze[fr][fc+1] = ["boss", boss];
+      } else if (this.maze[fr][fc-1].length === 0) {
+        this.maze[fr][fc-1] = ["boss", boss];
+      }
 
     }
 
-  }
 }

@@ -15,6 +15,8 @@ export default class MazeBuilder {
       this.rows = 2 * this.height + 1;
   
       this.maze = this.initArray([]);
+
+      this.keyLocation = [-1, -1];
   
       /* place initial walls */
   
@@ -202,7 +204,7 @@ export default class MazeBuilder {
   
     }
   
-    getKeyLocation() {
+    calculateKeyLocationAndPlaceKey() {
   
       let fromEntrance = this.initArray();
       let fromExit = this.initArray();
@@ -233,17 +235,16 @@ export default class MazeBuilder {
           }
         });
       });
-      console.log([fr, fc])
-      return [fr, fc];
-    }
-  
-    placeKey() {
-  
-      let fr, fc;
-      [fr, fc] = this.getKeyLocation();
-  
+
+      //set the maze's key location member
+      this.keyLocation = [fr, fc];
+
       this.maze[fr][fc] = ["key"];
-  
+    }
+
+    getKeyLocation() {
+      //console.log(this.keyLocation);
+      return this.keyLocation;
     }
   
     display(id) {
@@ -297,7 +298,7 @@ export default class MazeBuilder {
     }
     
     returnMazeBuilderArray() {
-      console.log("MazeBuilderArray:", this.maze);
+      //console.log("MazeBuilderArray:", this.maze);
       return this.maze;
     }
   
