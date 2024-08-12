@@ -240,11 +240,30 @@ export default class MazeBuilder {
       this.keyLocation = [fr, fc];
 
       this.maze[fr][fc] = ["key"];
+
     }
 
     getKeyLocation() {
       //console.log(this.keyLocation);
       return this.keyLocation;
+    }
+
+    //gets the areas around the key and walls it off if necessary
+    surroundKeyWithWalls() {
+      let fr, fc;
+      [fr, fc] = this.getKeyLocation();
+
+      //fill in empty space around key to be walled off
+      if (this.maze[fr+1][fc].length === 0) {
+        this.maze[fr+1][fc] = ["wall"];
+      } else if (this.maze[fr-1][fc].length === 0) {
+        this.maze[fr-1][fc] = ["wall"];
+      } else if (this.maze[fr][fc+1].length === 0) {
+        this.maze[fr][fc+1] = ["wall"];
+      } else if (this.maze[fr][fc-1].length === 0) {
+        this.maze[fr][fc-1] = ["wall"];
+      }
+
     }
   
     display(id) {
@@ -298,7 +317,7 @@ export default class MazeBuilder {
     }
     
     returnMazeBuilderArray() {
-      //console.log("MazeBuilderArray:", this.maze);
+      console.log("MazeBuilderArray:", this.maze);
       return this.maze;
     }
   

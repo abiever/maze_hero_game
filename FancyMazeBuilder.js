@@ -18,7 +18,7 @@ export default class FancyMazeBuilder extends MazeBuilder {
       this.placePowerUps(50); //change this number to alter amount of PowerUps placed in maze?
       this.calculateKeyLocationAndPlaceKey();
       this.placeBoss(this.cumulativeMonsterLevels);
-      this.getKeyLocation();
+      this.surroundKeyWithWalls();
   
     }
   
@@ -139,7 +139,7 @@ export default class FancyMazeBuilder extends MazeBuilder {
       if (this.maze[fr+1][fc].length === 0) {
         this.maze[fr+1][fc] = ["boss", boss];
       } else if (this.maze[fr-1][fc].length === 0) {
-        this.maze[fr+1][fc] = ["boss", boss];
+        this.maze[fr-1][fc] = ["boss", boss];
       } else if (this.maze[fr][fc+1].length === 0)  {
         this.maze[fr][fc+1] = ["boss", boss];
       } else if (this.maze[fr][fc-1].length === 0) {
