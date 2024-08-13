@@ -125,6 +125,26 @@
     color: #fff;
     z-index: 50;
   }
+
+  #maze.game_over::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    content: "GAME OVER";
+    background: rgba(82, 21, 5, 0.647);
+    text-align: center;
+    text-transform: uppercase;
+    font-family: monospace;
+    font-size: 5em;
+    text-shadow: 2px 2px 2px rgba(0,0,0,0.8);
+    color: #fff;
+    z-index: 50;
+  }
   
   #maze_output {
     display: flex;

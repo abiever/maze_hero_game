@@ -32,7 +32,6 @@ export default class MazeController {
         this.maze = []; //This array contains the HTML elements composing the maze itself?
         this.objectsInMazeArray = objectsInMazeArray; //This array will contain the positions of where objects like PowerUps are 
 
-        this.gameOver = false;
         this.beatLevel = false;
         this.gameLevel = 1;
 
@@ -91,6 +90,13 @@ export default class MazeController {
         this.mazeHero.setHeroHasKey(true);
         this.heroStepCounter.classList.add("has-key");
         this.setMessage("you now have the key!");
+    }
+
+    gameOver(text) {
+        /* de-activate control keys */
+        document.removeEventListener("keydown", this.keyPressHandler, false);
+        this.setMessage(text);
+        this.mazeContainer.classList.add("game_over");
     }
 
     levelCompleted(text) {
@@ -206,6 +212,10 @@ export default class MazeController {
         }
 
         this.mazeHero.increaseHeroStepCount();
+
+        if (this.mazeHero.getHeroStepCount() > this.mazeHero.getHeroValue()) {
+            this.gameOver("You have lost.")
+        }
 
         this.setMessage("...");
     }
