@@ -1,5 +1,5 @@
 import Hero from "./Hero.js";
-import PowerUp from "./PowerUp.js";
+import FancyMazeBuilder from "./FancyMazeBuilder.js";
 
 class Position {
     constructor(x, y) {
@@ -10,8 +10,6 @@ class Position {
         return this.x + ":" + this.y;
     }
 }
-
-//TODO: I may need to bundle everything with node/npm to get rid of the "Unexpected token 'export'" error in browser
 
 export default class MazeController {
     constructor(id, objectsInMazeArray) {
@@ -29,10 +27,14 @@ export default class MazeController {
         this.mazeMessage = document.createElement("div");
         this.mazeMessage.id = "maze_message";
 
-        this.mazeHero.setHeroScore(this.mazeContainer.getAttribute("data-steps")); // removed "- 2" from here a few commits ago; doesn't seem necessary any more??
+        //this.mazeHero.setHeroScore(this.mazeContainer.getAttribute("data-steps")); // removed "- 2" from here a few commits ago; doesn't seem necessary any more??
 
         this.maze = []; //This array contains the HTML elements composing the maze itself?
         this.objectsInMazeArray = objectsInMazeArray; //This array will contain the positions of where objects like PowerUps are 
+
+        this.gameOver = false;
+        this.beatLevel = false;
+        this.gameLevel = 1;
 
         var mazePosition;
         for (let i = 0; i < this.mazeContainer.children.length; i++) {
@@ -97,17 +99,32 @@ export default class MazeController {
         this.setMessage("you now have the key!");
     }
 
-    gameOver(text) {
+    levelCompleted(text) {
         /* de-activate control keys */
         document.removeEventListener("keydown", this.keyPressHandler, false);
         this.setMessage(text);
         this.mazeContainer.classList.add("finished");
+        this.beatLevel = true;
+        this.gameLevel += 1;
+    }
+
+    getGameLevel() {
+        return this.gameLevel;
+    }
+
+    isLevelBeaten() {
+        return this.beatLevel;
     }
 
     heroWins() {
         this.heroStepCounter.classList.remove("has-key");
         this.maze[this.mazeHero.getHeroPosition()].classList.remove("door");
-        this.gameOver("you finished !!!");
+        this.levelCompleted("Level Completed");
+    
+        // Wait for a moment and then start the next level
+        setTimeout(() => {
+            this.startNextLevel();
+        }, 3000); // 3 seconds delay before the next level
     }
 
     tryMoveHero(position) {
@@ -245,4 +262,27 @@ export default class MazeController {
     startNewGame() {
         //Use this method to start a new maze game but bigger and with greater functionality/difficulty??
     }
+
+    startNextLevel() {
+        // Clear the current maze
+        // this.mazeContainer.innerHTML = "";
+        // this.maze.length = 0;
+        // this.gameOver = false;
+        // this.beatLevel = false;
+    
+        // Generate a new, larger maze for the next level
+        const newWidth = Math.ceil(this.objectsInMazeArray[0].length / 2) + 2; // Increase width
+        const newHeight = Math.ceil(this.objectsInMazeArray.length / 2) + 2; // Increase height
+    
+        // Create and display the new maze
+        let Maze = new FancyMazeBuilder(newWidth, newHeight);
+        Maze.display("maze_container");
+        this.objectsInMazeArray = Maze.returnMazeBuilderArray();
+    
+        // Re-initialize the MazeController with the new maze
+        let newMazeGame = new MazeController("maze", this.objectsInMazeArray);
+    
+        this.setMessage("New Level! Good luck!");
+    }
+    
 }
