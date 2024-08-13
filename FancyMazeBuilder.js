@@ -148,4 +148,10 @@ export default class FancyMazeBuilder extends MazeBuilder {
 
     }
 
+    placeTrapDoors() {
+      //Use this method to check for 2 empty squares that are completely surrounded by wall except for one side and contain nothing else and put a trap door there
+      //This door will "warp" the hero from that spot to the other without costing a step 
+      //trap door generation should be random, but generally on opposite ends of the maze and SHOULD NOT generate in front of a door or a corner 
+    }
+
 }
