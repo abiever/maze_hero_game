@@ -76,12 +76,6 @@ export default class MazeController {
         this.heroStepCounter.innerHTML = this.mazeHero.getHeroStepCount();
     }
 
-    heroTakeTreasure() {
-        this.maze[this.mazeHero.getHeroPosition()].classList.remove("nubbin");
-        this.mazeHero.increaseScore(10);
-        this.setMessage("yay, treasure!");
-    }
-
     //Use this method to see if the Hero can beat the monster
     canHeroBeatMonster(monsterLevel) {
         return this.mazeHero.getHeroValue() > monsterLevel;
@@ -264,11 +258,6 @@ export default class MazeController {
     }
 
     startNextLevel() {
-        // Clear the current maze
-        // this.mazeContainer.innerHTML = "";
-        // this.maze.length = 0;
-        // this.gameOver = false;
-        // this.beatLevel = false;
     
         // Generate a new, larger maze for the next level
         const newWidth = Math.ceil(this.objectsInMazeArray[0].length / 2) + 2; // Increase width
