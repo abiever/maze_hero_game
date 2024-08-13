@@ -12,11 +12,11 @@ class Position {
 }
 
 export default class MazeController {
-    constructor(id, objectsInMazeArray) {
+    constructor(id, heroLevel, objectsInMazeArray) {
         // Original JavaScript code by Chirp Internet: www.chirpinternet.eu
         // Please acknowledge use of this code by including this header.
 
-        this.mazeHero = new Hero(5);
+        this.mazeHero = new Hero(heroLevel);
 
         /* bind to HTML element */
         this.mazeContainer = document.getElementById(id);
@@ -280,7 +280,7 @@ export default class MazeController {
         this.objectsInMazeArray = Maze.returnMazeBuilderArray();
     
         // Re-initialize the MazeController with the new maze
-        let newMazeGame = new MazeController("maze", this.objectsInMazeArray);
+        let newMazeGame = new MazeController("maze", this.mazeHero.getHeroValue(), this.objectsInMazeArray);
     
         this.setMessage("New Level! Good luck!");
     }
