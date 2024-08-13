@@ -127,6 +127,22 @@ export default class MazeController {
         }, 3000); // 3 seconds delay before the next level
     }
 
+    decideHeroVictory() {
+
+        if (this.mazeHero.getHeroStepCount() > this.mazeHero.getHeroValue()) {
+            this.gameOver("You have lost.")
+        } else { 
+            this.heroStepCounter.classList.remove("has-key");
+            this.maze[this.mazeHero.getHeroPosition()].classList.remove("door");
+            this.levelCompleted("Level Completed");
+        
+            // Wait for a moment and then start the next level
+            setTimeout(() => {
+                this.startNextLevel();
+            }, 3000); // 3 seconds delay before the next level
+        }
+    }
+
     tryMoveHero(position) {
         if ("object" !== typeof this.maze[position]) {
             return;
@@ -141,7 +157,8 @@ export default class MazeController {
 
         if (nextStep.match(/exit/)) {
             if (this.mazeHero.hasKey()) {
-                this.heroWins();
+                // this.heroWins();
+                this.decideHeroVictory();
             } else {
                 this.setMessage("you need a key to unlock the door");
                 return;
@@ -213,9 +230,9 @@ export default class MazeController {
 
         this.mazeHero.increaseHeroStepCount();
 
-        if (this.mazeHero.getHeroStepCount() > this.mazeHero.getHeroValue()) {
-            this.gameOver("You have lost.")
-        }
+        // if (this.mazeHero.getHeroStepCount() > this.mazeHero.getHeroValue()) {
+        //     this.gameOver("You have lost.")
+        // }
 
         this.setMessage("...");
     }
