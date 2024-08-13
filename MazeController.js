@@ -1,5 +1,5 @@
 import Hero from "./Hero.js";
-import PowerUp from "./PowerUp.js";
+import FancyMazeBuilder from "./FancyMazeBuilder.js";
 
 class Position {
     constructor(x, y) {
@@ -11,28 +11,30 @@ class Position {
     }
 }
 
-//TODO: I may need to bundle everything with node/npm to get rid of the "Unexpected token 'export'" error in browser
-
 export default class MazeController {
-    constructor(id, objectsInMazeArray) {
+    constructor(id, heroLevel, stepsTaken, objectsInMazeArray) {
         // Original JavaScript code by Chirp Internet: www.chirpinternet.eu
         // Please acknowledge use of this code by including this header.
 
-        this.mazeHero = new Hero(5);
+        this.mazeHero = new Hero(heroLevel);
+        this.mazeHero.setHeroStepCount(stepsTaken);
 
         /* bind to HTML element */
         this.mazeContainer = document.getElementById(id);
 
         this.heroStepCounter = document.createElement("div");
-        this.heroStepCounter.id = "maze_score";
+        this.heroStepCounter.id = "step_counter";
 
         this.mazeMessage = document.createElement("div");
         this.mazeMessage.id = "maze_message";
 
-        this.mazeHero.setHeroScore(this.mazeContainer.getAttribute("data-steps")); // removed "- 2" from here a few commits ago; doesn't seem necessary any more??
+        //this.mazeHero.setHeroScore(this.mazeContainer.getAttribute("data-steps")); // removed "- 2" from here a few commits ago; doesn't seem necessary any more??
 
         this.maze = []; //This array contains the HTML elements composing the maze itself?
         this.objectsInMazeArray = objectsInMazeArray; //This array will contain the positions of where objects like PowerUps are 
+
+        this.beatLevel = false;
+        this.gameLevel = 1;
 
         var mazePosition;
         for (let i = 0; i < this.mazeContainer.children.length; i++) {
@@ -74,12 +76,6 @@ export default class MazeController {
         this.heroStepCounter.innerHTML = this.mazeHero.getHeroStepCount();
     }
 
-    heroTakeTreasure() {
-        this.maze[this.mazeHero.getHeroPosition()].classList.remove("nubbin");
-        this.mazeHero.increaseScore(10);
-        this.setMessage("yay, treasure!");
-    }
-
     //Use this method to see if the Hero can beat the monster
     canHeroBeatMonster(monsterLevel) {
         return this.mazeHero.getHeroValue() > monsterLevel;
@@ -101,13 +97,51 @@ export default class MazeController {
         /* de-activate control keys */
         document.removeEventListener("keydown", this.keyPressHandler, false);
         this.setMessage(text);
+        this.mazeContainer.classList.add("game_over");
+    }
+
+    levelCompleted(text) {
+        /* de-activate control keys */
+        document.removeEventListener("keydown", this.keyPressHandler, false);
+        this.setMessage(text);
         this.mazeContainer.classList.add("finished");
+        this.beatLevel = true;
+        this.gameLevel += 1;
+    }
+
+    getGameLevel() {
+        return this.gameLevel;
+    }
+
+    isLevelBeaten() {
+        return this.beatLevel;
     }
 
     heroWins() {
         this.heroStepCounter.classList.remove("has-key");
         this.maze[this.mazeHero.getHeroPosition()].classList.remove("door");
-        this.gameOver("you finished !!!");
+        this.levelCompleted("Level Completed");
+    
+        // Wait for a moment and then start the next level
+        setTimeout(() => {
+            this.startNextLevel();
+        }, 3000); // 3 seconds delay before the next level
+    }
+
+    decideHeroVictory() {
+
+        if (this.mazeHero.getHeroStepCount() > this.mazeHero.getHeroValue()) {
+            this.gameOver("You have lost. Steps exceeded Hero level.")
+        } else { 
+            this.heroStepCounter.classList.remove("has-key");
+            this.maze[this.mazeHero.getHeroPosition()].classList.remove("door");
+            this.levelCompleted("Level Completed");
+        
+            // Wait for a moment and then start the next level
+            setTimeout(() => {
+                this.startNextLevel();
+            }, 3000); // 3 seconds delay before the next level
+        }
     }
 
     tryMoveHero(position) {
@@ -124,7 +158,8 @@ export default class MazeController {
 
         if (nextStep.match(/exit/)) {
             if (this.mazeHero.hasKey()) {
-                this.heroWins();
+                // this.heroWins();
+                this.decideHeroVictory();
             } else {
                 this.setMessage("you need a key to unlock the door");
                 return;
@@ -196,6 +231,10 @@ export default class MazeController {
 
         this.mazeHero.increaseHeroStepCount();
 
+        // if (this.mazeHero.getHeroStepCount() > this.mazeHero.getHeroValue()) {
+        //     this.gameOver("You have lost.")
+        // }
+
         this.setMessage("...");
     }
 
@@ -241,4 +280,29 @@ export default class MazeController {
     //     console.log("MazeControllerMazeArray:", this.maze);
     //     return this.maze;
     // }
+
+    restartNewGame() {
+        //eventually use this method to restart a new game from the beginning 
+    }
+
+    startNextLevel() {
+    
+        // Generate a new, larger maze for the next level
+        const newWidth = Math.ceil(this.objectsInMazeArray[0].length / 2) + 2; // Increase width
+        const newHeight = Math.ceil(this.objectsInMazeArray.length / 2) + 2; // Increase height
+    
+        // Create and display the new maze
+        let Maze = new FancyMazeBuilder(newWidth, newHeight);
+        Maze.display("maze_container");
+        this.objectsInMazeArray = Maze.returnMazeBuilderArray();
+
+        //make new Hero's level his value - steps taken
+        let newHeroLevel = this.mazeHero.getHeroValue() - this.mazeHero.getHeroStepCount();
+    
+        // Re-initialize the MazeController with the new maze
+        let newMazeGame = new MazeController("maze", newHeroLevel, this.mazeHero.getHeroStepCount(), this.objectsInMazeArray);
+    
+        this.setMessage("New Level! Good luck!");
+    }
+    
 }
