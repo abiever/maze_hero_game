@@ -2,7 +2,6 @@ export default class Hero {
     constructor(value) {
         this.heroValue = value;
         this.heroStepCount = 0;
-        this.heroScore = null;
         this.heroPosition = {};
         this.heroHasKey = false;
     }
@@ -15,12 +14,16 @@ export default class Hero {
         this.heroValue += valueToAdd;
     }
 
-    powerUpHero(factorValue) {
-        this.heroValue *= factorValue;
+    getHeroStepCount() {
+        return this.heroStepCount;
     }
 
-    setHeroScore(score) {
-        this.heroScore = score;
+    setHeroStepCount(stepCount) {
+        this.heroStepCount = stepCount;
+    }
+
+    powerUpHero(factorValue) {
+        this.heroValue *= factorValue;
     }
 
     setHeroPosition(position) {
@@ -31,10 +34,6 @@ export default class Hero {
         return this.heroPosition;
     }
 
-    getHeroScore() {
-        return this.heroScore;
-    }
-
     setHeroHasKey(hasKey) {
         this.heroHasKey = hasKey;
     }
@@ -43,19 +42,9 @@ export default class Hero {
         return this.heroHasKey;
     }
 
-    decreaseScore(amount) {
-        this.heroScore = Math.max(this.heroScore - amount, 0);
-    }
-
-    increaseScore(amount) {
-        this.heroScore += amount;
-    }
-
     increaseHeroStepCount() {
         this.heroStepCount += 1;
     }
 
-    getHeroStepCount() {
-        return this.heroStepCount;
-    }
+    
 }

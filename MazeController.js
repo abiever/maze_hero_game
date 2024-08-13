@@ -12,11 +12,12 @@ class Position {
 }
 
 export default class MazeController {
-    constructor(id, heroLevel, objectsInMazeArray) {
+    constructor(id, heroLevel, stepsTaken, objectsInMazeArray) {
         // Original JavaScript code by Chirp Internet: www.chirpinternet.eu
         // Please acknowledge use of this code by including this header.
 
         this.mazeHero = new Hero(heroLevel);
+        this.mazeHero.setHeroStepCount(stepsTaken);
 
         /* bind to HTML element */
         this.mazeContainer = document.getElementById(id);
@@ -130,7 +131,7 @@ export default class MazeController {
     decideHeroVictory() {
 
         if (this.mazeHero.getHeroStepCount() > this.mazeHero.getHeroValue()) {
-            this.gameOver("You have lost.")
+            this.gameOver("You have lost. Steps exceeded Hero level.")
         } else { 
             this.heroStepCounter.classList.remove("has-key");
             this.maze[this.mazeHero.getHeroPosition()].classList.remove("door");
@@ -299,7 +300,7 @@ export default class MazeController {
         let newHeroLevel = this.mazeHero.getHeroValue() - this.mazeHero.getHeroStepCount();
     
         // Re-initialize the MazeController with the new maze
-        let newMazeGame = new MazeController("maze", newHeroLevel, this.objectsInMazeArray);
+        let newMazeGame = new MazeController("maze", newHeroLevel, this.mazeHero.getHeroStepCount(), this.objectsInMazeArray);
     
         this.setMessage("New Level! Good luck!");
     }
