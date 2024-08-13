@@ -130,20 +130,20 @@
     display: flex;
     margin: 0.5em auto;
   }
-  #maze_score, #maze_message {
+  #step_counter, #maze_message {
     font-family: fantasy;
     font-weight: bold;
     font-size: 1em;
   }
-  #maze_score {
+  #step_counter {
     flex: 1;
     white-space: nowrap;
     text-align: left;
   }
-  #maze_score::before {
+  #step_counter::before {
     content: "Steps: ";
   }
-  #maze_score.has-key::after {
+  #step_counter.has-key::after {
     content: "\00a0\1F511";
   }
   #maze_message {

@@ -22,7 +22,7 @@ export default class MazeController {
         this.mazeContainer = document.getElementById(id);
 
         this.heroStepCounter = document.createElement("div");
-        this.heroStepCounter.id = "maze_score";
+        this.heroStepCounter.id = "step_counter";
 
         this.mazeMessage = document.createElement("div");
         this.mazeMessage.id = "maze_message";
@@ -253,8 +253,8 @@ export default class MazeController {
     //     return this.maze;
     // }
 
-    startNewGame() {
-        //Use this method to start a new maze game but bigger and with greater functionality/difficulty??
+    restartNewGame() {
+        //eventually use this method to restart a new game from the beginning 
     }
 
     startNextLevel() {
@@ -267,9 +267,12 @@ export default class MazeController {
         let Maze = new FancyMazeBuilder(newWidth, newHeight);
         Maze.display("maze_container");
         this.objectsInMazeArray = Maze.returnMazeBuilderArray();
+
+        //make new Hero's level his value - steps taken
+        let newHeroLevel = this.mazeHero.getHeroValue() - this.mazeHero.getHeroStepCount();
     
         // Re-initialize the MazeController with the new maze
-        let newMazeGame = new MazeController("maze", this.mazeHero.getHeroValue(), this.objectsInMazeArray);
+        let newMazeGame = new MazeController("maze", newHeroLevel, this.objectsInMazeArray);
     
         this.setMessage("New Level! Good luck!");
     }
