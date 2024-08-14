@@ -9,6 +9,9 @@ var makeMaze = (id, width, height) => {
     MazeGame = new MazeController("maze", 5, 0, Maze.returnMazeBuilderArray(), Maze.getUpperWarpSpot(), Maze.getLowerWarpSpot());
 }        
       
-//NOW:
-//Trying to create automated enemy movement
+makeMaze("maze_container", 11, 9);
+//NOTE: 'bare minimum' winnable game: 12, 10
+
+//TODO: 8/14/24
+//Trying to make enemy movmenet
 
