@@ -19,6 +19,7 @@ export default class FancyMazeBuilder extends MazeBuilder {
       this.calculateKeyLocationAndPlaceKey();
       this.placeBoss(this.cumulativeMonsterLevels);
       this.surroundKeyWithWalls();
+      this.placeWarpSpots(this.maze);
   
     }
   
@@ -148,10 +149,79 @@ export default class FancyMazeBuilder extends MazeBuilder {
 
     }
 
-    placeTrapDoors() {
+    placeWarpSpots(maze) {
       //Use this method to check for 2 empty squares that are completely surrounded by wall except for one side and contain nothing else and put a trap door there
       //This door will "warp" the hero from that spot to the other without costing a step 
       //trap door generation should be random, but generally on opposite ends of the maze and SHOULD NOT generate in front of a door or a corner 
+
+      const directions = [
+        { x: 0, y: -1 }, // up
+        { x: 0, y: 1 },  // down
+        { x: -1, y: 0 }, // left
+        { x: 1, y: 0 }   // right
+      ];
+
+      let validPositions = [];
+
+      // Loop through the maze array
+      for (let y = 0; y < maze.length; y++) {
+          for (let x = 0; x < maze[y].length; x++) {
+              // Check if the current cell is empty
+              if (maze[y][x].length === 0) {
+                  let wallCount = 0;
+
+                  // Check all four directions
+                  for (let direction of directions) {
+                      const newX = x + direction.x;
+                      console.log("newX:", newX);
+                      const newY = y + direction.y;
+                      console.log("newY:", newY);
+
+                      // Ensure the new position is within the maze bounds
+                      if (
+                          newX >= 0 && newX < maze[y].length &&
+                          newY >= 0 && newY < maze.length
+                      ) {
+                          // Check if the neighboring cell is a wall
+                          if (maze[newY][newX].includes("wall")) {
+                              wallCount++;
+                          }
+                      } else {
+                          // If out of bounds, treat it as a wall (e.g., edges of the maze)
+                          wallCount++;
+                      }
+                  }
+
+                  // If the empty cell is surrounded by exactly 3 walls, it's a valid position
+                  if (wallCount === 3) {
+                      validPositions.push({ x, y });
+                  }
+              }
+          }
+      }
+
+      //console.log("validPositions:", validPositions);
+      //return validPositions;
+
+      const mazeHeight = maze.length;
+      const midPoint = Math.floor(mazeHeight / 2);
+
+      // Separate validPositions into upper and lower half
+      const upperHalf = validPositions.filter(position => position.y < midPoint);
+      const lowerHalf = validPositions.filter(position => position.y >= midPoint);
+
+      // Randomly select one position from each half
+      const randomUpper = upperHalf[Math.floor(Math.random() * upperHalf.length)];
+      const randomLower = lowerHalf[Math.floor(Math.random() * lowerHalf.length)];
+
+      // Set the selected positions to "warp_spot"
+      if (randomUpper) {
+      maze[randomUpper.y][randomUpper.x] = ["warp_spot"];
+      }
+      if (randomLower) {
+      maze[randomLower.y][randomLower.x] = ["warp_spot"];
+      }
+
     }
 
 }

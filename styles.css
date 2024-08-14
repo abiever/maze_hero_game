@@ -45,6 +45,9 @@
   #maze div div.door.exit::after {
     content: "\1F6AA";
   }
+  #maze div div.warp_spot::after {
+    content: "\1F7EB";
+  }
   #maze div div.monster::after {
     content: "\1F40A"; /* Default monster emoji */
   }
