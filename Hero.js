@@ -45,6 +45,10 @@ export default class Hero {
     increaseHeroStepCount() {
         this.heroStepCount += 1;
     }
+    
+    halveHeroValue() {
+        this.heroValue = Math.floor(this.getHeroValue() / 2);
+    }
 
     
 }

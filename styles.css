@@ -48,6 +48,9 @@
   #maze div div.warp_spot::after {
     content: "\1F7EB";
   }
+  #maze div div.debuff::after {
+    content: "\1F480";
+  }
   #maze div div.monster::after {
     content: "\1F40A"; /* Default monster emoji */
   }
@@ -71,7 +74,7 @@
     content: "\1F6B6"; /*Hero emoji*/
     z-index: 10;
   }
-  .heroValue {
+  .heroValue, .debuffValue, .monsterValue, .powerUpValue {
     color: black;
     font-size: 16px;
     z-index: 30;

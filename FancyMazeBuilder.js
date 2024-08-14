@@ -1,5 +1,6 @@
 import MazeBuilder from "/MazeBuilder.js"
 import PowerUp from "./PowerUp.js";
+import Debuff from "./Debuff.js";
 import Monster from "./Monster.js";
 
 export default class FancyMazeBuilder extends MazeBuilder {
@@ -18,6 +19,7 @@ export default class FancyMazeBuilder extends MazeBuilder {
   
       this.placeMonsters();
       this.placePowerUps(50); //change this number to alter amount of PowerUps placed in maze?
+      this.placeDebuffs(50);
       this.calculateKeyLocationAndPlaceKey();
       this.placeBoss(this.cumulativeMonsterLevels);
       this.surroundKeyWithWalls();
@@ -115,9 +117,49 @@ export default class FancyMazeBuilder extends MazeBuilder {
           if(this.isA("wall", [r-1,c-1],[r-1,c],[r-1,c+1],[r+1,c-1],[r+1,c],[r+1,c+1]) ||
          this.isA("wall", [r-1,c-1],[r,c-1],[r+1,c-1],[r-1,c+1],[r,c+1],[r+1,c+1])) {
         // Create a new PowerUp object with a random factor value
-        let randomPowerUpFactor = Math.floor(Math.random() * 2) + 2;
-        const powerUp = new PowerUp(randomPowerUpFactor);
-        this.maze[r][c].push(powerUp);
+        // let randomPowerUpFactor = Math.floor(Math.random() * 2) + 2;
+        // const powerUp = new PowerUp(randomPowerUpFactor);
+
+        //Changed powerUp to just "2" to see how that affects balance
+        const powerUp = new PowerUp(2);
+        this.maze[r][c] = ["powerUp", powerUp];
+        }
+
+        });
+
+      });
+    }
+
+    placeDebuffs(percent = 100) {
+  
+      percent = parseInt(percent, 10);
+  
+      if((percent < 1) || (percent > 100)) {
+        percent = 100;
+      }
+  
+      this.maze.slice(1, -1).forEach((row, idx) => {
+  
+        let r = idx + 1;
+  
+        row.slice(1, -1).forEach((cell, idx) => {
+  
+          let c = idx + 1;
+  
+          if(!this.isA("wall", [r,c])) {
+            return;
+          }
+  
+          if(this.rand(1, 100) > percent) {
+            return;
+          }
+  
+          if(this.isA("wall", [r-1,c-1],[r-1,c],[r-1,c+1],[r+1,c-1],[r+1,c],[r+1,c+1]) ||
+         this.isA("wall", [r-1,c-1],[r,c-1],[r+1,c-1],[r-1,c+1],[r,c+1],[r+1,c+1])) {
+
+        //Use the Debuff object if you want more Debuff functionality options
+        //const debuff = new Debuff(1/2);
+        this.maze[r][c] = ["debuff"]
         }
 
         });
@@ -175,9 +217,9 @@ export default class FancyMazeBuilder extends MazeBuilder {
                   // Check all four directions
                   for (let direction of directions) {
                       const newX = x + direction.x;
-                      console.log("newX:", newX);
+                      //console.log("newX:", newX);
                       const newY = y + direction.y;
-                      console.log("newY:", newY);
+                      //console.log("newY:", newY);
 
                       // Ensure the new position is within the maze bounds
                       if (
@@ -220,12 +262,12 @@ export default class FancyMazeBuilder extends MazeBuilder {
       if (randomUpper) {
         maze[randomUpper.y][randomUpper.x] = ["warp_spot"];
         this.upperWarpSpot = [randomUpper.y, randomUpper.x];
-        console.log("upperWarpSpot:", this.upperWarpSpot);
+        //console.log("upperWarpSpot:", this.upperWarpSpot);
       }
       if (randomLower) {
         maze[randomLower.y][randomLower.x] = ["warp_spot"];
         this.lowerWarpSpot = [randomLower.y, randomLower.x];
-        console.log("lowerWarpSpot:", this.lowerWarpSpot);
+        //console.log("lowerWarpSpot:", this.lowerWarpSpot);
       }
 
     }

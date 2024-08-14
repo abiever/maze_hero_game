@@ -177,6 +177,10 @@ export default class MazeController {
             this.heroGetPowerUp(this.objectsInMazeArray[position.x][position.y][1].getPowerUpFactor());
         }
 
+        if (nextStep.match(/debuff/)) {
+            this.mazeHero.halveHeroValue();
+        }
+
         if (nextStep.match(/monster/)) {
             //don't allow movement onto monster if Hero is weaker than
             if (!this.canHeroBeatMonster(this.objectsInMazeArray[position.x][position.y][1].getMonsterLevel())) {
@@ -235,6 +239,11 @@ export default class MazeController {
 
         if (nextStep.match(/powerUp/)) {
             this.maze[this.mazeHero.getHeroPosition()].classList.remove("powerUp");
+            return;
+        }
+
+        if (nextStep.match(/debuff/)) {
+            this.maze[this.mazeHero.getHeroPosition()].classList.remove("debuff");
             return;
         }
         
