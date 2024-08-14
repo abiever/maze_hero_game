@@ -9,7 +9,6 @@ var makeMaze = (id, width, height) => {
     MazeGame = new MazeController("maze", 5, 0, Maze.returnMazeBuilderArray(), Maze.getUpperWarpSpot(), Maze.getLowerWarpSpot());
 }        
       
-/*TODO: Use the below to create larger and larger mazes for each "level" */
-makeMaze("maze_container", 11, 9);
-//NOTE: 'bare minimum' winnable game: 12, 10
+//NOW:
+//Trying to create automated enemy movement
 
