@@ -6,7 +6,7 @@ var Maze, MazeGame;
 var makeMaze = (id, width, height) => {
     Maze = new FancyMazeBuilder(width, height);
     Maze.display(id);
-    MazeGame = new MazeController("maze", 5, 0, Maze.returnMazeBuilderArray());
+    MazeGame = new MazeController("maze", 5, 0, Maze.returnMazeBuilderArray(), Maze.getUpperWarpSpot(), Maze.getLowerWarpSpot());
 }        
       
 /*TODO: Use the below to create larger and larger mazes for each "level" */

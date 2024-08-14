@@ -13,6 +13,8 @@ export default class FancyMazeBuilder extends MazeBuilder {
 
       //This will store the sum of all monster levels
       this.cumulativeMonsterLevels = 0;
+      this.upperWarpSpot = null;
+      this.lowerWarpSpot = null;
   
       this.placeMonsters();
       this.placePowerUps(50); //change this number to alter amount of PowerUps placed in maze?
@@ -216,12 +218,24 @@ export default class FancyMazeBuilder extends MazeBuilder {
 
       // Set the selected positions to "warp_spot"
       if (randomUpper) {
-      maze[randomUpper.y][randomUpper.x] = ["warp_spot"];
+        maze[randomUpper.y][randomUpper.x] = ["warp_spot"];
+        this.upperWarpSpot = [randomUpper.y, randomUpper.x];
+        console.log("upperWarpSpot:", this.upperWarpSpot);
       }
       if (randomLower) {
-      maze[randomLower.y][randomLower.x] = ["warp_spot"];
+        maze[randomLower.y][randomLower.x] = ["warp_spot"];
+        this.lowerWarpSpot = [randomLower.y, randomLower.x];
+        console.log("lowerWarpSpot:", this.lowerWarpSpot);
       }
 
+    }
+
+    getLowerWarpSpot() {
+      return this.lowerWarpSpot;
+    }
+
+    getUpperWarpSpot() {
+      return this.upperWarpSpot;
     }
 
 }

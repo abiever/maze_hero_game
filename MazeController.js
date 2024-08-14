@@ -12,12 +12,15 @@ class Position {
 }
 
 export default class MazeController {
-    constructor(id, heroLevel, stepsTaken, objectsInMazeArray) {
+    constructor(id, heroLevel, stepsTaken, objectsInMazeArray, warpPosition1, warpPosition2) {
         // Original JavaScript code by Chirp Internet: www.chirpinternet.eu
         // Please acknowledge use of this code by including this header.
 
         this.mazeHero = new Hero(heroLevel);
         this.mazeHero.setHeroStepCount(stepsTaken);
+
+        this.warpPosition1 = warpPosition1;
+        this.warpPosition2 = warpPosition2;
 
         /* bind to HTML element */
         this.mazeContainer = document.getElementById(id);
@@ -204,6 +207,21 @@ export default class MazeController {
         this.mazeHero.setHeroPosition(position);
         this.maze[position].innerHTML = `<span class="heroValue">${this.mazeHero.getHeroValue()}</span>`;
 
+        /* warp to other spot if available */
+        if (nextStep.match(/warp_spot/)) {
+            const currentWarpPosition = this.mazeHero.getHeroPosition();
+            const warpTarget = this.getWarpTarget(currentWarpPosition);
+
+            if (warpTarget) {
+                this.maze[currentWarpPosition].classList.remove("hero");
+                this.maze[currentWarpPosition].innerHTML = "";
+
+                this.maze[warpTarget].classList.add("hero");
+                this.mazeHero.setHeroPosition(warpTarget);
+                this.maze[warpTarget].innerHTML = `<span class="heroValue">${this.mazeHero.getHeroValue()}</span>`;
+            }
+        }
+
         /* check what was stepped on || remove element from display */
         if (nextStep.match(/monster/)) {
             this.maze[this.mazeHero.getHeroPosition()].classList.remove("monster");
@@ -281,6 +299,25 @@ export default class MazeController {
     //     return this.maze;
     // }
 
+    getWarpTarget(currentPosition) {
+        const [currentX, currentY] = [currentPosition.x, currentPosition.y];
+        const lowerWarpSpot = this.warpPosition2; // Get the lower warp spot
+        const upperWarpSpot = this.warpPosition1; // Get the upper warp spot
+    
+        // Check if the Hero is on the upper warp spot, then warp to the lower one
+        if (currentX === upperWarpSpot[0] && currentY === upperWarpSpot[1]) {
+            return new Position(lowerWarpSpot[0], lowerWarpSpot[1]);
+        }
+        
+        // Check if the Hero is on the lower warp spot, then warp to the upper one
+        if (currentX === lowerWarpSpot[0] && currentY === lowerWarpSpot[1]) {
+            return new Position(upperWarpSpot[0], upperWarpSpot[1]);
+        }
+    
+        return null;
+    }
+    
+
     restartNewGame() {
         //eventually use this method to restart a new game from the beginning 
     }
@@ -292,15 +329,15 @@ export default class MazeController {
         const newHeight = Math.ceil(this.objectsInMazeArray.length / 2) + 2; // Increase height
     
         // Create and display the new maze
-        let Maze = new FancyMazeBuilder(newWidth, newHeight);
-        Maze.display("maze_container");
-        this.objectsInMazeArray = Maze.returnMazeBuilderArray();
+        let newMaze = new FancyMazeBuilder(newWidth, newHeight);
+        newMaze.display("maze_container");
+        this.objectsInMazeArray = newMaze.returnMazeBuilderArray();
 
         //make new Hero's level his value - steps taken
         let newHeroLevel = this.mazeHero.getHeroValue() - this.mazeHero.getHeroStepCount();
     
         // Re-initialize the MazeController with the new maze
-        let newMazeGame = new MazeController("maze", newHeroLevel, this.mazeHero.getHeroStepCount(), this.objectsInMazeArray);
+        let newMazeGame = new MazeController("maze", newHeroLevel, this.mazeHero.getHeroStepCount(), this.objectsInMazeArray, newMaze.getUpperWarpSpot(), newMaze.getLowerWarpSpot());
     
         this.setMessage("New Level! Good luck!");
     }
