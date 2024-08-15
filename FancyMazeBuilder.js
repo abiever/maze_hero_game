@@ -1,6 +1,6 @@
 import MazeBuilder from "/MazeBuilder.js"
 import PowerUp from "./PowerUp.js";
-import Debuff from "./Debuff.js";
+import Position from "./Position.js";
 import Monster from "./Monster.js";
 
 export default class FancyMazeBuilder extends MazeBuilder {
@@ -16,6 +16,8 @@ export default class FancyMazeBuilder extends MazeBuilder {
       this.cumulativeMonsterLevels = 0;
       this.upperWarpSpot = null;
       this.lowerWarpSpot = null;
+
+      this.monsters = [];
   
       this.placeMonsters();
       this.placePowerUps(50); //change this number to alter amount of PowerUps placed in maze?
@@ -53,11 +55,15 @@ export default class FancyMazeBuilder extends MazeBuilder {
           }
   
           if(this.isA("wall", [r-1, c-1], [r-1, c], [r-1, c+1], [r+1, c]) && this.isGap([r+1, c-1], [r+1, c+1], [r+2, c])) {
+            //this shit is spaghetti AF; refactor??
             let randomMonsterLevel = Math.floor(Math.random() * 20) + 2;
             let monster = new Monster(randomMonsterLevel);
             this.cumulativeMonsterLevels += randomMonsterLevel;
             this.maze[r][c] = [];
             this.maze[r+1][c] = ["monster", monster];
+            let monsterPosition = new Position(r+1, c);
+            monster.setMonsterPosition(monsterPosition);
+            this.monsters.push(monster);
           }
   
           if(this.isA("wall", [r-1, c+1], [r, c-1], [r, c+1], [r+1, c+1]) && this.isGap([r-1, c-1], [r, c-2], [r+1, c-1])) {
@@ -66,6 +72,9 @@ export default class FancyMazeBuilder extends MazeBuilder {
             this.cumulativeMonsterLevels += randomMonsterLevel;
             this.maze[r][c] = [];
             this.maze[r][c-1] = ["monster", monster];
+            let monsterPosition = new Position(r, c-1);
+            monster.setMonsterPosition(monsterPosition);
+            this.monsters.push(monster);
           }
   
           if(this.isA("wall", [r-1, c-1], [r, c-1], [r+1, c-1], [r, c+1]) && this.isGap([r-1, c+1], [r, c+2], [r+1, c+1])) {
@@ -74,6 +83,9 @@ export default class FancyMazeBuilder extends MazeBuilder {
             this.cumulativeMonsterLevels += randomMonsterLevel;
             this.maze[r][c] = [];
             this.maze[r][c+1] = ["monster", monster];
+            let monsterPosition = new Position(r, c+1);
+            monster.setMonsterPosition(monsterPosition);
+            this.monsters.push(monster);
           }
   
           if(this.isA("wall", [r-1, c], [r+1, c-1], [r+1, c], [r+1, c+1]) && this.isGap([r-1, c-1], [r-2, c], [r-1, c+1])) {
@@ -82,6 +94,9 @@ export default class FancyMazeBuilder extends MazeBuilder {
             this.cumulativeMonsterLevels += randomMonsterLevel;
             this.maze[r][c] = [];
             this.maze[r-1][c] = ["monster", monster];
+            let monsterPosition = new Position(r-1, c);
+            monster.setMonsterPosition(monsterPosition);
+            this.monsters.push(monster);
           }
   
         });
@@ -280,4 +295,7 @@ export default class FancyMazeBuilder extends MazeBuilder {
       return this.upperWarpSpot;
     }
 
+    getMonsters() {
+      return this.monsters;
+    }
 }

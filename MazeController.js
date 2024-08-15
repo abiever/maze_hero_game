@@ -1,18 +1,9 @@
 import Hero from "./Hero.js";
 import FancyMazeBuilder from "./FancyMazeBuilder.js";
-
-class Position {
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
-    }
-    toString() {
-        return this.x + ":" + this.y;
-    }
-}
+import Position from "./Position.js";
 
 export default class MazeController {
-    constructor(id, heroLevel, stepsTaken, objectsInMazeArray, warpPosition1, warpPosition2) {
+    constructor(id, heroLevel, stepsTaken, objectsInMazeArray, monsters, warpPosition1, warpPosition2) {
         // Original JavaScript code by Chirp Internet: www.chirpinternet.eu
         // Please acknowledge use of this code by including this header.
 
@@ -22,6 +13,9 @@ export default class MazeController {
         this.warpPosition1 = warpPosition1;
         this.warpPosition2 = warpPosition2;
 
+        //The array passed from FancyMazeBuilder that contains all Monsters and their positions
+        this.monsters = monsters;
+
         /* bind to HTML element */
         this.mazeContainer = document.getElementById(id);
 
@@ -30,6 +24,9 @@ export default class MazeController {
 
         this.mazeMessage = document.createElement("div");
         this.mazeMessage.id = "maze_message";
+
+        this.gameInterval = 0;
+        this.interval = 0
 
         //this.mazeHero.setHeroScore(this.mazeContainer.getAttribute("data-steps")); // removed "- 2" from here a few commits ago; doesn't seem necessary any more??
 
@@ -70,6 +67,10 @@ export default class MazeController {
         /* activate control keys */
         this.keyPressHandler = this.mazeKeyPressHandler.bind(this);
         document.addEventListener("keydown", this.keyPressHandler, false);
+
+        // * start interval to move Monsters
+        this.gameInterval = 1000;
+        this.interval = setInterval(() => this.monsterMovesHandler(this.monsters), this.gameInterval);
     }
 
     setMessage(text) {
@@ -258,10 +259,6 @@ export default class MazeController {
 
         this.mazeHero.increaseHeroStepCount();
 
-        // if (this.mazeHero.getHeroStepCount() > this.mazeHero.getHeroValue()) {
-        //     this.gameOver("You have lost.")
-        // }
-
         this.setMessage("...");
     }
 
@@ -302,11 +299,103 @@ export default class MazeController {
         this.setMessage("collect all the treasure");
     }
 
-    //Use this to check the contents of the MazeControllerArray
-    // returnMazeControllerMaze() {
-    //     console.log("MazeControllerMazeArray:", this.maze);
-    //     return this.maze;
-    // }
+    // *****IMPORTANT********/
+    // Create a 'moveHandler' or something to automatically generate some valid position for monster movement? Will need for position argument below 
+    tryMoveMonster(monster, position) {
+
+        //monsters.forEach((monster) => {
+
+            if ("object" !== typeof this.maze[monster.getMonsterPosition()]) {
+                return;
+            }
+
+            var nextStep = this.maze[position].className;
+
+            /* make checks before moving to inhibit illegal moves*/
+            if (nextStep.match(/wall/)) {
+                return;
+            }
+
+            if (nextStep.match(/entrance/)) {
+                return;
+            }
+
+            if (nextStep.match(/exit/)) {
+                return
+            }
+
+            if (nextStep.match(/boss/)) {
+                return
+            }
+
+            /* move hero one step by removing him, then adding him to another position with his vurrent value */
+            this.maze[monster.getMonsterPosition()].classList.remove("monster");
+            //*****IMPORTANT********/
+            //I'll need to "move" the 'Monster' object to the next div as well??
+            this.maze[monster.getMonsterPosition()].innerHTML = "";
+            this.maze[position].classList.add("monster");
+            monster.setMonsterPosition(position);
+            this.maze[position].innerHTML = `<span class="monsterValue">${monster.getMonsterLevel()}</span>`;
+
+            if (nextStep.match(/warp_spot/)) {
+                return;
+            }
+
+            if (nextStep.match(/monster/)) {
+                return;
+            }
+
+            if (nextStep.match(/boss/)) {
+                return;
+            }
+
+            if (nextStep.match(/powerUp/)) {
+                return;
+            }
+
+            if (nextStep.match(/debuff/)) {
+                return;
+            }
+            
+            if (nextStep.match(/key/)) {
+                return;
+            }
+
+            if (nextStep.match(/exit/)) {
+                return;
+            }
+
+        // });
+
+    }
+
+    monsterMovesHandler(monsters) {
+
+        const directions = [
+            { x: 0, y: -1 }, // up
+            { x: 0, y: 1 },  // down
+            { x: -1, y: 0 }, // left
+            { x: 1, y: 0 }   // right
+          ];
+
+        monsters.forEach((monster) => {
+    
+            //let validPositions = []; //I may not need this for this purpose?
+
+            let randomDirectionIdx = Math.floor(Math.random() * 5);
+    
+            //const prevPosition = monster.getMonsterPosition(); //may not need this either? 
+
+            var tryPosition = new Position(
+                    monster.getMonsterPosition().x + directions[randomDirectionIdx].x, 
+                    monster.getMonsterPosition().y + directions[randomDirectionIdx].y
+                );
+    
+            this.tryMoveMonster(monster, tryPosition);
+    
+        });
+
+    }
 
     getWarpTarget(currentPosition) {
         const [currentX, currentY] = [currentPosition.x, currentPosition.y];
