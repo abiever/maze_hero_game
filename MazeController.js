@@ -449,13 +449,23 @@ export default class MazeController {
         // Create and display the new maze
         let newMaze = new FancyMazeBuilder(newWidth, newHeight);
         newMaze.display("maze_container");
-        this.objectsInMazeArray = newMaze.returnMazeBuilderArray();
+        let newObjectsInMazeArray = newMaze.returnMazeBuilderArray();
+
+        // Grab next Monsters array from new maze
+        let newMonstersArray = newMaze.getMonsters();
 
         //make new Hero's level his value - steps taken
         let newHeroLevel = this.mazeHero.getHeroValue() - this.mazeHero.getHeroStepCount();
     
         // Re-initialize the MazeController with the new maze
-        let newMazeGame = new MazeController("maze", newHeroLevel, this.mazeHero.getHeroStepCount(), this.objectsInMazeArray, newMaze.getUpperWarpSpot(), newMaze.getLowerWarpSpot());
+        let newMazeGame = new MazeController(
+            "maze", 
+            newHeroLevel, 
+            this.mazeHero.getHeroStepCount(), 
+            newObjectsInMazeArray, 
+            newMonstersArray,
+            newMaze.getUpperWarpSpot(), 
+            newMaze.getLowerWarpSpot());
     
         this.setMessage("New Level! Good luck!");
     }
