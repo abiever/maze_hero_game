@@ -402,7 +402,7 @@ export default class MazeController {
             //let validPositions = []; //I may not need this for this purpose?
 
             //Randomly choose one of the above directions 
-            let randomDirectionIdx = Math.floor(Math.random() * 5);
+            let randomDirectionIdx = Math.floor(Math.random() * directions.length);
     
             //const prevPosition = monster.getMonsterPosition(); //may not need this either? 
 
