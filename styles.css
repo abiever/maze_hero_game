@@ -54,18 +54,6 @@
   #maze div div.monster::after {
     content: "\1F40A"; /* Default monster emoji */
   }
-  #maze div.monster:nth-of-type(3n)::after {
-    content: "\1F40D"; /* Different monster emoji */
-  }
-  #maze div.monster:nth-of-type(5n)::after {
-    content: "\1F40C"; /* Different monster emoji */
-  }
-  #maze div.monster:nth-of-type(7n)::after {
-    content: "\1F40B"; /* Different monster emoji */
-  }
-  #maze div.monster:nth-of-type(13n)::after {
-    content: "\1F40E"; /* Different monster emoji */
-  }
   #maze div div.boss::after {
     content: "\1F409"; /* dragon emoji */
   }

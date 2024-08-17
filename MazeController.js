@@ -328,14 +328,28 @@ export default class MazeController {
                 return
             }
 
+            if (nextStep.match(/monster/)) {
+                return
+            }
+
             /* move hero one step by removing him, then adding him to another position with his vurrent value */
             this.maze[monster.getMonsterPosition()].classList.remove("monster");
             //*****IMPORTANT********/
             //I'll need to "move" the 'Monster' object to the next div as well??
             this.maze[monster.getMonsterPosition()].innerHTML = "";
+            this.objectsInMazeArray[monster.getMonsterPosition().x][monster.getMonsterPosition().y].length = 0;
             this.maze[position].classList.add("monster");
+            
+            
             monster.setMonsterPosition(position);
+            
+            //****POTENTIAL*****//
+            //Do I need to update the this.monsters array objects?
+
             this.maze[position].innerHTML = `<span class="monsterValue">${monster.getMonsterLevel()}</span>`;
+            this.objectsInMazeArray[position.x][position.y] = ["monster", monster];
+            //Is the below line the issue??
+            
 
             if (nextStep.match(/warp_spot/)) {
                 return;
@@ -382,6 +396,7 @@ export default class MazeController {
     
             //let validPositions = []; //I may not need this for this purpose?
 
+            //Randomly choose one of the above directions 
             let randomDirectionIdx = Math.floor(Math.random() * 5);
     
             //const prevPosition = monster.getMonsterPosition(); //may not need this either? 
