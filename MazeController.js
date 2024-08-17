@@ -3,7 +3,7 @@ import FancyMazeBuilder from "./FancyMazeBuilder.js";
 import Position from "./Position.js";
 
 export default class MazeController {
-    constructor(id, heroLevel, stepsTaken, objectsInMazeArray, monsters, warpPosition1, warpPosition2) {
+    constructor(id, heroLevel, stepsTaken, objectsInMazeArray, monstersArray, warpPosition1, warpPosition2) {
         // Original JavaScript code by Chirp Internet: www.chirpinternet.eu
         // Please acknowledge use of this code by including this header.
 
@@ -14,7 +14,7 @@ export default class MazeController {
         this.warpPosition2 = warpPosition2;
 
         //The array passed from FancyMazeBuilder that contains all Monsters and their positions
-        this.monsters = monsters;
+        this.monstersArray = monstersArray;
 
         /* bind to HTML element */
         this.mazeContainer = document.getElementById(id);
@@ -70,8 +70,8 @@ export default class MazeController {
 
         // * start interval to move Monsters
         this.gameInterval = 1000;
-        this.interval = setInterval(() => this.monsterMovesHandler(this.monsters), this.gameInterval);
-        console.log("Original Monsters Array:", this.monsters)
+        this.interval = setInterval(() => this.monsterMovesHandler(this.monstersArray), this.gameInterval);
+        console.log("Original Monsters Array:", this.monstersArray)
     }
 
     setMessage(text) {
@@ -195,8 +195,8 @@ export default class MazeController {
                 let defeatedMonster = this.objectsInMazeArray[position.x][position.y][1];
                 this.objectsInMazeArray[position.x][position.y].length = 0;
                 // Remove the defeated monster from the monsters array
-                this.monsters = this.monsters.filter(monster => monster !== defeatedMonster);
-                console.log("Updated Monsters Array:", this.monsters);
+                this.monstersArray = this.monstersArray.filter(monster => monster !== defeatedMonster);
+                console.log("Updated Monsters Array:", this.monstersArray);
             }
         }
 
