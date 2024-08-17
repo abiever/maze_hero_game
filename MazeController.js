@@ -31,7 +31,7 @@ export default class MazeController {
         //this.mazeHero.setHeroScore(this.mazeContainer.getAttribute("data-steps")); // removed "- 2" from here a few commits ago; doesn't seem necessary any more??
 
         this.maze = []; //This array contains the HTML elements composing the maze itself?
-        this.objectsInMazeArray = objectsInMazeArray; //This array will contain the positions of where objects like PowerUps are 
+        this.objectsInMazeArray = objectsInMazeArray; //This array will contain the positions of where objects like PowerUps & Monsters are 
 
         this.beatLevel = false;
         this.gameLevel = 1;
@@ -71,6 +71,7 @@ export default class MazeController {
         // * start interval to move Monsters
         this.gameInterval = 1000;
         this.interval = setInterval(() => this.monsterMovesHandler(this.monsters), this.gameInterval);
+        console.log("Original Monsters Array:", this.monsters)
     }
 
     setMessage(text) {
@@ -190,6 +191,12 @@ export default class MazeController {
             //allow Hero to defeat monster and take its level
             if (this.canHeroBeatMonster(this.objectsInMazeArray[position.x][position.y][1].getMonsterLevel())) {
                 this.mazeHero.increaseHeroValue(this.objectsInMazeArray[position.x][position.y][1].getMonsterLevel())
+
+                let defeatedMonster = this.objectsInMazeArray[position.x][position.y][1];
+                this.objectsInMazeArray[position.x][position.y].length = 0;
+                // Remove the defeated monster from the monsters array
+                this.monsters = this.monsters.filter(monster => monster !== defeatedMonster);
+                console.log("Updated Monsters Array:", this.monsters);
             }
         }
 
@@ -204,6 +211,9 @@ export default class MazeController {
                 this.mazeHero.increaseHeroValue(this.objectsInMazeArray[position.x][position.y][1].getMonsterLevel())
             }
         }
+
+        //****POTENTIAL ISSUE!!*******/
+        //ISSUE (8/17/24): It appears that the objectsInMazeArray is never actually updated with the Hero's actual position, and his position is simply updated within his own object instance and is where that state is maintained/updated. However, this may become an issue later?
 
         /* move hero one step by removing him, then adding him to another position with his vurrent value */
         this.maze[this.mazeHero.getHeroPosition()].classList.remove("hero");
@@ -230,6 +240,7 @@ export default class MazeController {
         /* check what was stepped on || remove element from display */
         if (nextStep.match(/monster/)) {
             this.maze[this.mazeHero.getHeroPosition()].classList.remove("monster");
+            this.objectsInMazeArray[position.x][position.y].length = 0;
             return;
         }
 
@@ -332,23 +343,17 @@ export default class MazeController {
                 return
             }
 
-            /* move hero one step by removing him, then adding him to another position with his vurrent value */
+            //****IMPORTANT!*****//
+            //It is/was necessary to update objectsInMazeArray with each Monster's new position so that Monster methods/members can be accessed after they move.
+
+            /* move Monster one step by removing it, then adding it to another position with his its value */
             this.maze[monster.getMonsterPosition()].classList.remove("monster");
-            //*****IMPORTANT********/
-            //I'll need to "move" the 'Monster' object to the next div as well??
             this.maze[monster.getMonsterPosition()].innerHTML = "";
             this.objectsInMazeArray[monster.getMonsterPosition().x][monster.getMonsterPosition().y].length = 0;
             this.maze[position].classList.add("monster");
-            
-            
             monster.setMonsterPosition(position);
-            
-            //****POTENTIAL*****//
-            //Do I need to update the this.monsters array objects?
-
             this.maze[position].innerHTML = `<span class="monsterValue">${monster.getMonsterLevel()}</span>`;
             this.objectsInMazeArray[position.x][position.y] = ["monster", monster];
-            //Is the below line the issue??
             
 
             if (nextStep.match(/warp_spot/)) {
