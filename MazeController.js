@@ -25,8 +25,8 @@ export default class MazeController {
         this.mazeMessage = document.createElement("div");
         this.mazeMessage.id = "maze_message";
 
-        this.gameInterval = 0;
-        this.interval = 0
+        this.intervalTime = 1000;
+        this.monstersInterval = 0
 
         //this.mazeHero.setHeroScore(this.mazeContainer.getAttribute("data-steps")); // removed "- 2" from here a few commits ago; doesn't seem necessary any more??
 
@@ -69,8 +69,8 @@ export default class MazeController {
         document.addEventListener("keydown", this.keyPressHandler, false);
 
         // * start interval to move Monsters
-        this.gameInterval = 1000;
-        this.interval = setInterval(() => this.monsterMovesHandler(this.monstersArray), this.gameInterval);
+        // this.gameInterval = 1000;
+        this.monstersInterval = setInterval(() => this.monsterMovesHandler(this.monstersArray), this.intervalTime);
         console.log("Original Monsters Array:", this.monstersArray)
     }
 
@@ -101,6 +101,7 @@ export default class MazeController {
     gameOver(text) {
         /* de-activate control keys */
         document.removeEventListener("keydown", this.keyPressHandler, false);
+        clearInterval(this.monstersInterval);
         this.setMessage(text);
         this.mazeContainer.classList.add("game_over");
     }
@@ -108,6 +109,7 @@ export default class MazeController {
     levelCompleted(text) {
         /* de-activate control keys */
         document.removeEventListener("keydown", this.keyPressHandler, false);
+        clearInterval(this.monstersInterval);
         this.setMessage(text);
         this.mazeContainer.classList.add("finished");
         this.beatLevel = true;
