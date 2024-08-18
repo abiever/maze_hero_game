@@ -16,6 +16,9 @@ export default class MazeController {
         //The array passed from FancyMazeBuilder that contains all Monsters and their positions
         this.monstersArray = monstersArray;
 
+        /* bind to button to start game/level */
+        
+
         /* bind to HTML element */
         this.mazeContainer = document.getElementById(id);
 
@@ -64,12 +67,20 @@ export default class MazeController {
 
         this.mazeContainer.insertAdjacentElement("afterend", mazeOutputDiv);
 
+        let gameButton = document.getElementById("start_game");
+
+        gameButton.addEventListener("click", () => {
+            this.startGame();
+        });
+        
+    }
+
+    startGame() {
         /* activate control keys */
         this.keyPressHandler = this.mazeKeyPressHandler.bind(this);
         document.addEventListener("keydown", this.keyPressHandler, false);
 
         // * start interval to move Monsters
-        // this.gameInterval = 1000;
         this.monstersInterval = setInterval(() => this.monsterMovesHandler(this.monstersArray), this.intervalTime);
         console.log("Original Monsters Array:", this.monstersArray)
     }
@@ -339,6 +350,10 @@ export default class MazeController {
 
             if (nextStep.match(/boss/)) {
                 return
+            }
+
+            if (nextStep.match(/powerUp/)) {
+                return;
             }
 
             if (nextStep.match(/monster/)) {
