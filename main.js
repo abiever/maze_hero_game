@@ -10,8 +10,6 @@ var makeMaze = (id, width, height) => {
 }        
       
 makeMaze("maze_container", 11, 9);
-//NOTE: 'bare minimum' winnable game: 12, 10
 
-//TODO: 8/14/24
-//Trying to make enemy movmenet
+
 

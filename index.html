@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Maze Hero Game</title>
     <link rel="stylesheet" href="/styles.css">
-    <script src="/main.js" type="module"></script>
+    <script src="/main.js" type="module" defer></script>
 </head>
 <body>
     <button id="start_game">START</button>
     <div id="maze_container"><!-- -->
+        <!--**ISSUE**-->
+        <!-- Whenever the button is here, it won't appear on top of the maze -->
         <div id="maze" data-steps="???">
             <!-- insert the maze HTML code here -->
           </div>
