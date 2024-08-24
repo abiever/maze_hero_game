@@ -67,9 +67,9 @@ export default class MazeController {
 
         this.mazeContainer.insertAdjacentElement("afterend", mazeOutputDiv);
 
-        let gameButton = document.getElementById("start_game");
+        this.gameButton = document.getElementById("start_game");
 
-        gameButton.addEventListener("click", () => {
+        this.gameButton.addEventListener("click", () => {
             this.startGame();
         });
         
@@ -82,7 +82,8 @@ export default class MazeController {
 
         // * start interval to move Monsters
         this.monstersInterval = setInterval(() => this.monsterMovesHandler(this.monstersArray), this.intervalTime);
-        console.log("Original Monsters Array:", this.monstersArray)
+        //console.log("Original Monsters Array:", this.monstersArray)
+        this.gameButton.style.display = 'none';
     }
 
     setMessage(text) {
@@ -478,7 +479,7 @@ export default class MazeController {
             newMaze.getUpperWarpSpot(), 
             newMaze.getLowerWarpSpot());
     
-        this.setMessage("New Level! Good luck!");
+        newMazeGame.startGame();
     }
     
 }
