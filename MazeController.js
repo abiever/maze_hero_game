@@ -136,16 +136,27 @@ export default class MazeController {
         return this.beatLevel;
     }
 
-    heroWins() {
-        this.heroStepCounter.classList.remove("has-key");
-        this.maze[this.mazeHero.getHeroPosition()].classList.remove("door");
-        this.levelCompleted("Level Completed");
+    startNextLevelCountdown(seconds) {
+        let countdownSeconds = seconds;
     
-        // Wait for a moment and then start the next level
-        setTimeout(() => {
-            this.startNextLevel();
-        }, 3000); // 3 seconds delay before the next level
+        // Create or update the countdown message
+        let countdownElement = document.getElementById('countdown');
+    
+        const countdownTimer = setInterval(() => {
+            countdownElement.textContent = `Next level will begin in ${countdownSeconds}...`;
+            console.log(countdownSeconds);
+            countdownSeconds--;
+    
+            if (countdownSeconds < 0) {
+                clearInterval(countdownTimer);
+                countdownElement.textContent = ''; // Clear the countdown message
+    
+                // Start the next level
+                this.startNextLevel();
+            }
+        }, 1000); // Update every second (1 second interval)
     }
+    
 
     decideHeroVictory() {
 
@@ -156,10 +167,8 @@ export default class MazeController {
             this.maze[this.mazeHero.getHeroPosition()].classList.remove("door");
             this.levelCompleted("Level Completed");
         
-            // Wait for a moment and then start the next level
-            setTimeout(() => {
-                this.startNextLevel();
-            }, 3000); // 3 seconds delay before the next level
+            //wait for the given seconds, then start next level
+            this.startNextLevelCountdown(10);
         }
     }
 
