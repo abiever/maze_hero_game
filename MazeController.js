@@ -67,7 +67,8 @@ export default class MazeController {
 
         this.mazeContainer.insertAdjacentElement("afterend", mazeOutputDiv);
 
-        this.gameButton = document.getElementById("start_game");
+        this.gameButton = document.getElementById("start_game_button");
+        this.mainMessage = document.getElementById("main_message");
 
         this.gameButton.addEventListener("click", () => {
             this.startGame();
@@ -84,6 +85,7 @@ export default class MazeController {
         this.monstersInterval = setInterval(() => this.monsterMovesHandler(this.monstersArray), this.intervalTime);
         //console.log("Original Monsters Array:", this.monstersArray)
         this.gameButton.style.display = 'none';
+        this.mainMessage.style.display = 'none';
     }
 
     setMessage(text) {
@@ -140,7 +142,7 @@ export default class MazeController {
         let countdownSeconds = seconds;
     
         // Create or update the countdown message
-        let countdownElement = document.getElementById('countdown');
+        let countdownElement = document.getElementById('countdown_message');
     
         const countdownTimer = setInterval(() => {
             countdownElement.textContent = `Next level will begin in ${countdownSeconds}...`;

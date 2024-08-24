@@ -8,8 +8,13 @@
     <script src="/main.js" type="module" defer></script>
 </head>
 <body>
-    <button id="start_game">START</button>
-    <div id="countdown"></div>
+
+    <div id="game_controls_container">
+        <div id="main_message">READY?</div>
+        <button id="start_game_button">START</button>
+        <div id="countdown_message"></div>
+    </div>
+    
     <div id="maze_container"><!-- -->
         <!--**ISSUE**-->
         <!-- Whenever the button is here, it won't appear on top of the maze -->
@@ -17,5 +22,6 @@
             <!-- insert the maze HTML code here -->
           </div>
     </div>
+
 </body>
 </html>
