@@ -323,11 +323,7 @@ export default class MazeController {
         this.setMessage("collect all the treasure");
     }
 
-    // *****IMPORTANT********/
-    // Create a 'moveHandler' or something to automatically generate some valid position for monster movement? Will need for position argument below 
     tryMoveMonster(monster, position) {
-
-        //monsters.forEach((monster) => {
 
             if ("object" !== typeof this.maze[monster.getMonsterPosition()]) {
                 return;
@@ -400,8 +396,6 @@ export default class MazeController {
             if (nextStep.match(/exit/)) {
                 return;
             }
-
-        // });
 
     }
 
