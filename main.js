@@ -1,7 +1,7 @@
 import FancyMazeBuilder from "/FancyMazeBuilder.js";
 import MazeController from "./MazeController.js"; 
 
-var Maze, MazeGame;
+var Maze, MazeGame; 
       
 var makeMaze = (id, width, height) => {
     Maze = new FancyMazeBuilder(width, height);
