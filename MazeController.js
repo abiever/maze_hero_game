@@ -101,6 +101,13 @@ export default class MazeController {
         //console.log("Original Monsters Array:", this.monstersArray)
         this.startGameButton.style.display = 'none';
         this.mainMessage.style.display = 'none';
+
+        // Play game music
+        //*****TODO: Make music/sfx a part of constructor members */
+        const gameMusic = document.getElementById("game-music");
+        if (gameMusic) {
+            gameMusic.play();
+        }
     }
 
     setMessage(text) {
