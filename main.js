@@ -10,6 +10,7 @@ var makeMaze = (id, width, height) => {
             "maze", 
             999, //made Hero Level high for easier testing purposes
             0, 
+            1,
             Maze.returnMazeBuilderArray(), 
             Maze.getMonsters(), 
             Maze.getUpperWarpSpot(), 

@@ -3,7 +3,16 @@ import FancyMazeBuilder from "./FancyMazeBuilder.js";
 import Position from "./Position.js";
 
 export default class MazeController {
-    constructor(id, heroLevel, stepsTaken, objectsInMazeArray, monstersArray, warpPosition1, warpPosition2) {
+    constructor(
+        id, 
+        heroLevel, 
+        stepsTaken, 
+        gameLevel, 
+        objectsInMazeArray, 
+        monstersArray, 
+        warpPosition1, 
+        warpPosition2
+    ) {
         // Original JavaScript code by Chirp Internet: www.chirpinternet.eu
         // Please acknowledge use of this code by including this header.
 
@@ -37,7 +46,7 @@ export default class MazeController {
         this.objectsInMazeArray = objectsInMazeArray; //This array will contain the positions of where objects like PowerUps & Monsters are 
 
         this.beatLevel = false;
-        this.gameLevel = 1;
+        this.gameLevel = gameLevel;
 
         var mazePosition;
         for (let i = 0; i < this.mazeContainer.children.length; i++) {
@@ -168,6 +177,9 @@ export default class MazeController {
             this.heroStepCounter.classList.remove("has-key");
             this.maze[this.mazeHero.getHeroPosition()].classList.remove("door");
             this.levelCompleted("Level Completed");
+
+            this.mainMessage.innerHTML = `Level ${this.getGameLevel()} Completed`
+            this.mainMessage.style.display = 'block';
         
             //wait for the given seconds, then start next level
             this.startNextLevelCountdown(10);
@@ -485,6 +497,7 @@ export default class MazeController {
             "maze", 
             newHeroLevel, 
             this.mazeHero.getHeroStepCount(), 
+            this.getGameLevel(),
             newObjectsInMazeArray, 
             newMonstersArray,
             newMaze.getUpperWarpSpot(), 
