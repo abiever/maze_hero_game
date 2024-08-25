@@ -76,11 +76,17 @@ export default class MazeController {
 
         this.mazeContainer.insertAdjacentElement("afterend", mazeOutputDiv);
 
-        this.gameButton = document.getElementById("start_game_button");
+        this.startGameButton = document.getElementById("start_game_button");
+        this.restartGameButton = document.getElementById("restart_game_button")
+
         this.mainMessage = document.getElementById("main_message");
 
-        this.gameButton.addEventListener("click", () => {
+        this.startGameButton.addEventListener("click", () => {
             this.startGame();
+        });
+
+        this.restartGameButton.addEventListener("click", () => {
+            this.restartNewGame();
         });
         
     }
@@ -93,7 +99,7 @@ export default class MazeController {
         // * start interval to move Monsters
         this.monstersInterval = setInterval(() => this.monsterMovesHandler(this.monstersArray), this.intervalTime);
         //console.log("Original Monsters Array:", this.monstersArray)
-        this.gameButton.style.display = 'none';
+        this.startGameButton.style.display = 'none';
         this.mainMessage.style.display = 'none';
     }
 
@@ -127,6 +133,11 @@ export default class MazeController {
         clearInterval(this.monstersInterval);
         this.setMessage(text);
         this.mazeContainer.classList.add("game_over");
+
+        this.mainMessage.innerHTML = "GAME OVER";
+        this.mainMessage.style.display = "block";
+
+        this.restartGameButton.style.display = "block";
     }
 
     levelCompleted(text) {
@@ -472,7 +483,32 @@ export default class MazeController {
     
 
     restartNewGame() {
-        //eventually use this method to restart a new game from the beginning 
+        let width = 11;
+        let height = 9;
+
+        let newMaze = new FancyMazeBuilder(width, height);
+        newMaze.display("maze_container");
+        let newObjectsInMazeArray = newMaze.returnMazeBuilderArray();
+        let newMonstersArray = newMaze.getMonsters();
+        let newHeroLevel = 5;
+        let newHeroStepCount = 0;
+        let newGameLevel = 1;
+
+        let newMazeGame = new MazeController(
+            "maze",
+            newHeroLevel,
+            newHeroStepCount,
+            newGameLevel,
+            newObjectsInMazeArray,
+            newMonstersArray,
+            newMaze.getUpperWarpSpot(),
+            newMaze.getLowerWarpSpot()
+        )
+
+        this.restartGameButton.style.display = 'none';
+        this.mainMessage.style.display = 'none';
+
+        newMazeGame.startGame();
     }
 
     startNextLevel() {

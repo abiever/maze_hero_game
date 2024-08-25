@@ -8,7 +8,7 @@ var makeMaze = (id, width, height) => {
     Maze.display(id);
     MazeGame = new MazeController(
             "maze", 
-            999, //made Hero Level high for easier testing purposes
+            99, //made Hero Level high for easier testing purposes
             0, 
             1,
             Maze.returnMazeBuilderArray(), 
