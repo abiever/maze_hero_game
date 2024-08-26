@@ -48,6 +48,20 @@ export default class MazeController {
         this.beatLevel = false;
         this.gameLevel = gameLevel;
 
+        this.ghostHeroHTML =  `<span class="ghost">
+            <span class="heroValue">
+                <span>${this.mazeHero.getHeroValue()}</span>
+            </span>
+            <span class="pulse">
+                <span style="--i:0;"></span>
+                <span style="--i:1;"></span>
+                <span style="--i:2;"></span>
+                <span style="--i:3;"></span>
+            </span>
+            <span class="ghost__eyes"></span>
+            <span class="ghost__dimples"></span> 
+        </span>`;
+        
         var mazePosition;
         for (let i = 0; i < this.mazeContainer.children.length; i++) {
             for (let j = 0; j < this.mazeContainer.children[i].children.length; j++) {
@@ -63,23 +77,7 @@ export default class MazeController {
 
                     //ORIGINAL HERO
                     // this.maze[this.mazeHero.getHeroPosition()].innerHTML = `<span class="heroValue">${this.mazeHero.getHeroValue()}</span>`;
-                    this.maze[this.mazeHero.getHeroPosition()].innerHTML = 
-                        `
-                        <span class="ghost">
-                            <span class="heroValue">
-                                <span>${this.mazeHero.getHeroValue()}</span>
-                            </span>
-                            <span class="pulse">
-                                <span style="--i:0;"></span>
-                                <span style="--i:1;"></span>
-                                <span style="--i:2;"></span>
-                                <span style="--i:3;"></span>
-                            </span>
-                            <span class="ghost__eyes"></span>
-                            <span class="ghost__dimples"></span>
-                            
-                        </span>
-                        `;
+                    this.maze[this.mazeHero.getHeroPosition()].innerHTML = this.ghostHeroHTML;
                     
                 }
             }
@@ -141,6 +139,22 @@ export default class MazeController {
     canHeroBeatMonster(monsterLevel) {
         return this.mazeHero.getHeroValue() > monsterLevel;
     }
+
+    updateGhostHeroHTML() {
+        this.ghostHeroHTML = `<span class="ghost">
+            <span class="heroValue">
+                <span>${this.mazeHero.getHeroValue()}</span>
+            </span>
+            <span class="pulse">
+                <span style="--i:0;"></span>
+                <span style="--i:1;"></span>
+                <span style="--i:2;"></span>
+                <span style="--i:3;"></span>
+            </span>
+            <span class="ghost__eyes"></span>
+            <span class="ghost__dimples"></span> 
+        </span>`;
+    }    
 
     heroGetPowerUp(powerUpAtPosition) {
         /* Have Hero's value increase by PowerUp's factor */
@@ -267,11 +281,13 @@ export default class MazeController {
             if (this.canHeroBeatMonster(this.objectsInMazeArray[position.x][position.y][1].getMonsterLevel())) {
                 this.mazeHero.increaseHeroValue(this.objectsInMazeArray[position.x][position.y][1].getMonsterLevel())
 
+                this.updateGhostHeroHTML();
+
                 let defeatedMonster = this.objectsInMazeArray[position.x][position.y][1];
                 this.objectsInMazeArray[position.x][position.y].length = 0;
                 // Remove the defeated monster from the monsters array
                 this.monstersArray = this.monstersArray.filter(monster => monster !== defeatedMonster);
-                console.log("Updated Monsters Array:", this.monstersArray);
+                //console.log("Updated Monsters Array:", this.monstersArray);
             }
         }
 
@@ -284,6 +300,7 @@ export default class MazeController {
             //allow Hero to defeat monster and take its level
             if (this.canHeroBeatMonster(this.objectsInMazeArray[position.x][position.y][1].getMonsterLevel())) {
                 this.mazeHero.increaseHeroValue(this.objectsInMazeArray[position.x][position.y][1].getMonsterLevel())
+                this.updateGhostHeroHTML();
             }
         }
 
@@ -295,7 +312,10 @@ export default class MazeController {
         this.maze[this.mazeHero.getHeroPosition()].innerHTML = "";
         this.maze[position].classList.add("hero");
         this.mazeHero.setHeroPosition(position);
-        this.maze[position].innerHTML = `<span class="heroValue">${this.mazeHero.getHeroValue()}</span>`;
+        //ORIGINAL HERO
+        // this.maze[position].innerHTML = `<span class="heroValue">${this.mazeHero.getHeroValue()}</span>`;
+
+        this.maze[this.mazeHero.getHeroPosition()].innerHTML = this.ghostHeroHTML;
 
         /* warp to other spot if available */
         if (nextStep.match(/warp_spot/)) {
@@ -308,7 +328,7 @@ export default class MazeController {
 
                 this.maze[warpTarget].classList.add("hero");
                 this.mazeHero.setHeroPosition(warpTarget);
-                this.maze[warpTarget].innerHTML = `<span class="heroValue">${this.mazeHero.getHeroValue()}</span>`;
+                this.maze[warpTarget].innerHTML = this.maze[this.mazeHero.getHeroPosition()].innerHTML = this.ghostHeroHTML;
             }
         }
 
