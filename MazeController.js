@@ -60,7 +60,27 @@ export default class MazeController {
                     this.maze[this.mazeHero.getHeroPosition()].classList.add("hero");
                     /*trying some complicated stuff here to format the innerHTML by inserting a span inside template literals*/
                     //https://stackoverflow.com/questions/28458208/using-a-css-stylesheet-with-javascript-innerhtml
-                    this.maze[this.mazeHero.getHeroPosition()].innerHTML = `<span class="heroValue">${this.mazeHero.getHeroValue()}</span>`;
+
+                    //ORIGINAL HERO
+                    // this.maze[this.mazeHero.getHeroPosition()].innerHTML = `<span class="heroValue">${this.mazeHero.getHeroValue()}</span>`;
+                    this.maze[this.mazeHero.getHeroPosition()].innerHTML = 
+                        `
+                        <span class="ghost">
+                            <span class="heroValue">
+                                <span>${this.mazeHero.getHeroValue()}</span>
+                            </span>
+                            <span class="pulse">
+                                <span style="--i:0;"></span>
+                                <span style="--i:1;"></span>
+                                <span style="--i:2;"></span>
+                                <span style="--i:3;"></span>
+                            </span>
+                            <span class="ghost__eyes"></span>
+                            <span class="ghost__dimples"></span>
+                            
+                        </span>
+                        `;
+                    
                 }
             }
         }
