@@ -48,7 +48,8 @@ export default class MazeController {
         this.beatLevel = false;
         this.gameLevel = gameLevel;
 
-        this.ghostHeroHTML =  `<span class="ghost">
+        this.ghostHeroHTML =  
+        `<span class="ghost">
             <span class="heroValue">
                 <span>${this.mazeHero.getHeroValue()}</span>
             </span>

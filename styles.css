@@ -120,12 +120,47 @@ body {
     content: "\1F480";
 }
 
-#maze div div.monster::after {
-    content: "\1F40A"; /* Default monster emoji */
-}
+/* Default monster emoji */
+/* #maze div div.monster::after {
+    content: "\1F40A"; 
+} */
   
 #maze div div.boss::after {
     content: "\1F409"; /* dragon emoji */
+}
+
+.monster {
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); /*DIAMOND Shape*/
+  position: relative;
+  width: 6px;
+  height: 6px;
+  /* border: 1px solid transparent; */ /* seems to mess with maze sizing? */
+  background-color: whitesmoke;
+  /* animation: float 1s infinite;   */
+}
+
+.monster__eyes {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: space-around;
+  width: 9px;
+  height: 2px;
+  z-index: 2;
+}
+
+.monster__eyes:before { 
+  content: "";
+  display: block;
+  width: 3px;
+  height: 5px;
+  background: red;
+  border-radius: 50%;
+  animation: eyesBlink 2s infinite;
+  transition: transform 0.3s ease; 
+  z-index: 50;
 }
 
 /*Hero emoji*/
