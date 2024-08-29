@@ -125,9 +125,10 @@ body {
     content: "\1F40A"; 
 } */
   
-#maze div div.boss::after {
-    content: "\1F409"; /* dragon emoji */
-}
+/* dragon emoji */
+/* #maze div div.boss::after {
+    content: "\1F409"; 
+} */
 
 .monster-container {
   position: relative;
@@ -400,4 +401,53 @@ body {
   50% {
     transform: translateY(-15px);
   }
+}
+
+.boss-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bossValue {
+  position: absolute;
+  z-index: 100;
+  color: black;
+  font-size: 12px;
+}
+
+.boss {
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  width: 10px;
+  height: 10px;
+  background-color: #ff4500; /* A more intense color for the boss */
+  position: relative;
+}
+
+.boss__eyes {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: space-around;
+  width: 12px;
+  height: 3px;
+  z-index: 2;
+}
+
+.boss__eyes:before, 
+.boss__eyes:after {
+  content: "";
+  display: block;
+  width: 4px;
+  height: 6px;
+  background: #ffff00; /* Yellow eyes for the boss */
+  border-radius: 50%;
+  animation: eyesBlink 2s infinite;
+  transition: transform 0.3s ease; 
+  z-index: 50;
 }
