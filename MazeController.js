@@ -419,6 +419,10 @@ export default class MazeController {
                 return;
             }
 
+            if (nextStep.match(/warp_spot/)) {
+                return;
+            }
+
             if (nextStep.match(/entrance/)) {
                 return;
             }
@@ -448,7 +452,15 @@ export default class MazeController {
             this.objectsInMazeArray[monster.getMonsterPosition().x][monster.getMonsterPosition().y].length = 0;
             this.maze[position].classList.add("monster");
             monster.setMonsterPosition(position);
-            this.maze[position].innerHTML = `<span class="monsterValue">${monster.getMonsterLevel()}</span>`;
+            this.maze[position].innerHTML = 
+                `
+                <div class="monster-container">
+                    <span class="monsterValue">${monster.getMonsterLevel()}</span>
+                    <span class="monster">
+                    <span class="monster__eyes"></span>
+                    </span>
+                </div>
+                `;
             this.objectsInMazeArray[position.x][position.y] = ["monster", monster];
             
 
