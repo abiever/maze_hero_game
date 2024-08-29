@@ -1,6 +1,7 @@
 import PowerUp from "./PowerUp.js";
 import Debuff from "./Debuff.js";
 import Monster from "./Monster.js";
+import Boss from "./Boss.js";
 
 export default class MazeBuilder {
 
@@ -313,7 +314,29 @@ export default class MazeBuilder {
           // Check if this cell contains a Monster object, then display its HTML
           const monsterInstance = cell.find(item => item instanceof Monster);
           if (monsterInstance) {
-            cellDiv.innerHTML = `<span class="monsterValue">${monsterInstance.getMonsterLevel()}</span>`;
+            cellDiv.innerHTML = 
+            `
+              <div class="monster-container">
+                <span class="monsterValue">${monsterInstance.getMonsterLevel()}</span>
+                <span class="monster">
+                  <span class="monster__eyes"></span>
+                </span>
+              </div>
+            `;
+          }
+
+          // Check if this cell contains a Boss object, then display its HTML
+          const bossInstance = cell.find(item => item instanceof Boss);
+          if (bossInstance) {
+            cellDiv.innerHTML = 
+            `
+              <div class="boss-container">
+                <span class="bossValue">${bossInstance.getMonsterLevel()}</span>
+                <span class="boss">
+                  <span class="boss__eyes"></span>
+                </span>
+              </div>
+            `;
           }
     
           rowDiv.appendChild(cellDiv);

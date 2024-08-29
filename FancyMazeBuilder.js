@@ -2,6 +2,7 @@ import MazeBuilder from "/MazeBuilder.js"
 import PowerUp from "./PowerUp.js";
 import Position from "./Position.js";
 import Monster from "./Monster.js";
+import Boss from "./Boss.js";
 
 export default class FancyMazeBuilder extends MazeBuilder {
 
@@ -187,25 +188,23 @@ export default class FancyMazeBuilder extends MazeBuilder {
     /* this will place the Boss Monster right in front the key */
     //ISSUE!!! Boss is currently being placed ON THE KEY
     placeBoss(bossLevel) {
-
       let fr, fc;
       [fr, fc] = this.getKeyLocation();
-      //console.log("key location in placeBoss():", [fr, fc])
       
-      let boss = new Monster(bossLevel); //edit this to be based on ALL monster levels
+      let boss = new Boss(bossLevel);
 
-      //Checks to make sure there's an empty spot next to the key to place the boss
-      //TODO: Add extra checks to make sure key is "trapped" in a corner and you must get through the boss to get it
       if (this.maze[fr+1][fc].length === 0) {
-        this.maze[fr+1][fc] = ["boss", boss];
+          this.maze[fr+1][fc] = ["boss", boss];
       } else if (this.maze[fr-1][fc].length === 0) {
-        this.maze[fr-1][fc] = ["boss", boss];
+          this.maze[fr-1][fc] = ["boss", boss];
       } else if (this.maze[fr][fc+1].length === 0)  {
-        this.maze[fr][fc+1] = ["boss", boss];
+          this.maze[fr][fc+1] = ["boss", boss];
       } else if (this.maze[fr][fc-1].length === 0) {
-        this.maze[fr][fc-1] = ["boss", boss];
+          this.maze[fr][fc-1] = ["boss", boss];
       }
 
+      // Add the boss to the monsters array
+      this.monsters.push(boss);
     }
 
     placeWarpSpots(maze) {
