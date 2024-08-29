@@ -129,14 +129,28 @@ body {
     content: "\1F409"; /* dragon emoji */
 }
 
-.monster {
-  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); /*DIAMOND Shape*/
+.monster-container {
   position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.monsterValue {
+  position: absolute;
+  z-index: 100;
+  color: black;
+  font-size: 12px;
+}
+
+.monster {
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
   width: 6px;
   height: 6px;
-  /* border: 1px solid transparent; */ /* seems to mess with maze sizing? */
   background-color: whitesmoke;
-  /* animation: float 1s infinite;   */
+  position: relative;
 }
 
 .monster__eyes {
@@ -174,7 +188,7 @@ body {
     position: absolute;
     display: flex;
     font-size: 12px;
-    z-index: 30;
+    z-index: 100;
 }
   
 #maze.face-right div.hero::after {
@@ -358,7 +372,7 @@ body {
   background: inherit;
   border-radius: inherit;
   opacity: 0.8;
-  animation: pulseAnimate 4s ease-out infinite;
+  /* animation: pulseAnimate 4s ease-out infinite; */
   animation-delay: calc(2s * var(--i));
   z-index: 26;
 }
@@ -387,4 +401,3 @@ body {
     transform: translateY(-15px);
   }
 }
-  

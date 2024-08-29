@@ -313,14 +313,14 @@ export default class MazeBuilder {
           // Check if this cell contains a Monster object, then display its HTML
           const monsterInstance = cell.find(item => item instanceof Monster);
           if (monsterInstance) {
-            // cellDiv.innerHTML = `<span class="monsterValue">${monsterInstance.getMonsterLevel()}</span>`;
-            cellDiv.innerHTML = 
-                `<span class="monster">
-                    <span class="monsterValue">
-                      <span>${monsterInstance.getMonsterLevel()}</span>
-                    </span>
-                    <span class="monster__eyes"></span>
-                </span>`
+            cellDiv.innerHTML = `
+              <div class="monster-container">
+                <span class="monsterValue">${monsterInstance.getMonsterLevel()}</span>
+                <span class="monster">
+                  <span class="monster__eyes"></span>
+                </span>
+              </div>
+            `;
           }
     
           rowDiv.appendChild(cellDiv);
