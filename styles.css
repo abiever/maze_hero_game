@@ -383,6 +383,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 100;
 }
 
 .ghost__eyes {
@@ -394,7 +395,7 @@ body {
   justify-content: space-around;
   width: 9px;
   height: 2px;
-  z-index: 2;
+  z-index: 101;
 }
 
 .ghost__eyes:before,
@@ -407,7 +408,7 @@ body {
   border-radius: 50%;
   animation: eyesBlink 3s infinite;
   transition: transform 0.3s ease; 
-  z-index: 50;
+  z-index: 102;
 }
 
 .ghost__dimples {
@@ -421,7 +422,7 @@ body {
   padding: 8px 0 0;
   width: 13px;
   height: 2px;
-  z-index: 60;
+  z-index: 103;
 }
 
 .ghost__dimples:before,
@@ -432,7 +433,7 @@ body {
   height: 2px;
   background: var(--pink);
   border-radius: 50%;
-  z-index: 60;
+  z-index: 104;
 }
 
 .pulse {
