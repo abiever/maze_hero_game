@@ -121,9 +121,6 @@ body {
     content: ""; /*Reset content by default*/
 }
 
-/* #maze div div.door.exit::after {
-    content: "\1F6AA";
-} */
   
 #maze div div.warp_spot {
   background-color: var(--background);
@@ -172,16 +169,6 @@ body {
     content: "\1F480";
 }
 
-/* Default monster emoji */
-/* #maze div div.monster::after {
-    content: "\1F40A"; 
-} */
-  
-/* dragon emoji */
-/* #maze div div.boss::after {
-    content: "\1F409"; 
-} */
-
 .monster-container {
   width: 100%;
   height: 100%;
@@ -228,12 +215,6 @@ body {
   transition: transform 0.3s ease; 
   z-index: 50;
 }
-
-/*Hero emoji*/
-/* #maze div div.hero::after {
-    content: "\1F6B6"; 
-    z-index: 10;
-} */
   
 .heroValue, .debuffValue, .monsterValue, .powerUpValue {
     color: black;
@@ -283,20 +264,60 @@ body {
     background: transparent;
 }
   
+#maze div div.powerUp {
+  position: relative;
+  background-color: transparent;
+  border-radius: 50%;
+  overflow: visible; /* Allow glow to extend beyond div boundaries */
+}
+
+#maze div div.powerUp::before {
+  content: '';
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  right: -10%;
+  bottom: -10%;
+  border-radius: 50%;
+  background: radial-gradient(circle, 
+    rgba(138, 43, 226, 0) 40%, 
+    rgba(138, 43, 226, 0.3) 60%, 
+    rgba(138, 43, 226, 0.5) 70%, 
+    rgba(138, 43, 226, 0.3) 80%, 
+    rgba(138, 43, 226, 0) 100%
+  );
+  z-index: 5;
+  filter: blur(3px);
+}
+
 #maze div div.powerUp::after {
-    content: "\1F344"; /* mushroom emoji */
-    z-index: 10;
+  content: "x" attr(data-powerup-value);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  border: 2px solid var(--wall-color);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: calc(var(--maze-font-size) * 0.6);
+  font-weight: bold;
+  color: var(--wall-color);
+  background-color: transparent;
+  z-index: 10;
+  box-shadow: 
+    0 0 5px var(--wall-color),
+    0 0 10px var(--wall-color),
+    0 0 15px var(--wall-color);
 }
-  
-#maze div.powerUp:nth-of-type(3n)::after {
-    content: "\1F345"; /* tomato emoji */
-    z-index: 10;
-}
-  
+
 #maze div div.key::after {
     content: "\1F511";
 }
-  
+
 #maze div div:nth-child(odd) {
     width: var(--maze-wall-thickness);
 }
