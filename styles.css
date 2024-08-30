@@ -1,7 +1,6 @@
 /*1F409*/ /*dragon emoji*/
 
 :root {
-  --background: #00034b;
   --white: #ffffff;
   --grey: #dbdbdb;
   --pink: #e5a9c4;
@@ -10,7 +9,11 @@
   --background: #000000; /* Black */
   --maze-cell-size: 0.8em;
   --maze-wall-thickness: 0.8em;
-  --maze-font-size: 1em;
+  --maze-font-size: 1em; /* this adjusts the size of the maze overall? */
+  --door-slash-color: #fab1fc; /* Bright neon pink */
+  --door-slash-thickness: 10%;
+  --warp-slash-color: #ff6ad5; /* Bright neon pink */
+  --warp-slash-thickness: 10%;
 }
 
 /*HOW TO CENTER A DIV: https://stackoverflow.com/questions/14123999/center-a-div-horizontally-and-vertically*/
@@ -27,7 +30,7 @@ body {
     width: fit-content;
     max-width: 100%;
     max-height: 100%;
-    font-size: 40px; /* Base font size, adjust as needed */
+    font-size: 30px; /* Base font size, adjust as needed */
 }
   
 #game_controls_container {
@@ -44,7 +47,7 @@ body {
 }
 
 #main_message {
-    font-size: 1em;
+    font-size: 4em;
     text-shadow: 2px 2px 2px rgba(0,0,0,0.8);
     color: #fff;
     margin-bottom: 10px;
@@ -118,12 +121,51 @@ body {
     content: ""; /*Reset content by default*/
 }
 
-#maze div div.door.exit::after {
+/* #maze div div.door.exit::after {
     content: "\1F6AA";
-}
+} */
   
+#maze div div.warp_spot {
+  background-color: var(--background);
+  position: relative;
+  overflow: hidden;
+  outline: 1px solid var(--warp-slash-color);
+  z-index: 50;
+  /* opacity: 0.8; */
+}
+
+#maze div div.warp_spot::before,
 #maze div div.warp_spot::after {
-    content: "\1F7EB";
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(
+      45deg,
+      transparent calc(50% - var(--warp-slash-thickness) / 2),
+      var(--warp-slash-color) calc(50% - var(--warp-slash-thickness) / 2),
+      var(--warp-slash-color) calc(50% + var(--warp-slash-thickness) / 2),
+      transparent calc(50% + var(--warp-slash-thickness) / 2)
+    ),
+    linear-gradient(
+      -45deg,
+      transparent calc(50% - var(--warp-slash-thickness) / 2),
+      var(--warp-slash-color) calc(50% - var(--warp-slash-thickness) / 2),
+      var(--warp-slash-color) calc(50% + var(--warp-slash-thickness) / 2),
+      transparent calc(50% + var(--warp-slash-thickness) / 2)
+    );
+  background-size: calc(var(--maze-cell-size) * 0.25) calc(var(--maze-cell-size) * 0.25);
+  box-shadow: 0 0 5px var(--warp-slash-color), 0 0 10px var(--warp-slash-color);
+  z-index: 51;
+  /* opacity: 0.8; */
+}
+
+/* If you want to remove the previous warp spot styling */
+#maze div div.warp_spot::after {
+  content: none;
 }
 
 #maze div div.debuff::after {
@@ -205,9 +247,36 @@ body {
     transform: scale(-1, 1);
 }
   
-#maze div div.wall, #maze div div.door.exit {
+#maze div div.wall  {
     background-color: var(--wall-color);
     box-shadow: 0 0 10px var(--wall-color);
+}
+
+#maze div div.door.exit {
+  background-color: var(--wall-color);
+  position: relative;
+  overflow: hidden;
+}
+
+#maze div div.door.exit::before {
+  content: '';
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  right: 10%;
+  bottom: 10%;
+  background-color: var(--background);
+  border-radius: 50%;
+  box-shadow: 0 0 5px var(--background), 0 0 10px var(--background);
+}
+
+@keyframes spin {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
 }
   
 #maze div div.powerUp.wall {
