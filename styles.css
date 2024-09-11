@@ -1,4 +1,6 @@
-/*1F409*/ /*dragon emoji*/
+* {
+    box-sizing: border-box;
+}
 
 :root {
   --white: #ffffff;
@@ -14,6 +16,7 @@
   --door-slash-thickness: 10%;
   --warp-slash-color: #ff6ad5; /* Bright neon pink */
   --warp-slash-thickness: 10%;
+  --monster-border-color: #b355ff; /* Lighter purple for monster/boss border */
 }
 
 /*HOW TO CENTER A DIV: https://stackoverflow.com/questions/14123999/center-a-div-horizontally-and-vertically*/
@@ -169,7 +172,7 @@ body {
     content: "\1F480";
 }
 
-.monster-container {
+.monster-container, .boss-container {
   width: 100%;
   height: 100%;
   display: flex;
@@ -177,7 +180,7 @@ body {
   align-items: center;
 }
 
-.monsterValue {
+.monsterValue, .bossValue {
   position: absolute;
   z-index: 100;
   color: black;
@@ -188,8 +191,10 @@ body {
   clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
   width: calc(var(--maze-cell-size) * 0.75);
   height: calc(var(--maze-cell-size) * 0.75);
-  background-color: whitesmoke;
+  background-color: var(--wall-color);
   position: relative;
+  box-shadow: 0 0 10px var(--wall-color);
+  border: 2px solid var(--monster-border-color);
 }
 
 .monster__eyes {
@@ -209,7 +214,7 @@ body {
   display: block;
   width: 3px;
   height: 5px;
-  background: red;
+  background: var(--background);
   border-radius: 50%;
   animation: eyesBlink 2s infinite;
   transition: transform 0.3s ease; 
@@ -425,7 +430,7 @@ body {
   display: block;
   width: 3px;
   height: 5px;
-  background: var(--background);
+  background: black;
   border-radius: 50%;
   animation: eyesBlink 3s infinite;
   transition: transform 0.3s ease; 
@@ -439,7 +444,6 @@ body {
   transform: translate(-50%, -50%);
   display: flex;
   justify-content: space-around;
-  /* margin: 0 auto; */ /* Doesn't seem necessary ? */
   padding: 8px 0 0;
   width: 13px;
   height: 2px;
@@ -452,7 +456,7 @@ body {
   display: block;
   width: 4px;
   height: 2px;
-  background: var(--pink);
+  background: white;
   border-radius: 50%;
   z-index: 104;
 }
@@ -524,8 +528,10 @@ body {
   clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
   width: calc(var(--maze-cell-size) * 0.75);
   height: calc(var(--maze-cell-size) * 0.75);
-  background-color: #ff4500; /* A more intense color for the boss */
+  background-color: var(--wall-color);
   position: relative;
+  box-shadow: 0 0 15px var(--wall-color);
+  border: 2px solid var(--monster-border-color);
 }
 
 .boss__eyes {
@@ -546,7 +552,7 @@ body {
   display: block;
   width: 4px;
   height: 6px;
-  background: #ffff00; /* Yellow eyes for the boss */
+  background: var(--background);
   border-radius: 50%;
   animation: eyesBlink 2s infinite;
   transition: transform 0.3s ease; 
