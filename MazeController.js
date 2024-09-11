@@ -123,10 +123,10 @@ export default class MazeController {
 
         // Play game music
         //*****TODO: Make music/sfx a part of constructor members */
-        const gameMusic = document.getElementById("game-music");
-        if (gameMusic) {
-            gameMusic.play();
-        }
+        // const gameMusic = document.getElementById("game-music");
+        // if (gameMusic) {
+        //     gameMusic.play();
+        // }
     }
 
     setMessage(text) {
