@@ -123,10 +123,10 @@ export default class MazeController {
 
         // Play game music
         //*****TODO: Make music/sfx a part of constructor members */
-        const gameMusic = document.getElementById("game-music");
-        if (gameMusic) {
-            gameMusic.play();
-        }
+        // const gameMusic = document.getElementById("game-music");
+        // if (gameMusic) {
+        //     gameMusic.play();
+        // }
     }
 
     setMessage(text) {
@@ -267,10 +267,12 @@ export default class MazeController {
         //2) remove className of 'powerUp' so that the emoji disappears right when the Hero moves onto that square
         if (nextStep.match(/powerUp/)) {
             this.heroGetPowerUp(this.objectsInMazeArray[position.x][position.y][1].getPowerUpFactor());
+            this.updateGhostHeroHTML();
         }
 
         if (nextStep.match(/debuff/)) {
             this.mazeHero.halveHeroValue();
+            this.updateGhostHeroHTML();
         }
 
         if (nextStep.match(/monster/)) {

@@ -1,18 +1,27 @@
-/*1F409*/ /*dragon emoji*/
+* {
+    box-sizing: border-box;
+}
 
 :root {
-  --background: #00034b;
   --white: #ffffff;
   --grey: #dbdbdb;
   --pink: #e5a9c4;
   --shadow: #000232;
+  --wall-color: #8a2be2; /* Neon purple */
+  --background: #000000; /* Black */
+  --maze-cell-size: 0.8em;
+  --maze-wall-thickness: 0.8em;
+  --maze-font-size: 1em; /* this adjusts the size of the maze overall? */
+  --door-slash-color: #fab1fc; /* Bright neon pink */
+  --door-slash-thickness: 10%;
+  --warp-slash-color: #ff6ad5; /* Bright neon pink */
+  --warp-slash-thickness: 10%;
+  --monster-border-color: #b355ff; /* Lighter purple for monster/boss border */
 }
 
 /*HOW TO CENTER A DIV: https://stackoverflow.com/questions/14123999/center-a-div-horizontally-and-vertically*/
 body {
-  background-color: #302d2d;
-    background-image: linear-gradient(45deg, rgba(0,0,0,0.2) 45%, transparent 55%), linear-gradient(to bottom, rgba(0,0,0,0.2) 45%, transparent 55%);
-    background-size: 0.5em 0.5em;
+  background-color: var(--background);
 }
 
 #maze_container {
@@ -24,6 +33,7 @@ body {
     width: fit-content;
     max-width: 100%;
     max-height: 100%;
+    font-size: 30px; /* Base font size, adjust as needed */
 }
   
 #game_controls_container {
@@ -67,9 +77,7 @@ body {
 
 #maze {
     position: relative;
-    background-color: #a7c53f;
-    background-image: radial-gradient(circle at 0% 0%, transparent 50%, rgba(0,0,0,0.1) 50%), radial-gradient(circle at center, rgba(0,0,0,0.1) 50%, transparent 50%), radial-gradient(circle at 100% 100%, transparent 50%, rgba(0,0,0,0.1) 50%), radial-gradient(circle at 0% 100%, transparent 50%, rgba(0,0,0,0.1) 50%), radial-gradient(circle at 100% 0%, transparent 50%, rgba(0,0,0,0.1) 50%);
-    background-size: 8em 8em;
+    background-color: var(--background);
     z-index: 1;
 }
   
@@ -88,13 +96,21 @@ body {
   
 #maze div div {
     position: relative;
-    width: 1em;
-    height: 1em;
+    width: var(--maze-cell-size);
+    height: var(--maze-cell-size);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2em;
+    font-size: var(--maze-font-size);
     z-index: 20; /* Ensure text is on top */
+}
+  
+#maze div div:nth-child(odd) {
+    width: var(--maze-wall-thickness);
+}
+
+#maze div:nth-child(odd) div {
+    height: var(--maze-wall-thickness);
 }
   
 #maze div div::after {
@@ -108,30 +124,55 @@ body {
     content: ""; /*Reset content by default*/
 }
 
-#maze div div.door.exit::after {
-    content: "\1F6AA";
-}
   
+#maze div div.warp_spot {
+  background-color: var(--background);
+  position: relative;
+  overflow: hidden;
+  outline: 1px solid var(--warp-slash-color);
+  z-index: 50;
+  /* opacity: 0.8; */
+}
+
+#maze div div.warp_spot::before,
 #maze div div.warp_spot::after {
-    content: "\1F7EB";
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(
+      45deg,
+      transparent calc(50% - var(--warp-slash-thickness) / 2),
+      var(--warp-slash-color) calc(50% - var(--warp-slash-thickness) / 2),
+      var(--warp-slash-color) calc(50% + var(--warp-slash-thickness) / 2),
+      transparent calc(50% + var(--warp-slash-thickness) / 2)
+    ),
+    linear-gradient(
+      -45deg,
+      transparent calc(50% - var(--warp-slash-thickness) / 2),
+      var(--warp-slash-color) calc(50% - var(--warp-slash-thickness) / 2),
+      var(--warp-slash-color) calc(50% + var(--warp-slash-thickness) / 2),
+      transparent calc(50% + var(--warp-slash-thickness) / 2)
+    );
+  background-size: calc(var(--maze-cell-size) * 0.25) calc(var(--maze-cell-size) * 0.25);
+  box-shadow: 0 0 5px var(--warp-slash-color), 0 0 10px var(--warp-slash-color);
+  z-index: 51;
+  /* opacity: 0.8; */
+}
+
+/* If you want to remove the previous warp spot styling */
+#maze div div.warp_spot::after {
+  content: none;
 }
 
 #maze div div.debuff::after {
     content: "\1F480";
 }
 
-/* Default monster emoji */
-/* #maze div div.monster::after {
-    content: "\1F40A"; 
-} */
-  
-/* dragon emoji */
-/* #maze div div.boss::after {
-    content: "\1F409"; 
-} */
-
-.monster-container {
-  position: relative;
+.monster-container, .boss-container {
   width: 100%;
   height: 100%;
   display: flex;
@@ -142,16 +183,18 @@ body {
 .monsterValue {
   position: absolute;
   z-index: 100;
-  color: black;
-  font-size: 12px;
+  color: white;
+  font-size: calc(var(--maze-font-size) * 0.5);
 }
 
 .monster {
   clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-  width: 6px;
-  height: 6px;
-  background-color: whitesmoke;
+  width: calc(var(--maze-cell-size) * 0.75);
+  height: calc(var(--maze-cell-size) * 0.75);
+  background-color: var(--wall-color);
   position: relative;
+  box-shadow: 0 0 10px var(--wall-color);
+  border: 2px solid var(--monster-border-color);
 }
 
 .monster__eyes {
@@ -171,61 +214,121 @@ body {
   display: block;
   width: 3px;
   height: 5px;
-  background: red;
+  background: var(--background);
   border-radius: 50%;
   animation: eyesBlink 2s infinite;
   transition: transform 0.3s ease; 
   z-index: 50;
 }
-
-/*Hero emoji*/
-/* #maze div div.hero::after {
-    content: "\1F6B6"; 
-    z-index: 10;
-} */
   
-.heroValue, .debuffValue, .monsterValue, .powerUpValue {
-    color: black;
+.heroValue, .debuffValue, .powerUpValue {
+    color: white;
     position: absolute;
     display: flex;
-    font-size: 12px;
-    z-index: 100;
+    font-size: calc(var(--maze-font-size) * 0.5);
+    z-index: 200;
 }
   
 #maze.face-right div.hero::after {
     transform: scale(-1, 1);
 }
   
-#maze div div.wall, #maze div div.door.exit {
-    background-color: #454545;
-    background-image: linear-gradient(45deg, rgba(0,0,0,0.2) 45%, transparent 55%), linear-gradient(to bottom, rgba(0,0,0,0.2) 45%, transparent 55%);
-    background-size: 0.5em 0.5em;
+#maze div div.wall  {
+    background-color: var(--wall-color);
+    box-shadow: 0 0 10px var(--wall-color);
+}
+
+#maze div div.door.exit {
+  background-color: var(--wall-color);
+  position: relative;
+  overflow: hidden;
+}
+
+#maze div div.door.exit::before {
+  content: '';
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  right: 10%;
+  bottom: 10%;
+  background-color: var(--background);
+  border-radius: 50%;
+  box-shadow: 0 0 5px var(--background), 0 0 10px var(--background);
+}
+
+@keyframes spin {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
 }
   
 #maze div div.powerUp.wall {
     background: transparent;
 }
   
+#maze div div.powerUp {
+  position: relative;
+  background-color: transparent;
+  border-radius: 50%;
+  overflow: visible; /* Allow glow to extend beyond div boundaries */
+}
+
+#maze div div.powerUp::before {
+  content: '';
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  right: -10%;
+  bottom: -10%;
+  border-radius: 50%;
+  background: radial-gradient(circle, 
+    rgba(138, 43, 226, 0) 40%, 
+    rgba(138, 43, 226, 0.3) 60%, 
+    rgba(138, 43, 226, 0.5) 70%, 
+    rgba(138, 43, 226, 0.3) 80%, 
+    rgba(138, 43, 226, 0) 100%
+  );
+  z-index: 5;
+  filter: blur(3px);
+}
+
 #maze div div.powerUp::after {
-    content: "\1F344"; /* mushroom emoji */
-    z-index: 10;
+  content: "x" attr(data-powerup-value);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  border: 2px solid var(--wall-color);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: calc(var(--maze-font-size) * 0.6);
+  font-weight: bold;
+  color: var(--wall-color);
+  background-color: transparent;
+  z-index: 10;
+  box-shadow: 
+    0 0 5px var(--wall-color),
+    0 0 10px var(--wall-color),
+    0 0 15px var(--wall-color);
 }
-  
-#maze div.powerUp:nth-of-type(3n)::after {
-    content: "\1F345"; /* tomato emoji */
-    z-index: 10;
-}
-  
+
 #maze div div.key::after {
     content: "\1F511";
 }
-  
+
 #maze div div:nth-child(odd) {
-    width: 1em;
+    width: var(--maze-wall-thickness);
 }
-  
+
 #maze div:nth-child(odd) div {
-    height: 1em;
+    height: var(--maze-wall-thickness);
 }
   
 #maze.finished::after {
@@ -277,6 +380,8 @@ body {
     font-family: fantasy;
     font-weight: bold;
     font-size: 1em;
+    color: var(--white);
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); /* Add this line for a subtle glow */
 }
   
 #step_counter {
@@ -299,10 +404,25 @@ body {
 }
 
 .ghost {
-    position: relative;
-    width: 20px; /* Same width as pulse div */
-    height: 20px; /* Same height as pulse div */
-    /* animation: float 2s infinite;    */
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    position: relative; /* Add this line */
+}
+
+.ghost::before { /* Add this new pseudo-element */
+    content: '';
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    right: 10%;
+    bottom: 10%;
+    background-color: var(--wall-color);
+    border-radius: 50%;
+    z-index: -1;
 }
 
 .ghost__eyes {
@@ -314,7 +434,7 @@ body {
   justify-content: space-around;
   width: 9px;
   height: 2px;
-  z-index: 2;
+  z-index: 101;
 }
 
 .ghost__eyes:before,
@@ -327,7 +447,7 @@ body {
   border-radius: 50%;
   animation: eyesBlink 3s infinite;
   transition: transform 0.3s ease; 
-  z-index: 50;
+  z-index: 102;
 }
 
 .ghost__dimples {
@@ -337,11 +457,10 @@ body {
   transform: translate(-50%, -50%);
   display: flex;
   justify-content: space-around;
-  /* margin: 0 auto; */ /* Doesn't seem necessary ? */
   padding: 8px 0 0;
   width: 13px;
   height: 2px;
-  z-index: 60;
+  z-index: 103;
 }
 
 .ghost__dimples:before,
@@ -350,32 +469,20 @@ body {
   display: block;
   width: 4px;
   height: 2px;
-  background: var(--pink);
+  background: var(--background);
   border-radius: 50%;
-  z-index: 60;
+  z-index: 104;
 }
 
 .pulse {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: whitesmoke;
+  top: 10%; /* Adjust these values to match the ghost::before */
+  left: 10%;
+  right: 10%;
+  bottom: 10%;
+  background: var(--wall-color);
   border-radius: 50%;
   z-index: 1;
-}
-
-.pulse span {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: inherit;
-  border-radius: inherit;
-  opacity: 0.8;
-  /* animation: pulseAnimate 4s ease-out infinite; */
-  animation-delay: calc(2s * var(--i));
-  z-index: 26;
 }
 
 @keyframes eyesBlink {
@@ -404,7 +511,6 @@ body {
 }
 
 .boss-container {
-  position: relative;
   width: 100%;
   height: 100%;
   display: flex;
@@ -415,16 +521,18 @@ body {
 .bossValue {
   position: absolute;
   z-index: 100;
-  color: black;
-  font-size: 12px;
+  color: white;
+  font-size: calc(var(--maze-font-size) * 0.5);
 }
 
 .boss {
   clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-  width: 10px;
-  height: 10px;
-  background-color: #ff4500; /* A more intense color for the boss */
+  width: calc(var(--maze-cell-size) * 0.75);
+  height: calc(var(--maze-cell-size) * 0.75);
+  background-color: var(--wall-color);
   position: relative;
+  box-shadow: 0 0 15px var(--wall-color);
+  border: 2px solid var(--monster-border-color);
 }
 
 .boss__eyes {
@@ -445,9 +553,17 @@ body {
   display: block;
   width: 4px;
   height: 6px;
-  background: #ffff00; /* Yellow eyes for the boss */
+  background: var(--background);
   border-radius: 50%;
   animation: eyesBlink 2s infinite;
   transition: transform 0.3s ease; 
   z-index: 50;
+}
+
+/* Ensure content is centered in all cells */
+#maze div div > * {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
