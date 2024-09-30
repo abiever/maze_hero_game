@@ -162,11 +162,29 @@ export default class MazeController {
         this.mazeHero.powerUpHero(powerUpAtPosition)
     }
 
-    heroTakeKey() {
-        this.maze[this.mazeHero.getHeroPosition()].classList.remove("key");
-        this.mazeHero.setHeroHasKey(true);
-        this.heroStepCounter.classList.add("has-key");
-        this.setMessage("you now have the key!");
+    // heroTakeKey() {
+    //     this.maze[this.mazeHero.getHeroPosition()].classList.remove("key");
+    //     this.mazeHero.setHeroHasKey(true);
+    //     this.heroStepCounter.classList.add("has-key");
+    //     this.setMessage("you now have the key!");
+    // }
+
+    defeatBoss() {
+        this.maze[this.mazeHero.getHeroPosition()].classList.remove("boss");
+        this.setMessage("You defeated the boss! The exit is now unlocked.");
+        this.unlockExit();
+    }
+    
+    unlockExit() {
+        // Find the exit door and remove the 'locked' class if it exists
+        for (let i = 0; i < this.maze.length; i++) {
+            for (let j = 0; j < this.maze[i].length; j++) {
+                if (this.maze[i][j].classList.contains("exit")) {
+                    this.maze[i][j].classList.remove("locked");
+                    break;
+                }
+            }
+        }
     }
 
     gameOver(text) {
@@ -252,11 +270,10 @@ export default class MazeController {
         }
 
         if (nextStep.match(/exit/)) {
-            if (this.mazeHero.hasKey()) {
-                // this.heroWins();
+            if (!this.maze[position].classList.contains("locked")) {
                 this.decideHeroVictory();
             } else {
-                this.setMessage("you need a key to unlock the door");
+                this.setMessage("You need to defeat the boss to unlock the exit!");
                 return;
             }
         }
@@ -296,14 +313,14 @@ export default class MazeController {
 
         //This is a little too spaghetti code — consider consolidating!
         if (nextStep.match(/boss/)) {
-            //don't allow movement onto boss if Hero is weaker than
-            if (!this.canHeroBeatMonster(this.objectsInMazeArray[position.x][position.y][1].getMonsterLevel())) {
-                return;
-            }
-            //allow Hero to defeat monster and take its level
             if (this.canHeroBeatMonster(this.objectsInMazeArray[position.x][position.y][1].getMonsterLevel())) {
-                this.mazeHero.increaseHeroValue(this.objectsInMazeArray[position.x][position.y][1].getMonsterLevel())
+                this.mazeHero.increaseHeroValue(this.objectsInMazeArray[position.x][position.y][1].getMonsterLevel());
                 this.updateGhostHeroHTML();
+                this.defeatBoss();
+                this.objectsInMazeArray[position.x][position.y].length = 0;
+            } else {
+                this.setMessage("You're not strong enough to defeat the boss yet!");
+                return;
             }
         }
 
@@ -357,10 +374,10 @@ export default class MazeController {
             return;
         }
         
-        if (nextStep.match(/key/)) {
-            this.heroTakeKey();
-            return;
-        }
+        // if (nextStep.match(/key/)) {
+        //     this.heroTakeKey();
+        //     return;
+        // }
 
         if (nextStep.match(/exit/)) {
             return;
@@ -542,7 +559,6 @@ export default class MazeController {
     
         return null;
     }
-    
 
     restartNewGame() {
         let width = 11;
