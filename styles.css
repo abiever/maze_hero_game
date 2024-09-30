@@ -169,7 +169,10 @@ body {
 }
 
 #maze div div.debuff::after {
-    content: "\1F480";
+    /* content: "\1F480"; */
+    content: url('/skull.svg');
+    /* width: 12px;
+    height: 12px; */
 }
 
 .monster-container, .boss-container {
