@@ -12,9 +12,9 @@
   --maze-cell-size: 0.8em;
   --maze-wall-thickness: 0.8em;
   --maze-font-size: 1em; /* this adjusts the size of the maze overall? */
-  --door-slash-color: #fab1fc; /* Bright neon pink */
-  --door-slash-thickness: 10%;
-  --warp-slash-color: #ff6ad5; /* Bright neon pink */
+  
+  --warp-slash-color-A: #ff6ad5; /* Bright neon pink */
+  --warp-slash-color-B: #e2fcb1;
   --warp-slash-thickness: 10%;
   --monster-border-color: #b355ff; /* Lighter purple for monster/boss border */
 }
@@ -125,17 +125,26 @@ body {
 }
 
   
-#maze div div.warp_spot {
+#maze div div.warp_spot_a {
   background-color: var(--background);
   position: relative;
   overflow: hidden;
-  outline: 1px solid var(--warp-slash-color);
+  outline: 1px solid var(--warp-slash-color-A);
   z-index: 50;
   /* opacity: 0.8; */
 }
 
-#maze div div.warp_spot::before,
-#maze div div.warp_spot::after {
+#maze div div.warp_spot_b {
+  background-color: var(--background);
+  position: relative;
+  overflow: hidden;
+  outline: 1px solid var(--warp-slash-color-B);
+  z-index: 50;
+  /* opacity: 0.8; */
+}
+
+#maze div div.warp_spot_a::before,
+#maze div div.warp_spot_a::after {
   content: '';
   position: absolute;
   top: 0;
@@ -146,27 +155,57 @@ body {
     linear-gradient(
       45deg,
       transparent calc(50% - var(--warp-slash-thickness) / 2),
-      var(--warp-slash-color) calc(50% - var(--warp-slash-thickness) / 2),
-      var(--warp-slash-color) calc(50% + var(--warp-slash-thickness) / 2),
+        var(--warp-slash-color-A) calc(50% - var(--warp-slash-thickness) / 2),
+      var(--warp-slash-color-A) calc(50% + var(--warp-slash-thickness) / 2),
       transparent calc(50% + var(--warp-slash-thickness) / 2)
     ),
     linear-gradient(
       -45deg,
       transparent calc(50% - var(--warp-slash-thickness) / 2),
-      var(--warp-slash-color) calc(50% - var(--warp-slash-thickness) / 2),
-      var(--warp-slash-color) calc(50% + var(--warp-slash-thickness) / 2),
+      var(--warp-slash-color-A) calc(50% - var(--warp-slash-thickness) / 2),
+      var(--warp-slash-color-A) calc(50% + var(--warp-slash-thickness) / 2),
       transparent calc(50% + var(--warp-slash-thickness) / 2)
     );
   background-size: calc(var(--maze-cell-size) * 0.25) calc(var(--maze-cell-size) * 0.25);
-  box-shadow: 0 0 5px var(--warp-slash-color), 0 0 10px var(--warp-slash-color);
+  box-shadow: 0 0 5px var(--warp-slash-color-A), 0 0 10px var(--warp-slash-color-A);
   z-index: 51;
   /* opacity: 0.8; */
 }
 
-/* If you want to remove the previous warp spot styling */
-#maze div div.warp_spot::after {
-  content: none;
+#maze div div.warp_spot_b::before,
+#maze div div.warp_spot_b::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(
+      45deg,
+      transparent calc(50% - var(--warp-slash-thickness) / 2),
+      var(--warp-slash-color-B) calc(50% - var(--warp-slash-thickness) / 2),
+      var(--warp-slash-color-B) calc(50% + var(--warp-slash-thickness) / 2),
+      transparent calc(50% + var(--warp-slash-thickness) / 2)
+    ),
+    linear-gradient(
+      -45deg,
+      transparent calc(50% - var(--warp-slash-thickness) / 2),
+      var(--warp-slash-color-B) calc(50% - var(--warp-slash-thickness) / 2),
+      var(--warp-slash-color-B) calc(50% + var(--warp-slash-thickness) / 2),
+      transparent calc(50% + var(--warp-slash-thickness) / 2)
+    );
+  background-size: calc(var(--maze-cell-size) * 0.25) calc(var(--maze-cell-size) * 0.25);
+  box-shadow: 0 0 5px var(--warp-slash-color-B), 0 0 10px var(--warp-slash-color-B);
+  z-index: 51;
+  /* opacity: 0.8; */
 }
+
+
+/* If you want to remove the previous warp spot styling */
+/* #maze div div.warp_spot::after {
+  content: none;
+} */
 
 #maze div div.debuff::after {
     /* content: "\1F480"; */

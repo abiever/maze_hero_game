@@ -13,8 +13,10 @@ var makeMaze = (id, width, height) => {
             1,
             Maze.returnMazeBuilderArray(), 
             Maze.getMonsters(), 
-            Maze.getUpperWarpSpot(), 
-            Maze.getLowerWarpSpot());
+            Maze.getUpperWarpSpotA(), 
+            Maze.getLowerWarpSpotA(),
+            Maze.getUpperWarpSpotB(),
+            Maze.getLowerWarpSpotB());
 }        
       
 makeMaze("maze_container", 10, 10);

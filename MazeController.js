@@ -10,8 +10,10 @@ export default class MazeController {
         gameLevel, 
         objectsInMazeArray, 
         monstersArray, 
-        warpPosition1, 
-        warpPosition2
+        warpPositionA1, 
+        warpPositionA2,
+        warpPositionB1,
+        warpPositionB2
     ) {
         // Original JavaScript code by Chirp Internet: www.chirpinternet.eu
         // Please acknowledge use of this code by including this header.
@@ -19,8 +21,10 @@ export default class MazeController {
         this.mazeHero = new Hero(heroLevel);
         this.mazeHero.setHeroStepCount(stepsTaken);
 
-        this.warpPosition1 = warpPosition1;
-        this.warpPosition2 = warpPosition2;
+        this.warpPositionA1 = warpPositionA1;
+        this.warpPositionA2 = warpPositionA2;
+        this.warpPositionB1 = warpPositionB1;
+        this.warpPositionB2 = warpPositionB2;
 
         //The array passed from FancyMazeBuilder that contains all Monsters and their positions
         this.monstersArray = monstersArray;
@@ -347,9 +351,9 @@ export default class MazeController {
         }
 
         /* warp to other spot if available */
-        if (nextStep.match(/warp_spot/)) {
+        if (nextStep.match(/warp_spot_a/)) {
             const currentWarpPosition = this.mazeHero.getHeroPosition();
-            const warpTarget = this.getWarpTarget(currentWarpPosition);
+            const warpTarget = this.getWarpTargetA(currentWarpPosition);
 
             if (warpTarget) {
                 this.maze[currentWarpPosition].classList.remove("hero");
@@ -360,6 +364,21 @@ export default class MazeController {
                 this.maze[warpTarget].innerHTML = this.maze[this.mazeHero.getHeroPosition()].innerHTML = this.ghostHeroHTML;
             }
         }
+
+        if (nextStep.match(/warp_spot_b/)) {
+            const currentWarpPosition = this.mazeHero.getHeroPosition();
+            const warpTarget = this.getWarpTargetB(currentWarpPosition);
+
+            if (warpTarget) {
+                this.maze[currentWarpPosition].classList.remove("hero");
+                this.maze[currentWarpPosition].innerHTML = "";  
+
+                this.maze[warpTarget].classList.add("hero");
+                this.mazeHero.setHeroPosition(warpTarget);
+                this.maze[warpTarget].innerHTML = this.maze[this.mazeHero.getHeroPosition()].innerHTML = this.ghostHeroHTML;
+            }
+        }
+
 
         /* check what was stepped on || remove element from display */
         if (nextStep.match(/monster/)) {
@@ -577,19 +596,37 @@ export default class MazeController {
 
     }
 
-    getWarpTarget(currentPosition) {
+    getWarpTargetA(currentPosition) {
         const [currentX, currentY] = [currentPosition.x, currentPosition.y];
-        const lowerWarpSpot = this.warpPosition2; // Get the lower warp spot
-        const upperWarpSpot = this.warpPosition1; // Get the upper warp spot
+        const lowerWarpSpotA = this.warpPositionA2; // Get the lower warp spot
+        const upperWarpSpotA = this.warpPositionA1; // Get the upper warp spot
     
         // Check if the Hero is on the upper warp spot, then warp to the lower one
-        if (currentX === upperWarpSpot[0] && currentY === upperWarpSpot[1]) {
-            return new Position(lowerWarpSpot[0], lowerWarpSpot[1]);
+        if (currentX === upperWarpSpotA[0] && currentY === upperWarpSpotA[1]) {
+            return new Position(lowerWarpSpotA[0], lowerWarpSpotA[1]);
         }
         
         // Check if the Hero is on the lower warp spot, then warp to the upper one
-        if (currentX === lowerWarpSpot[0] && currentY === lowerWarpSpot[1]) {
-            return new Position(upperWarpSpot[0], upperWarpSpot[1]);
+        if (currentX === lowerWarpSpotA[0] && currentY === lowerWarpSpotA[1]) {
+            return new Position(upperWarpSpotA[0], upperWarpSpotA[1]);
+        }
+    
+        return null;
+    }
+
+    getWarpTargetB(currentPosition) {
+        const [currentX, currentY] = [currentPosition.x, currentPosition.y];
+        const lowerWarpSpotB = this.warpPositionB2; // Get the lower warp spot
+        const upperWarpSpotB = this.warpPositionB1; // Get the upper warp spot
+    
+        // Check if the Hero is on the upper warp spot, then warp to the lower one
+        if (currentX === upperWarpSpotB[0] && currentY === upperWarpSpotB[1]) {
+            return new Position(lowerWarpSpotB[0], lowerWarpSpotB[1]);
+        }
+        
+        // Check if the Hero is on the lower warp spot, then warp to the upper one
+        if (currentX === lowerWarpSpotB[0] && currentY === lowerWarpSpotB[1]) {
+            return new Position(upperWarpSpotB[0], upperWarpSpotB[1]);
         }
     
         return null;
@@ -614,8 +651,10 @@ export default class MazeController {
             newGameLevel,
             newObjectsInMazeArray,
             newMonstersArray,
-            newMaze.getUpperWarpSpot(),
-            newMaze.getLowerWarpSpot()
+            newMaze.getUpperWarpSpotA(),
+            newMaze.getLowerWarpSpotA(),
+            newMaze.getUpperWarpSpotB(),
+            newMaze.getLowerWarpSpotB()
         )
 
         this.restartGameButton.style.display = 'none';
@@ -649,8 +688,11 @@ export default class MazeController {
             this.getGameLevel(),
             newObjectsInMazeArray, 
             newMonstersArray,
-            newMaze.getUpperWarpSpot(), 
-            newMaze.getLowerWarpSpot());
+            newMaze.getUpperWarpSpotA(), 
+            newMaze.getLowerWarpSpotA(),
+            newMaze.getUpperWarpSpotB(),
+            newMaze.getLowerWarpSpotB()
+        );
     
         newMazeGame.startGame();
     }

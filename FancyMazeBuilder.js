@@ -15,19 +15,19 @@ export default class FancyMazeBuilder extends MazeBuilder {
 
       //This will store the sum of all monster levels
       this.cumulativeMonsterLevels = 0;
-      this.upperWarpSpot = null;
-      this.lowerWarpSpot = null;
+      this.upperWarpSpotA = null;
+      this.lowerWarpSpotA = null;
+      this.upperWarpSpotB = null;
+      this.lowerWarpSpotB = null;
 
       this.monsters = [];
   
       this.placeMonsters();
       this.placePowerUps(50); //change this number to alter amount of PowerUps placed in maze?
       this.placeDebuffs(50);
-      //this.calculateKeyLocationAndPlaceKey();
       this.placeBoss(this.cumulativeMonsterLevels);
-      //this.surroundKeyWithWalls();
-      this.placeWarpSpots(this.maze);
-  
+      this.placeWarpSpotsA(this.maze);
+      this.placeWarpSpotsB(this.maze);
     }
   
     isA(value, ...cells) {
@@ -226,7 +226,7 @@ export default class FancyMazeBuilder extends MazeBuilder {
       this.monsters.push(boss);
     }
 
-    placeWarpSpots(maze) {
+    placeWarpSpotsA(maze) {
       //Use this method to check for 2 empty squares that are completely surrounded by wall except for one side and contain nothing else and put a trap door there
       //This door will "warp" the hero from that spot to the other without costing a step 
       //trap door generation should be random, but generally on opposite ends of the maze and SHOULD NOT generate in front of a door or a corner 
@@ -288,29 +288,116 @@ export default class FancyMazeBuilder extends MazeBuilder {
       const lowerHalf = validPositions.filter(position => position.y >= midPoint);
 
       // Randomly select one position from each half
-      const randomUpper = upperHalf[Math.floor(Math.random() * upperHalf.length)];
-      const randomLower = lowerHalf[Math.floor(Math.random() * lowerHalf.length)];
+      const randomUpperA = upperHalf[Math.floor(Math.random() * upperHalf.length)];
+      const randomLowerA = lowerHalf[Math.floor(Math.random() * lowerHalf.length)];
 
       // Set the selected positions to "warp_spot"
-      if (randomUpper) {
-        maze[randomUpper.y][randomUpper.x] = ["warp_spot"];
-        this.upperWarpSpot = [randomUpper.y, randomUpper.x];
+      if (randomUpperA) {
+        maze[randomUpperA.y][randomUpperA.x] = ["warp_spot_a"];
+        this.upperWarpSpotA = [randomUpperA.y, randomUpperA.x];
         //console.log("upperWarpSpot:", this.upperWarpSpot);
       }
-      if (randomLower) {
-        maze[randomLower.y][randomLower.x] = ["warp_spot"];
-        this.lowerWarpSpot = [randomLower.y, randomLower.x];
+      if (randomLowerA) {
+        maze[randomLowerA.y][randomLowerA.x] = ["warp_spot_a"];
+        this.lowerWarpSpotA = [randomLowerA.y, randomLowerA.x];
         //console.log("lowerWarpSpot:", this.lowerWarpSpot);
       }
 
     }
 
-    getLowerWarpSpot() {
-      return this.lowerWarpSpot;
+    placeWarpSpotsB(maze) {
+      //Use this method to check for 2 empty squares that are completely surrounded by wall except for one side and contain nothing else and put a trap door there
+      //This door will "warp" the hero from that spot to the other without costing a step 
+      //trap door generation should be random, but generally on opposite ends of the maze and SHOULD NOT generate in front of a door or a corner 
+
+      const directions = [
+        { x: 0, y: -1 }, // up
+        { x: 0, y: 1 },  // down
+        { x: -1, y: 0 }, // left
+        { x: 1, y: 0 }   // right
+      ];
+
+      let validPositions = [];
+
+      // Loop through the maze array
+      for (let y = 0; y < maze.length; y++) {
+          for (let x = 0; x < maze[y].length; x++) {
+              // Check if the current cell is empty
+              if (maze[y][x].length === 0) {
+                  let wallCount = 0;
+
+                  // Check all four directions
+                  for (let direction of directions) {
+                      const newX = x + direction.x;
+                      //console.log("newX:", newX);
+                      const newY = y + direction.y;
+                      //console.log("newY:", newY);
+
+                      // Ensure the new position is within the maze bounds
+                      if (
+                          newX >= 0 && newX < maze[y].length &&
+                          newY >= 0 && newY < maze.length
+                      ) {
+                          // Check if the neighboring cell is a wall
+                          if (maze[newY][newX].includes("wall")) {
+                              wallCount++;
+                          }
+                      } else {
+                          // If out of bounds, treat it as a wall (e.g., edges of the maze)
+                          wallCount++;
+                      }
+                  }
+
+                  // If the empty cell is surrounded by exactly 3 walls, it's a valid position
+                  if (wallCount === 3) {
+                      validPositions.push({ x, y });
+                  }
+              }
+          }
+      }
+
+      //console.log("validPositions:", validPositions);
+      //return validPositions;
+
+      const mazeHeight = maze.length;
+      const midPoint = Math.floor(mazeHeight / 2);
+
+      // Separate validPositions into upper and lower half
+      const upperHalf = validPositions.filter(position => position.y < midPoint);
+      const lowerHalf = validPositions.filter(position => position.y >= midPoint);
+
+      // Randomly select one position from each half
+      const randomUpperB = upperHalf[Math.floor(Math.random() * upperHalf.length)];
+      const randomLowerB = lowerHalf[Math.floor(Math.random() * lowerHalf.length)];
+
+      // Set the selected positions to "warp_spot_b"
+      if (randomUpperB) {
+        maze[randomUpperB.y][randomUpperB.x] = ["warp_spot_b"];
+        this.upperWarpSpotB = [randomUpperB.y, randomUpperB.x];
+        //console.log("upperWarpSpot:", this.upperWarpSpot);
+      }
+      if (randomLowerB) {
+        maze[randomLowerB.y][randomLowerB.x] = ["warp_spot_b"];
+        this.lowerWarpSpotB = [randomLowerB.y, randomLowerB.x];
+        //console.log("lowerWarpSpot:", this.lowerWarpSpot);
+      }
+
     }
 
-    getUpperWarpSpot() {
-      return this.upperWarpSpot;
+    getLowerWarpSpotA() {
+      return this.lowerWarpSpotA;
+    }
+
+    getUpperWarpSpotA() {
+      return this.upperWarpSpotA;
+    }
+
+    getLowerWarpSpotB() {
+      return this.lowerWarpSpotB;
+    }
+
+    getUpperWarpSpotB() {
+      return this.upperWarpSpotB;
     }
 
     getMonsters() {
