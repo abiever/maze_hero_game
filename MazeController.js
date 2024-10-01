@@ -228,16 +228,16 @@ export default class MazeController {
         let countdownSeconds = seconds;
     
         // Create or update the countdown message
-        let countdownElement = document.getElementById('countdown_message');
+        //let countdownElement = document.getElementById('countdown_message');
     
         const countdownTimer = setInterval(() => {
-            countdownElement.textContent = `Next level will begin in ${countdownSeconds}...`;
-            console.log(countdownSeconds);
+            //countdownElement.textContent = `Next level will begin in ${countdownSeconds}...`;
+            //console.log(countdownSeconds);
             countdownSeconds--;
     
             if (countdownSeconds < 0) {
                 clearInterval(countdownTimer);
-                countdownElement.textContent = ''; // Clear the countdown message
+                //countdownElement.textContent = ''; // Clear the countdown message
     
                 // Start the next level
                 this.startNextLevel();
@@ -251,15 +251,11 @@ export default class MazeController {
         if (this.mazeHero.getHeroStepCount() > this.mazeHero.getHeroValue()) {
             this.gameOver("You have lost. Steps exceeded Hero level.")
         } else { 
-            this.heroStepCounter.classList.remove("has-key");
-            this.maze[this.mazeHero.getHeroPosition()].classList.remove("door");
-            this.levelCompleted("Level Completed");
-
             this.mainMessage.innerHTML = `Level ${this.getGameLevel()} Completed`
             this.mainMessage.style.display = 'block';
-        
+            this.levelCompleted("Level Completed");
             //wait for the given seconds, then start next level
-            this.startNextLevelCountdown(10);
+            this.startNextLevelCountdown(1);
         }
     }
 
@@ -406,10 +402,6 @@ export default class MazeController {
                     cell.classList.remove("entrance");
                     // Add the wall class
                     cell.classList.add("wall");
-                    // Update the styling to match other walls
-                    // cell.style.backgroundColor = "var(--wall-color)";
-                    // cell.style.boxShadow = "0 0 10px var(--wall-color)";
-                    // console.log("Entrance replaced with wall");
                     break;
                 }
             }
@@ -490,6 +482,17 @@ export default class MazeController {
                 return
             }
 
+            if (nextStep.match(/debuff/)) {
+                return;
+            }
+
+            if (nextStep.match(/hero/)) {
+                if (monster.getMonsterLevel() > this.mazeHero.getHeroValue()) {
+                    this.gameOver("You got eaten by a monster!")
+                } 
+                else return;
+            }
+
             //****IMPORTANT!*****//
             //It is/was necessary to update objectsInMazeArray with each Monster's new position so that Monster methods/members can be accessed after they move.
 
@@ -512,6 +515,10 @@ export default class MazeController {
             
 
             if (nextStep.match(/warp_spot/)) {
+                return;
+            }
+
+            if (nextStep.match(/debuff/)) {
                 return;
             }
 
@@ -596,7 +603,7 @@ export default class MazeController {
         newMaze.display("maze_container");
         let newObjectsInMazeArray = newMaze.returnMazeBuilderArray();
         let newMonstersArray = newMaze.getMonsters();
-        let newHeroLevel = 5;
+        let newHeroLevel = 10;
         let newHeroStepCount = 0;
         let newGameLevel = 1;
 
