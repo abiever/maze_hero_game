@@ -17,7 +17,7 @@ var makeMaze = (id, width, height) => {
             Maze.getLowerWarpSpot());
 }        
       
-makeMaze("maze_container", 11, 9);
+makeMaze("maze_container", 8, 8);
 
 
 

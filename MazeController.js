@@ -162,25 +162,29 @@ export default class MazeController {
         this.mazeHero.powerUpHero(powerUpAtPosition)
     }
 
-    // heroTakeKey() {
-    //     this.maze[this.mazeHero.getHeroPosition()].classList.remove("key");
-    //     this.mazeHero.setHeroHasKey(true);
-    //     this.heroStepCounter.classList.add("has-key");
-    //     this.setMessage("you now have the key!");
-    // }
-
     defeatBoss() {
-        this.maze[this.mazeHero.getHeroPosition()].classList.remove("boss");
+        //this.maze[this.mazeHero.getHeroPosition()].classList.remove("boss");
         this.setMessage("You defeated the boss! The exit is now unlocked.");
         this.unlockExit();
     }
     
+    //****EXPLANATION OF ITERATION FOR UNLOCKING EXIT******/
+    // The reason this.maze.length is returning 0 despite having many elements is because the object is using non-standard indexing. Instead of using consecutive integer indices (0, 1, 2, ...), it's using string keys in the format "row:column" (like "0:0", "0:1", etc.).
+    // This explains why standard array methods and properties (like length) aren't working as expected.
+    // To work with this structure, you'll need to use object methods rather than array methods. Here's how you can modify your unlockExit method to work with this structure:
     unlockExit() {
-        // Find the exit door and remove the 'locked' class if it exists
-        for (let i = 0; i < this.maze.length; i++) {
-            for (let j = 0; j < this.maze[i].length; j++) {
-                if (this.maze[i][j].classList.contains("exit")) {
-                    this.maze[i][j].classList.remove("locked");
+        // Iterate over all properties of this.maze
+        for (let key in this.maze) {
+            // Check if the property is an object property (not inherited)
+            if (this.maze.hasOwnProperty(key)) {
+                let cell = this.maze[key];
+                // Check if the cell is the exit
+                if (cell.classList && cell.classList.contains("exit")) {
+                    // Remove the 'locked' class
+                    cell.classList.remove("locked");
+                    // Remove background
+                    cell.style.background = "none";
+                    console.log("Exit unlocked");
                     break;
                 }
             }
@@ -266,6 +270,7 @@ export default class MazeController {
 
         /* make checks before moving to inhibit illegal moves*/
         if (nextStep.match(/wall/)) {
+            console.log("That's a wall!");
             return;
         }
 
@@ -274,6 +279,7 @@ export default class MazeController {
                 this.decideHeroVictory();
             } else {
                 this.setMessage("You need to defeat the boss to unlock the exit!");
+                //console.log("nextStep:", nextStep.className);
                 return;
             }
         }

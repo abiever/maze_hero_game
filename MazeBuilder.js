@@ -46,7 +46,7 @@ export default class MazeBuilder {
         if(r == 0) {
           /* place exit in top row */
           let doorPos = this.posToSpace(this.rand(1, this.width));
-          this.maze[r][doorPos] = ["door", "exit"];
+          this.maze[r][doorPos] = ["door", "exit", "locked"];
         }
   
         if(r == this.rows - 1) {
@@ -227,9 +227,13 @@ export default class MazeBuilder {
         row.forEach((cell) => {
           let cellDiv = document.createElement("div");
     
-          // Add all string classes to the div
-          if (cell) {
-            cellDiv.className = cell.filter(item => typeof item === "string").join(" ");
+          // Add all string items as classes
+          if (Array.isArray(cell)) {
+            cell.forEach(item => {
+              if (typeof item === "string") {
+                cellDiv.classList.add(item);
+              }
+            });
           }
     
           // Check if this cell contains a powerup object
