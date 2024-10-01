@@ -107,6 +107,8 @@ export default class MazeController {
         this.restartGameButton.addEventListener("click", () => {
             this.restartNewGame();
         });
+
+        this.isFirstStepTaken = false;
         
     }
 
@@ -270,7 +272,7 @@ export default class MazeController {
 
         /* make checks before moving to inhibit illegal moves*/
         if (nextStep.match(/wall/)) {
-            console.log("That's a wall!");
+            // console.log("That's a wall!");
             return;
         }
 
@@ -278,7 +280,7 @@ export default class MazeController {
             if (!this.maze[position].classList.contains("locked")) {
                 this.decideHeroVictory();
             } else {
-                this.setMessage("You need to defeat the boss to unlock the exit!");
+                // this.setMessage("You need to defeat the boss to unlock the exit!");
                 //console.log("nextStep:", nextStep.className);
                 return;
             }
@@ -343,6 +345,11 @@ export default class MazeController {
 
         this.maze[this.mazeHero.getHeroPosition()].innerHTML = this.ghostHeroHTML;
 
+        if (this.isFirstStepTaken === false) {
+            this.isFirstStepTaken = true;
+            this.replaceEntranceWithWall();
+        }
+
         /* warp to other spot if available */
         if (nextStep.match(/warp_spot/)) {
             const currentWarpPosition = this.mazeHero.getHeroPosition();
@@ -380,10 +387,6 @@ export default class MazeController {
             return;
         }
         
-        // if (nextStep.match(/key/)) {
-        //     this.heroTakeKey();
-        //     return;
-        // }
 
         if (nextStep.match(/exit/)) {
             return;
@@ -392,6 +395,25 @@ export default class MazeController {
         this.mazeHero.increaseHeroStepCount();
 
         this.setMessage("...");
+    }
+
+    replaceEntranceWithWall() {
+        for (let key in this.maze) {
+            if (this.maze.hasOwnProperty(key)) {
+                let cell = this.maze[key];
+                if (cell.classList && cell.classList.contains("entrance")) {
+                    // Remove the entrance class
+                    cell.classList.remove("entrance");
+                    // Add the wall class
+                    cell.classList.add("wall");
+                    // Update the styling to match other walls
+                    // cell.style.backgroundColor = "var(--wall-color)";
+                    // cell.style.boxShadow = "0 0 10px var(--wall-color)";
+                    // console.log("Entrance replaced with wall");
+                    break;
+                }
+            }
+        }
     }
 
     mazeKeyPressHandler(e) {
