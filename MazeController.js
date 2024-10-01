@@ -107,6 +107,8 @@ export default class MazeController {
         this.restartGameButton.addEventListener("click", () => {
             this.restartNewGame();
         });
+
+        this.isFirstStepTaken = false;
         
     }
 
@@ -162,11 +164,33 @@ export default class MazeController {
         this.mazeHero.powerUpHero(powerUpAtPosition)
     }
 
-    heroTakeKey() {
-        this.maze[this.mazeHero.getHeroPosition()].classList.remove("key");
-        this.mazeHero.setHeroHasKey(true);
-        this.heroStepCounter.classList.add("has-key");
-        this.setMessage("you now have the key!");
+    defeatBoss() {
+        //this.maze[this.mazeHero.getHeroPosition()].classList.remove("boss");
+        this.setMessage("You defeated the boss! The exit is now unlocked.");
+        this.unlockExit();
+    }
+    
+    //****EXPLANATION OF ITERATION FOR UNLOCKING EXIT******/
+    // The reason this.maze.length is returning 0 despite having many elements is because the object is using non-standard indexing. Instead of using consecutive integer indices (0, 1, 2, ...), it's using string keys in the format "row:column" (like "0:0", "0:1", etc.).
+    // This explains why standard array methods and properties (like length) aren't working as expected.
+    // To work with this structure, you'll need to use object methods rather than array methods. Here's how you can modify your unlockExit method to work with this structure:
+    unlockExit() {
+        // Iterate over all properties of this.maze
+        for (let key in this.maze) {
+            // Check if the property is an object property (not inherited)
+            if (this.maze.hasOwnProperty(key)) {
+                let cell = this.maze[key];
+                // Check if the cell is the exit
+                if (cell.classList && cell.classList.contains("exit")) {
+                    // Remove the 'locked' class
+                    cell.classList.remove("locked");
+                    // Remove background
+                    cell.style.background = "none";
+                    console.log("Exit unlocked");
+                    break;
+                }
+            }
+        }
     }
 
     gameOver(text) {
@@ -248,15 +272,16 @@ export default class MazeController {
 
         /* make checks before moving to inhibit illegal moves*/
         if (nextStep.match(/wall/)) {
+            // console.log("That's a wall!");
             return;
         }
 
         if (nextStep.match(/exit/)) {
-            if (this.mazeHero.hasKey()) {
-                // this.heroWins();
+            if (!this.maze[position].classList.contains("locked")) {
                 this.decideHeroVictory();
             } else {
-                this.setMessage("you need a key to unlock the door");
+                // this.setMessage("You need to defeat the boss to unlock the exit!");
+                //console.log("nextStep:", nextStep.className);
                 return;
             }
         }
@@ -296,14 +321,14 @@ export default class MazeController {
 
         //This is a little too spaghetti code — consider consolidating!
         if (nextStep.match(/boss/)) {
-            //don't allow movement onto boss if Hero is weaker than
-            if (!this.canHeroBeatMonster(this.objectsInMazeArray[position.x][position.y][1].getMonsterLevel())) {
-                return;
-            }
-            //allow Hero to defeat monster and take its level
             if (this.canHeroBeatMonster(this.objectsInMazeArray[position.x][position.y][1].getMonsterLevel())) {
-                this.mazeHero.increaseHeroValue(this.objectsInMazeArray[position.x][position.y][1].getMonsterLevel())
+                this.mazeHero.increaseHeroValue(this.objectsInMazeArray[position.x][position.y][1].getMonsterLevel());
                 this.updateGhostHeroHTML();
+                this.defeatBoss();
+                this.objectsInMazeArray[position.x][position.y].length = 0;
+            } else {
+                this.setMessage("You're not strong enough to defeat the boss yet!");
+                return;
             }
         }
 
@@ -319,6 +344,11 @@ export default class MazeController {
         // this.maze[position].innerHTML = `<span class="heroValue">${this.mazeHero.getHeroValue()}</span>`;
 
         this.maze[this.mazeHero.getHeroPosition()].innerHTML = this.ghostHeroHTML;
+
+        if (this.isFirstStepTaken === false) {
+            this.isFirstStepTaken = true;
+            this.replaceEntranceWithWall();
+        }
 
         /* warp to other spot if available */
         if (nextStep.match(/warp_spot/)) {
@@ -357,10 +387,6 @@ export default class MazeController {
             return;
         }
         
-        if (nextStep.match(/key/)) {
-            this.heroTakeKey();
-            return;
-        }
 
         if (nextStep.match(/exit/)) {
             return;
@@ -369,6 +395,25 @@ export default class MazeController {
         this.mazeHero.increaseHeroStepCount();
 
         this.setMessage("...");
+    }
+
+    replaceEntranceWithWall() {
+        for (let key in this.maze) {
+            if (this.maze.hasOwnProperty(key)) {
+                let cell = this.maze[key];
+                if (cell.classList && cell.classList.contains("entrance")) {
+                    // Remove the entrance class
+                    cell.classList.remove("entrance");
+                    // Add the wall class
+                    cell.classList.add("wall");
+                    // Update the styling to match other walls
+                    // cell.style.backgroundColor = "var(--wall-color)";
+                    // cell.style.boxShadow = "0 0 10px var(--wall-color)";
+                    // console.log("Entrance replaced with wall");
+                    break;
+                }
+            }
+        }
     }
 
     mazeKeyPressHandler(e) {
@@ -542,7 +587,6 @@ export default class MazeController {
     
         return null;
     }
-    
 
     restartNewGame() {
         let width = 11;

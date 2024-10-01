@@ -23,9 +23,9 @@ export default class FancyMazeBuilder extends MazeBuilder {
       this.placeMonsters();
       this.placePowerUps(50); //change this number to alter amount of PowerUps placed in maze?
       this.placeDebuffs(50);
-      this.calculateKeyLocationAndPlaceKey();
+      //this.calculateKeyLocationAndPlaceKey();
       this.placeBoss(this.cumulativeMonsterLevels);
-      this.surroundKeyWithWalls();
+      //this.surroundKeyWithWalls();
       this.placeWarpSpots(this.maze);
   
     }
@@ -183,25 +183,44 @@ export default class FancyMazeBuilder extends MazeBuilder {
       });
     }
   
-    
-
-    /* this will place the Boss Monster right in front the key */
-    //ISSUE!!! Boss is currently being placed ON THE KEY
     placeBoss(bossLevel) {
-      let fr, fc;
-      [fr, fc] = this.getKeyLocation();
       
       let boss = new Boss(bossLevel);
 
-      if (this.maze[fr+1][fc].length === 0) {
-          this.maze[fr+1][fc] = ["boss", boss];
-      } else if (this.maze[fr-1][fc].length === 0) {
-          this.maze[fr-1][fc] = ["boss", boss];
-      } else if (this.maze[fr][fc+1].length === 0)  {
-          this.maze[fr][fc+1] = ["boss", boss];
-      } else if (this.maze[fr][fc-1].length === 0) {
-          this.maze[fr][fc-1] = ["boss", boss];
+      let fromEntrance = this.initArray();
+      let fromExit = this.initArray();
+  
+      this.totalSteps = -1;
+  
+      for(let j = 1; j < this.cols-1; j++) {
+        if(this.maze[this.rows-1][j].includes("entrance")) {
+          this.countSteps(fromEntrance, this.rows-1, j, 0, "exit");
+        }
+        if(this.maze[0][j].includes("exit")) {
+          this.countSteps(fromExit, 0, j, 0, "entrance");
+        }
       }
+  
+      let fc = -1, fr = -1;
+  
+      this.maze.forEach((row, r) => {
+        row.forEach((cell, c) => {
+          if(typeof fromEntrance[r][c] == "undefined") {
+            return;
+          }
+          let stepCount = fromEntrance[r][c] + fromExit[r][c];
+          if(stepCount > this.totalSteps) {
+            fr = r;
+            fc = c;
+            this.totalSteps = stepCount;
+          }
+        });
+      });
+
+      //set the maze's key location member
+      this.keyLocation = [fr, fc];
+
+      this.maze[fr][fc] = ["boss", boss];
 
       // Add the boss to the monsters array
       this.monsters.push(boss);

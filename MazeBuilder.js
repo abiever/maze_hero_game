@@ -46,7 +46,7 @@ export default class MazeBuilder {
         if(r == 0) {
           /* place exit in top row */
           let doorPos = this.posToSpace(this.rand(1, this.width));
-          this.maze[r][doorPos] = ["door", "exit"];
+          this.maze[r][doorPos] = ["door", "exit", "locked"];
         }
   
         if(r == this.rows - 1) {
@@ -206,68 +206,6 @@ export default class MazeBuilder {
   
     }
   
-    calculateKeyLocationAndPlaceKey() {
-  
-      let fromEntrance = this.initArray();
-      let fromExit = this.initArray();
-  
-      this.totalSteps = -1;
-  
-      for(let j = 1; j < this.cols-1; j++) {
-        if(this.maze[this.rows-1][j].includes("entrance")) {
-          this.countSteps(fromEntrance, this.rows-1, j, 0, "exit");
-        }
-        if(this.maze[0][j].includes("exit")) {
-          this.countSteps(fromExit, 0, j, 0, "entrance");
-        }
-      }
-  
-      let fc = -1, fr = -1;
-  
-      this.maze.forEach((row, r) => {
-        row.forEach((cell, c) => {
-          if(typeof fromEntrance[r][c] == "undefined") {
-            return;
-          }
-          let stepCount = fromEntrance[r][c] + fromExit[r][c];
-          if(stepCount > this.totalSteps) {
-            fr = r;
-            fc = c;
-            this.totalSteps = stepCount;
-          }
-        });
-      });
-
-      //set the maze's key location member
-      this.keyLocation = [fr, fc];
-
-      this.maze[fr][fc] = ["key"];
-
-    }
-
-    getKeyLocation() {
-      //console.log(this.keyLocation);
-      return this.keyLocation;
-    }
-
-    //gets the areas around the key and walls it off if necessary
-    surroundKeyWithWalls() {
-      let fr, fc;
-      [fr, fc] = this.getKeyLocation();
-
-      //fill in empty space around key to be walled off
-      if (this.maze[fr+1][fc].length === 0) {
-        this.maze[fr+1][fc] = ["wall"];
-      } else if (this.maze[fr-1][fc].length === 0) {
-        this.maze[fr-1][fc] = ["wall"];
-      } else if (this.maze[fr][fc+1].length === 0) {
-        this.maze[fr][fc+1] = ["wall"];
-      } else if (this.maze[fr][fc-1].length === 0) {
-        this.maze[fr][fc-1] = ["wall"];
-      }
-
-    }
-  
     display(id) {
       this.parentDiv = document.getElementById(id);
     
@@ -289,9 +227,13 @@ export default class MazeBuilder {
         row.forEach((cell) => {
           let cellDiv = document.createElement("div");
     
-          // Add all string classes to the div
-          if (cell) {
-            cellDiv.className = cell.filter(item => typeof item === "string").join(" ");
+          // Add all string items as classes
+          if (Array.isArray(cell)) {
+            cell.forEach(item => {
+              if (typeof item === "string") {
+                cellDiv.classList.add(item);
+              }
+            });
           }
     
           // Check if this cell contains a powerup object

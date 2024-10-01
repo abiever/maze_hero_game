@@ -8,7 +8,7 @@ var makeMaze = (id, width, height) => {
     Maze.display(id);
     MazeGame = new MazeController(
             "maze", 
-            10, //Adjust hero level here for testing purposes
+            100, //Adjust hero level here for testing purposes
             0, 
             1,
             Maze.returnMazeBuilderArray(), 
@@ -17,7 +17,7 @@ var makeMaze = (id, width, height) => {
             Maze.getLowerWarpSpot());
 }        
       
-makeMaze("maze_container", 11, 9);
+makeMaze("maze_container", 8, 8);
 
 
 
