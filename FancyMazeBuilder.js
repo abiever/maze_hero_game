@@ -25,10 +25,10 @@ export default class FancyMazeBuilder extends MazeBuilder {
       this.placeMonsters();
       this.placeBoss(this.cumulativeMonsterLevels);
       this.placePowerUps(1); //change this number to alter amount of PowerUps placed in maze
-      this.placeDebuffs(50);
+      this.placeDebuffs(1);
       this.placeWarpSpotsA(this.maze);
       this.placeWarpSpotsB(this.maze);
-      console.log("this.maze.length:", this.maze.length);
+      //console.log("this.maze.length:", this.maze.length);
     }
   
     isA(value, ...cells) {
@@ -107,7 +107,7 @@ export default class FancyMazeBuilder extends MazeBuilder {
 
     }
   
-    placePowerUps(count = 1) {
+    placePowerUps(powerUpsToPlace) {
       const validPositions = [];
 
       // Start from 1 and end at length-1 to avoid edge cases
@@ -125,10 +125,10 @@ export default class FancyMazeBuilder extends MazeBuilder {
         }
       }
 
-      console.log("validPositions.length:", validPositions.length);
+      //console.log("validPositions.length:", validPositions.length);
 
       if (validPositions.length > 0) {
-        for (let i = 0; i < count; i++) {
+        for (let i = 0; i < powerUpsToPlace; i++) {
           if (validPositions.length === 0) break;
           const randomIndex = Math.floor(Math.random() * validPositions.length);
           const [r, c] = validPositions.splice(randomIndex, 1)[0];
@@ -140,41 +140,37 @@ export default class FancyMazeBuilder extends MazeBuilder {
       }
     }
 
-    placeDebuffs(percent = 100) {
-  
-      percent = parseInt(percent, 10);
-  
-      if((percent < 1) || (percent > 100)) {
-        percent = 100;
-      }
-  
-      this.maze.slice(1, -1).forEach((row, idx) => {
-  
-        let r = idx + 1;
-  
-        row.slice(1, -1).forEach((cell, idx) => {
-  
-          let c = idx + 1;
-  
-          if(!this.isA("wall", [r,c])) {
-            return;
-          }
-  
-          if(this.rand(1, 100) > percent) {
-            return;
-          }
-  
-          if(this.isA("wall", [r-1,c-1],[r-1,c],[r-1,c+1],[r+1,c-1],[r+1,c],[r+1,c+1]) ||
-         this.isA("wall", [r-1,c-1],[r,c-1],[r+1,c-1],[r-1,c+1],[r,c+1],[r+1,c+1])) {
+    placeDebuffs(debuffsToPlace) {
+      const validPositions = [];
 
-        //Use the Debuff object if you want more Debuff functionality options
-        //const debuff = new Debuff(1/2);
-        this.maze[r][c] = ["debuff"]
+      // Start from 1 and end at length-1 to avoid edge cases
+      for (let r = 1; r < this.maze.length - 1; r++) {
+        for (let c = 1; c < this.maze[r].length - 1; c++) {
+          if (this.maze[r][c].length === 0) {  // Check if the cell is empty
+            // Check for parallel walls
+            if (
+              (this.isA("wall", [r, c-1], [r, c+1]) && !this.isA("wall", [r-1, c], [r+1, c])) ||
+              (this.isA("wall", [r-1, c], [r+1, c]) && !this.isA("wall", [r, c-1], [r, c+1]))
+            ) {
+              validPositions.push([r, c]);
+            }
+          }
         }
+      }
 
-        });
+      //console.log("validPositions.length:", validPositions.length);
 
-      });
+      if (validPositions.length > 0) {
+        for (let i = 0; i < debuffsToPlace; i++) {
+          if (validPositions.length === 0) break;
+          const randomIndex = Math.floor(Math.random() * validPositions.length);
+          const [r, c] = validPositions.splice(randomIndex, 1)[0];
+          // const powerUp = new PowerUp(2); //Change this to Debuff if you want more Debuff functionality options
+          this.maze[r][c] = ["debuff"];
+        }
+      } else {
+        console.log("No valid positions found for debuffs");
+      }
     }
   
     placeBoss(bossLevel) {
