@@ -95,7 +95,7 @@ export default class MazeController {
         mazeOutputDiv.appendChild(this.mazeMessage);
 
         mazeOutputDiv.style.width = this.mazeContainer.scrollWidth + "px";
-        this.setMessage("first find the key");
+        this.setMessage("...");
 
         this.mazeContainer.insertAdjacentElement("afterend", mazeOutputDiv);
 
@@ -138,7 +138,9 @@ export default class MazeController {
     setMessage(text) {
         /* display message on screen */
         this.mazeMessage.innerHTML = text;
-        /* changed the below to 'step count'. Refactor names for better readability */
+    }
+
+    updateStepCounterDisplay() {
         this.heroStepCounter.innerHTML = this.mazeHero.getHeroStepCount();
     }
 
@@ -409,7 +411,7 @@ export default class MazeController {
 
         this.mazeHero.increaseHeroStepCount();
 
-        this.setMessage("...");
+        this.updateStepCounterDisplay();
     }
 
     replaceEntranceWithWall() {
@@ -633,8 +635,8 @@ export default class MazeController {
     }
 
     restartNewGame() {
-        let width = 11;
-        let height = 9;
+        let width = 10;
+        let height = 10;
 
         let newMaze = new FancyMazeBuilder(width, height);
         newMaze.display("maze_container");
@@ -666,8 +668,11 @@ export default class MazeController {
     startNextLevel() {
     
         // Generate a new, larger maze for the next level
-        const newWidth = Math.ceil(this.objectsInMazeArray[0].length / 2) + 2; // Increase width
-        const newHeight = Math.ceil(this.objectsInMazeArray.length / 2) + 2; // Increase height
+        // const newWidth = Math.ceil(this.objectsInMazeArray[0].length / 2) + 2; // Increase width
+        // const newHeight = Math.ceil(this.objectsInMazeArray.length / 2) + 2; // Increase height
+
+        const newWidth = 10;
+        const newHeight = 10;
     
         // Create and display the new maze
         let newMaze = new FancyMazeBuilder(newWidth, newHeight);
