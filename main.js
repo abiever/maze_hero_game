@@ -1,5 +1,6 @@
 import FancyMazeBuilder from "/FancyMazeBuilder.js";
 import MazeController from "./MazeController.js"; 
+import Timer from "./Timer.js";
 
 var Maze, MazeGame; 
       
@@ -11,6 +12,7 @@ var makeMaze = (id, width, height) => {
             10, //Adjust hero level here for testing purposes
             0, 
             1,
+            new Timer(),
             Maze.returnMazeBuilderArray(), 
             Maze.getMonsters(), 
             Maze.getUpperWarpSpotA(), 
@@ -19,7 +21,7 @@ var makeMaze = (id, width, height) => {
             Maze.getLowerWarpSpotB());
 }        
       
-makeMaze("maze_container", 10, 10);
+makeMaze("maze_container", 8, 8);
 
 
 

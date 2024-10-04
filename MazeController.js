@@ -1,6 +1,7 @@
 import Hero from "./Hero.js";
 import FancyMazeBuilder from "./FancyMazeBuilder.js";
 import Position from "./Position.js";
+import Timer from "./Timer.js";
 
 export default class MazeController {
     constructor(
@@ -8,6 +9,7 @@ export default class MazeController {
         heroLevel, 
         stepsTaken, 
         gameLevel, 
+        timer,
         objectsInMazeArray, 
         monstersArray, 
         warpPositionA1, 
@@ -29,9 +31,9 @@ export default class MazeController {
         //The array passed from FancyMazeBuilder that contains all Monsters and their positions
         this.monstersArray = monstersArray;
 
-        /* bind to button to start game/level */
+        /* create timer */
+        this.timer = timer;
         
-
         /* bind to HTML element */
         this.mazeContainer = document.getElementById(id);
 
@@ -88,16 +90,15 @@ export default class MazeController {
             }
         }
 
-        var mazeOutputDiv = document.createElement("div");
-        mazeOutputDiv.id = "maze_output";
-
-        mazeOutputDiv.appendChild(this.heroStepCounter);
-        mazeOutputDiv.appendChild(this.mazeMessage);
-
-        mazeOutputDiv.style.width = this.mazeContainer.scrollWidth + "px";
+        this.heroStepCounter = document.getElementById("step_counter");
+        this.heroStepCounter.innerHTML = stepsTaken;
+        // this.timer = document.getElementById("timer");
+        this.levelCounter = document.getElementById("level_counter");
+        this.levelCounter.innerHTML = gameLevel;
+        this.mazeMessage = document.getElementById("maze_message");
+        // this.minutesElement = document.getElementById("minutes");
+        // this.secondsElement = document.getElementById("seconds");
         this.setMessage("...");
-
-        this.mazeContainer.insertAdjacentElement("afterend", mazeOutputDiv);
 
         this.startGameButton = document.getElementById("start_game_button");
         this.restartGameButton = document.getElementById("restart_game_button")
@@ -126,6 +127,7 @@ export default class MazeController {
         //console.log("Original Monsters Array:", this.monstersArray)
         this.startGameButton.style.display = 'none';
         this.mainMessage.style.display = 'none';
+        this.timer.start();
 
         // Play game music
         //*****TODO: Make music/sfx a part of constructor members */
@@ -204,6 +206,7 @@ export default class MazeController {
         document.removeEventListener("keydown", this.keyPressHandler, false);
         clearInterval(this.monstersInterval);
         this.setMessage(text);
+        this.timer.stop();
         this.mazeContainer.classList.add("game_over");
 
         this.mainMessage.innerHTML = "GAME OVER";
@@ -216,6 +219,7 @@ export default class MazeController {
         /* de-activate control keys */
         document.removeEventListener("keydown", this.keyPressHandler, false);
         clearInterval(this.monstersInterval);
+        this.timer.stop();
         this.setMessage(text);
         this.mazeContainer.classList.add("finished");
         this.beatLevel = true;
@@ -510,6 +514,7 @@ export default class MazeController {
             if (nextStep.match(/hero/)) {
                 if (monster.getMonsterLevel() > this.mazeHero.getHeroValue()) {
                     this.gameOver("You got eaten by a monster!")
+                    console.log("eatten by" + monster)
                 } 
                 else return;
             }
@@ -635,8 +640,9 @@ export default class MazeController {
     }
 
     restartNewGame() {
-        let width = 10;
-        let height = 10;
+        this.timer.reset();
+        let width = 8;
+        let height = 8;
 
         let newMaze = new FancyMazeBuilder(width, height);
         newMaze.display("maze_container");
@@ -651,6 +657,7 @@ export default class MazeController {
             newHeroLevel,
             newHeroStepCount,
             newGameLevel,
+            new Timer(),
             newObjectsInMazeArray,
             newMonstersArray,
             newMaze.getUpperWarpSpotA(),
@@ -671,8 +678,8 @@ export default class MazeController {
         // const newWidth = Math.ceil(this.objectsInMazeArray[0].length / 2) + 2; // Increase width
         // const newHeight = Math.ceil(this.objectsInMazeArray.length / 2) + 2; // Increase height
 
-        const newWidth = 10;
-        const newHeight = 10;
+        const newWidth = 8;
+        const newHeight = 8;
     
         // Create and display the new maze
         let newMaze = new FancyMazeBuilder(newWidth, newHeight);
@@ -691,6 +698,7 @@ export default class MazeController {
             newHeroLevel, 
             this.mazeHero.getHeroStepCount(), 
             this.getGameLevel(),
+            this.timer,
             newObjectsInMazeArray, 
             newMonstersArray,
             newMaze.getUpperWarpSpotA(), 

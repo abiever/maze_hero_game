@@ -17,20 +17,28 @@
         <div id="main_message">READY?</div>
         <button id="start_game_button">START</button>
         <button id="restart_game_button">RESTART</button>
-        <div id="countdown_message"></div>
+        <!-- <div id="countdown_message"></div> -->
     </div>
 
-    <!-- <div id="game_info_container">
-        <div id="timer">00:00</div>
-        <div id="level_counter">0</div>
-    </div> -->
-
-    <div id="maze_container"><!-- -->
-        
-        <div id="maze" data-steps="???">
-            <!-- insert the maze HTML code here -->
-          </div>
+    <div id="game_container">
+        <div id="top_info_container">
+            <div id="timer">
+                <span id="minutes">00</span>:<span id="seconds">00</span>
+            </div>
+            <div id="level_counter">1</div>
+        </div>
+        <div id="maze_container"><!-- -->
+            <div id="maze" data-steps="???">
+                <!-- insert the maze HTML code here -->
+              </div>
+        </div>
+        <div id="bottom_info_container">
+            <div id="step_counter">0</div>
+            <div id="maze_message"></div>
+        </div>
     </div>
+    
+    
 
 </body>
 </html>
