@@ -84,12 +84,9 @@ export default class MazeController {
 
         this.heroStepCounter = document.getElementById("step_counter");
         this.heroStepCounter.innerHTML = stepsTaken;
-        // this.timer = document.getElementById("timer");
         this.levelCounter = document.getElementById("level_counter");
         this.levelCounter.innerHTML = gameLevel;
         this.mazeMessage = document.getElementById("maze_message");
-        // this.minutesElement = document.getElementById("minutes");
-        // this.secondsElement = document.getElementById("seconds");
         this.setMessage("...");
 
         this.startGameButton = document.getElementById("start_game_button");
@@ -506,7 +503,7 @@ export default class MazeController {
             if (nextStep.match(/hero/)) {
                 if (monster.getMonsterLevel() > this.mazeHero.getHeroValue()) {
                     this.gameOver("You got eaten by a monster!")
-                    console.log("eatten by" + monster)
+                    console.log("eatten by monster level" + monster.getMonsterLevel())
                 } 
                 else return;
             }
@@ -643,13 +640,14 @@ export default class MazeController {
         let newHeroLevel = 10;
         let newHeroStepCount = 0;
         let newGameLevel = 1;
+        let newTimer = new Timer()
 
         let newMazeGame = new MazeController(
             "maze",
             newHeroLevel,
             newHeroStepCount,
             newGameLevel,
-            new Timer(),
+            newTimer,
             newObjectsInMazeArray,
             newMonstersArray,
             newMaze.getUpperWarpSpotA(),
