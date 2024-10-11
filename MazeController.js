@@ -37,16 +37,8 @@ export default class MazeController {
         /* bind to HTML element */
         this.mazeContainer = document.getElementById(id);
 
-        this.heroStepCounter = document.createElement("div");
-        this.heroStepCounter.id = "step_counter";
-
-        this.mazeMessage = document.createElement("div");
-        this.mazeMessage.id = "maze_message";
-
         this.intervalTime = 1000;
         this.monstersInterval = 0
-
-        //this.mazeHero.setHeroScore(this.mazeContainer.getAttribute("data-steps")); // removed "- 2" from here a few commits ago; doesn't seem necessary any more??
 
         this.maze = []; //This array contains the HTML elements composing the maze itself?
         this.objectsInMazeArray = objectsInMazeArray; //This array will contain the positions of where objects like PowerUps & Monsters are 
@@ -92,12 +84,9 @@ export default class MazeController {
 
         this.heroStepCounter = document.getElementById("step_counter");
         this.heroStepCounter.innerHTML = stepsTaken;
-        // this.timer = document.getElementById("timer");
         this.levelCounter = document.getElementById("level_counter");
         this.levelCounter.innerHTML = gameLevel;
         this.mazeMessage = document.getElementById("maze_message");
-        // this.minutesElement = document.getElementById("minutes");
-        // this.secondsElement = document.getElementById("seconds");
         this.setMessage("...");
 
         this.startGameButton = document.getElementById("start_game_button");
@@ -110,7 +99,14 @@ export default class MazeController {
         });
 
         this.restartGameButton.addEventListener("click", () => {
-            this.restartNewGame();
+            /* This method attempts to "reset" the game by returning everything to its initial state */
+            //this.restartNewGame();
+
+            /****** WORKAROUND *******/
+            //Please see issue related to "restartNewGame" at its declaration (around line 650)
+
+            /* This method simply reloads the page, which effectively resets the game with a clean slate */
+            this.refreshGame();
         });
 
         this.isFirstStepTaken = false;
@@ -514,7 +510,7 @@ export default class MazeController {
             if (nextStep.match(/hero/)) {
                 if (monster.getMonsterLevel() > this.mazeHero.getHeroValue()) {
                     this.gameOver("You got eaten by a monster!")
-                    console.log("eatten by" + monster)
+                    console.log("eatten by monster level" + monster.getMonsterLevel())
                 } 
                 else return;
             }
@@ -639,6 +635,12 @@ export default class MazeController {
         return null;
     }
 
+    /******* ISSUE!! ************/
+    //(10/11/24) The restartNewGame method is not working as expected.
+    //On the the surface, it seems to work, but the "new game" does not behave as expected.
+    //Essentially, it seems like there are "unseen monsters" that are still in the maze, and they will "eat" the Hero causing an erroneous game over. However, this "game over" does not appear to happen in the "startNextLevel" method, nor does it seem to stop monster movement or the game's timer from running.
+    //Additionally, the issue seems to "compound" with each "restartGame" that occurs within the same game session. (which is why the current work-around is to reload the page in its entirety)
+    /***************************/
     restartNewGame() {
         this.timer.reset();
         let width = 8;
@@ -651,13 +653,14 @@ export default class MazeController {
         let newHeroLevel = 10;
         let newHeroStepCount = 0;
         let newGameLevel = 1;
+        let newTimer = new Timer()
 
         let newMazeGame = new MazeController(
             "maze",
             newHeroLevel,
             newHeroStepCount,
             newGameLevel,
-            new Timer(),
+            newTimer,
             newObjectsInMazeArray,
             newMonstersArray,
             newMaze.getUpperWarpSpotA(),
@@ -670,6 +673,10 @@ export default class MazeController {
         this.mainMessage.style.display = 'none';
 
         newMazeGame.startGame();
+    }
+
+    refreshGame() {
+        window.location.reload();
     }
 
     startNextLevel() {

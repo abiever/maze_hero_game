@@ -208,20 +208,27 @@ export default class MazeBuilder {
   
     display(id) {
       this.parentDiv = document.getElementById(id);
-    
+
       if(!this.parentDiv) {
         alert("Cannot initialise maze - no element found with id \"" + id + "\"");
         return false;
       }
-    
-      while(this.parentDiv.firstChild) {
-        this.parentDiv.removeChild(this.parentDiv.firstChild);
+
+      const container = document.getElementById("maze");
+      if (!container) {
+        console.error("No element with id 'maze' found");
+        return false;
       }
-    
-      const container = document.createElement("div");
-      container.id = "maze";
-      container.dataset.steps = this.totalSteps;
-    
+
+      // Clear existing content
+      while(container.firstChild) {
+        container.removeChild(container.firstChild);
+      }
+
+      // Update data-steps attribute
+      //container.dataset.steps = this.totalSteps;
+
+      // Build maze content
       this.maze.forEach((row) => {
         let rowDiv = document.createElement("div");
         row.forEach((cell) => {
@@ -285,9 +292,7 @@ export default class MazeBuilder {
         });
         container.appendChild(rowDiv);
       });
-    
-      this.parentDiv.appendChild(container);
-    
+
       return true;
     }
     
