@@ -99,7 +99,14 @@ export default class MazeController {
         });
 
         this.restartGameButton.addEventListener("click", () => {
-            this.restartNewGame();
+            /* This method attempts to "reset" the game by returning everything to its initial state */
+            //this.restartNewGame();
+
+            /****** WORKAROUND *******/
+            //Please see issue related to "restartNewGame" at its declaration (around line 650)
+
+            /* This method simply reloads the page, which effectively resets the game with a clean slate */
+            this.refreshGame();
         });
 
         this.isFirstStepTaken = false;
@@ -628,6 +635,12 @@ export default class MazeController {
         return null;
     }
 
+    /******* ISSUE!! ************/
+    //(10/11/24) The restartNewGame method is not working as expected.
+    //On the the surface, it seems to work, but the "new game" does not behave as expected.
+    //Essentially, it seems like there are "unseen monsters" that are still in the maze, and they will "eat" the Hero causing an erroneous game over. However, this "game over" does not appear to happen in the "startNextLevel" method, nor does it seem to stop monster movement or the game's timer from running.
+    //Additionally, the issue seems to "compound" with each "restartGame" that occurs within the same game session. (which is why the current work-around is to reload the page in its entirety)
+    /***************************/
     restartNewGame() {
         this.timer.reset();
         let width = 8;
@@ -660,6 +673,10 @@ export default class MazeController {
         this.mainMessage.style.display = 'none';
 
         newMazeGame.startGame();
+    }
+
+    refreshGame() {
+        window.location.reload();
     }
 
     startNextLevel() {
